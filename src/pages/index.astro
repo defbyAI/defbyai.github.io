@@ -4,14 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>defby.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@100;200;300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      @font-face {
-        font-family: "Astra Sans";
-        src: local("Astra Sans"), local("AstraSans");
-        font-style: normal;
-        font-weight: 400 800;
-      }
-
       :root {
         --bg: #efefef;
         --text: #5f5f5f;
@@ -28,7 +27,7 @@
       }
 
       body {
-        font-family: "Astra Sans", "Astra", "Helvetica Neue", Arial, sans-serif;
+        font-family: "Asta Sans", "Helvetica Neue", Arial, sans-serif;
         background: var(--bg);
       }
 
@@ -63,8 +62,14 @@
         transform: translate(-50%, -50%);
         z-index: 1;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: clamp(8px, 1.2vw, 14px);
+      }
+
+      .brand-row {
+        display: flex;
+        align-items: center;
+        gap: clamp(12px, 1.5vw, 18px);
         padding: 12px 16px;
       }
 
@@ -82,6 +87,18 @@
         font-weight: 700;
         letter-spacing: -0.03em;
       }
+
+      .tagline {
+        margin: 20px 0 0;
+        color: #6b6b6b;
+        font-size: clamp(1rem, 1.6vw, 1.28rem);
+        line-height: 1.2;
+        letter-spacing: 0.01em;
+        font-weight: 100;
+        font-family: "Asta Sans", "Helvetica Neue", Arial, sans-serif;
+        text-align: center;
+        white-space: nowrap;
+      }
     </style>
   </head>
   <body>
@@ -98,8 +115,11 @@
       </div>
 
       <section class="brand" aria-label="defby.ai brand">
-        <img src="/defby_logo.svg" alt="defby.ai logo" />
-        <h1>defby.ai</h1>
+        <div class="brand-row">
+          <img src="/defby_logo.svg" alt="defby.ai logo" />
+          <h1>defby.ai</h1>
+        </div>
+        <p class="tagline">&nbsp;&nbsp;&nbsp;AI defines everything. You make it matter.</p>
       </section>
     </main>
 

@@ -33,11 +33,27 @@
       }
 
       .page {
+        --px: 0;
+        --py: 0;
         position: relative;
         height: 100vh;
         overflow: hidden;
         display: grid;
         place-items: center;
+      }
+
+      .dot-grid {
+        position: absolute;
+        inset: -6%;
+        z-index: 0;
+        background-color: var(--bg);
+        background-image: radial-gradient(circle, #d3d3d3 1.05px, transparent 1.05px);
+        background-size: 24px 24px;
+        background-position: 0 0;
+        transform: translate(calc(var(--px) * -5px), calc(var(--py) * -5px));
+        transition: none;
+        will-change: transform;
+        pointer-events: none;
       }
 
       .brand {
@@ -69,11 +85,39 @@
     </style>
   </head>
   <body>
-    <main class="page">
+    <main class="page" id="page">
+      <div class="dot-grid" aria-hidden="true"></div>
+
       <section class="brand" aria-label="defby.ai brand">
         <img src="/defby_logo.svg" alt="defby.ai logo" />
         <h1>defby.ai</h1>
       </section>
     </main>
+
+    <script is:inline>
+      const page = document.getElementById("page");
+
+      if (page) {
+        const setParallax = (clientX, clientY) => {
+          const x = (clientX / window.innerWidth - 0.5) * 2;
+          const y = (clientY / window.innerHeight - 0.5) * 2;
+          page.style.setProperty("--px", `${x}`);
+          page.style.setProperty("--py", `${y}`);
+        };
+
+        window.addEventListener(
+          "pointermove",
+          (event) => {
+            setParallax(event.clientX, event.clientY);
+          },
+          { passive: true }
+        );
+
+        window.addEventListener("pointerleave", () => {
+          page.style.setProperty("--px", "0");
+          page.style.setProperty("--py", "0");
+        });
+      }
+    </script>
   </body>
 </html>

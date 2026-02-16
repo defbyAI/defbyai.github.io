@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>defby.ai</title>
+    <style>
+      @font-face {
+        font-family: "Astra Sans";
+        src: local("Astra Sans"), local("AstraSans");
+        font-style: normal;
+        font-weight: 400 800;
+      }
+
+      :root {
+        --bg: #efefef;
+        --text: #5f5f5f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+
+      body {
+        font-family: "Astra Sans", "Astra", "Helvetica Neue", Arial, sans-serif;
+        background: var(--bg);
+      }
+
+      .page {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+      }
+
+      .brand {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: clamp(8px, 1.2vw, 14px);
+        padding: 12px 16px;
+      }
+
+      .brand img {
+        width: clamp(48px, 7vw, 86px);
+        height: auto;
+        display: block;
+      }
+
+      .brand h1 {
+        margin: 0;
+        color: var(--text);
+        font-size: clamp(2rem, 5.5vw, 4.4rem);
+        line-height: 0.95;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="brand" aria-label="defby.ai brand">
+        <img src="/defby_logo.svg" alt="defby.ai logo" />
+        <h1>defby.ai</h1>
+      </section>
+    </main>
+  </body>
+</html>

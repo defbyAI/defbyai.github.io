@@ -17,7 +17,7 @@ Keep page logic in `src/pages/`, move repeated markup to `src/components/`, and 
 - `npm run dev`: start Astro local server
 - `npm run build`: production build (must pass before PR merge)
 - `npm run preview`: verify built output locally
-- `npm run astro check`: Astro type/content checks
+- `npm run astro check`: Astro type/content checks (`@astrojs/check` and TypeScript are pinned development dependencies)
 
 If scripts change, update this section in the same PR.
 

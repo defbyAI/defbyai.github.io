@@ -1,0 +1,97 @@
+{
+  "effectiveDate": "2026-09-28",
+  "websiteURL": "https://defby.ai/zeropl/privacy",
+  "contactEmail": "defby64@gmail.com",
+  "translations": {
+    "en": {
+      "title": "zeroPL Privacy Policy",
+      "sections": [
+        {
+          "heading": "Our core commitment: local storage and on-device AI",
+          "body": "All settings, playback history, playlists, thumbnails, generated subtitles, and translation results that zeroPL saves for playback and translation are stored on your device. zeroPL does not store or synchronize this data on the developer’s servers.\n\nSpeech recognition, translation, and subtitle refinement for automatic translation all run through on-device AI engines. Video, audio, and subtitle text are not sent over the internet or to cloud AI servers for AI processing. Once the required language and model assets are installed, AI processing of local media takes place on your device.\n\nzeroPL does not automatically transmit stored data or usage information to the developer or to analytics or advertising servers. It has no advertising, tracking, usage analytics, or automatic crash-reporting features.\n\nNetwork communication can occur when you use an SMB/WebDAV server or file provider you choose, download Apple language or model assets, open external links, or send email. These communications and system backups are explained below."
+        },
+        {
+          "heading": "Who this policy covers",
+          "body": "This policy describes zeroPL for iPhone, iPad, and Mac. The zeroPL developer is responsible for the practices described here. For privacy questions or requests, contact defby64@gmail.com. Effective date: September 28, 2026."
+        },
+        {
+          "heading": "What the developer receives",
+          "body": "zeroPL does not require an account and does not automatically send your media, playback history, subtitles, network credentials, or usage statistics to the developer. The app has no advertising, tracking, analytics, or automatic crash-reporting SDK. The developer does not sell your personal data or use it for advertising."
+        },
+        {
+          "heading": "Data stored on your device",
+          "body": "To provide playback, browsing, and resume features, zeroPL stores settings, file and folder references, bookmarks, playlists, server profiles, filenames, playback positions, viewing history, thumbnails, and subtitle selections on your device. Automatic subtitles can store recognized speech, translated and refined text, timing information, and translation context in a local database and subtitle cache. Saved server passwords are stored in the system Keychain; connection settings such as server addresses and usernames are stored separately. Passwords that you choose not to save are used for the current connection session."
+        },
+        {
+          "heading": "Media access and network connections",
+          "body": "zeroPL reads media and subtitles that you open or grant it access to, including files provided by Files and other file providers. When you use SMB or WebDAV, the app sends the server operator the connection information and file requests needed to browse, play, or manage your files. That server can also see your network address and keep its own logs. The developer does not receive these requests unless you independently choose a server operated by the developer. Your server and file-provider operators govern their own data handling. Use HTTPS for WebDAV when available; HTTP does not encrypt the connection."
+        },
+        {
+          "heading": "Speech recognition and translation",
+          "body": "When you enable automatic subtitles, zeroPL processes the media audio with Apple’s on-device speech recognition and translation frameworks. Subtitle refinement, when available, uses Apple’s on-device Foundation Models framework. zeroPL does not send that audio or subtitle text to the developer or a cloud AI service. Apple may download language or model assets over the network. Availability and downloads depend on the device, language, and system settings. zeroPL does not record the microphone for this feature."
+        },
+        {
+          "heading": "Permissions and system services",
+          "body": "Local-network permission is used to connect to your media servers. On iPhone and iPad, optional Face ID or Touch ID locking uses the system authentication result; zeroPL does not receive your biometric templates. You can change permissions in system settings. File-provider synchronization, device backups, and any diagnostics you choose to share with Apple are controlled by the operating system and the relevant service provider."
+        },
+        {
+          "heading": "Retention and deletion",
+          "body": "Local settings and saved data remain until you remove them or the system removes the relevant app data; zeroPL does not impose a fixed expiry on playback history or generated subtitles. On iPhone and iPad, Settings > Playback Data > Clear Playback Data removes playback records, thumbnails, and saved playback metadata. On Mac, use the Playback Data command in the zeroPL menu. This does not clear generated translation subtitles, saved playlists, server profiles, or your media files.\n\nTo clear generated subtitle content for the current video, use Reset Generated Subtitles in the translation controls. Turn automatic translation off first if you do not want subtitles to be generated again. Minimal identity/reset records can remain to prevent old subtitle content from being restored. Remove playlists and bookmarks in their respective lists. Remove a saved network connection to delete its profile and request deletion of its saved Keychain password; the app reports a password-deletion failure if it occurs.\n\nDeleting the app on iPhone or iPad removes its local app container, but Keychain items and existing backups may remain under system rules. Remove saved connections before uninstalling if you want their saved passwords deleted. On Mac, removing the app alone does not remove its Application Support data, preferences, or Keychain entries. Exported files, source media, server copies, and backups must be removed separately where they are stored."
+        },
+        {
+          "heading": "Support and diagnostic information",
+          "body": "If you choose to email the developer, the developer receives your email address, message, and any attachments you send. These are used to answer your request and resolve support or license-material requests, and are retained only as needed for those purposes and applicable record-keeping obligations. Email is handled by the email service providers involved, including Gmail for this contact address. You may request access, correction, or deletion by emailing the same address; information subject to an applicable retention requirement may need to be retained.\n\nDeveloper-enabled translation timing logs are local and are not uploaded automatically. The timing trace excludes caption text, media URLs, and credentials. Only send diagnostic material after reviewing its contents; do not include passwords or private media unless needed and intentionally shared."
+        },
+        {
+          "heading": "Links and changes",
+          "body": "Opening the public policy page, source-code links, or the email contact uses your browser or email application. Those services receive the requests needed to open the selected destination, and the website host may process normal connection information such as your IP address. This policy is available offline in zeroPL. Its public webpage address is https://defby.ai/zeropl/privacy. We will update the effective date when the policy changes. If a future version introduces data collection, its disclosures and any required choices will be updated before that collection begins."
+        }
+      ]
+    },
+    "ko": {
+      "title": "zeroPL 개인정보 처리방침",
+      "sections": [
+        {
+          "heading": "핵심 원칙: 로컬 저장과 기기 내 AI 처리",
+          "body": "zeroPL이 재생과 번역을 위해 직접 저장하는 설정, 재생 기록, 재생목록, 미리보기 이미지, 생성된 자막과 번역 결과는 모두 사용자의 기기에 저장됩니다. zeroPL은 이 데이터를 개발자의 서버에 저장하거나 동기화하지 않습니다.\n\n자동 번역에 필요한 음성 인식, 번역, 자막 다듬기는 모두 기기 내 AI 엔진으로 처리합니다. 영상·음성·자막은 AI 처리를 위해 인터넷이나 클라우드 AI 서버로 전송되지 않습니다. 필요한 언어·모델 파일을 설치한 뒤에는 로컬 미디어의 AI 처리를 기기 안에서 수행합니다.\n\nzeroPL은 저장된 데이터나 이용 정보를 개발자 또는 분석·광고 서버로 자동 전송하지 않습니다. 광고, 사용자 추적, 이용 분석 및 오류 보고 자동 전송 기능도 없습니다.\n\n사용자가 선택한 SMB/WebDAV 서버·파일 제공자 이용, Apple 언어·모델 파일 다운로드, 외부 링크 열기와 이메일 전송에는 통신이 발생할 수 있습니다. 각 통신과 시스템 백업의 범위는 아래에 설명합니다."
+        },
+        {
+          "heading": "적용 범위와 연락처",
+          "body": "이 방침은 iPhone, iPad, Mac용 zeroPL에 적용됩니다. zeroPL 개발자가 아래에 설명된 개인정보 처리의 주체입니다. 개인정보 관련 문의나 요청은 defby64@gmail.com으로 보내주세요. 시행일: 2026년 9월 28일."
+        },
+        {
+          "heading": "개발자가 받는 정보",
+          "body": "zeroPL은 회원가입을 요구하지 않으며, 사용자의 미디어·재생 기록·자막·서버 접속 정보·사용 통계를 개발자에게 자동으로 보내지 않습니다. 앱에는 광고, 사용자 추적, 이용 분석, 오류 보고 자동 전송을 위한 SDK가 없습니다. 개발자는 개인정보를 판매하거나 광고에 사용하지 않습니다."
+        },
+        {
+          "heading": "기기에 저장하는 정보",
+          "body": "재생·탐색·이어보기 기능을 위해 설정, 파일·폴더 참조, 즐겨찾기, 재생목록, 서버 연결 설정, 파일명, 재생 위치, 시청 기록, 미리보기 이미지, 자막 선택 정보를 기기에 저장합니다. 자동 자막 기능은 인식한 음성의 텍스트, 번역·다듬기 결과, 시간 정보와 번역 문맥을 기기의 데이터베이스와 자막 캐시에 저장할 수 있습니다. 저장한 서버 비밀번호는 시스템 키체인에 보관하며, 서버 주소·사용자명 등 연결 설정과 분리합니다. 저장하지 않기로 선택한 비밀번호는 현재 연결 세션에서 사용합니다."
+        },
+        {
+          "heading": "미디어 접근과 네트워크 연결",
+          "body": "zeroPL은 사용자가 열거나 접근을 허용한 미디어와 자막을 읽습니다. 여기에는 파일 앱과 다른 파일 제공자가 제공하는 파일도 포함됩니다. SMB 또는 WebDAV를 사용하면 앱은 탐색·재생·파일 관리에 필요한 접속 정보와 파일 요청을 해당 서버 운영자에게 보냅니다. 서버 운영자는 사용자의 네트워크 주소를 확인하거나 자체 접속 기록을 남길 수 있습니다. 사용자가 별도로 개발자가 운영하는 서버를 선택하지 않는 한, 개발자는 이 요청을 받지 않습니다. 서버와 파일 제공자의 정보 처리에는 각 운영자의 방침이 적용됩니다. WebDAV는 가능한 경우 HTTPS를 사용하세요. HTTP 연결은 암호화되지 않습니다."
+        },
+        {
+          "heading": "음성 인식과 번역",
+          "body": "자동 자막을 켜면 Apple의 기기 내 음성 인식 및 번역 프레임워크로 미디어의 오디오를 처리합니다. 자막 다듬기 기능이 지원되는 경우 Apple의 기기 내 Foundation Models 프레임워크를 사용합니다. zeroPL은 해당 오디오나 자막 텍스트를 개발자 또는 클라우드 AI 서비스에 전송하지 않습니다. Apple이 언어·모델 파일을 네트워크로 다운로드할 수 있으며, 지원 여부와 다운로드는 기기·언어·시스템 설정에 따라 달라집니다. 이 기능을 위해 마이크를 녹음하지 않습니다."
+        },
+        {
+          "heading": "권한과 시스템 서비스",
+          "body": "로컬 네트워크 권한은 미디어 서버 연결에 사용합니다. iPhone과 iPad의 선택적 Face ID·Touch ID 잠금은 시스템의 인증 결과를 사용하며, zeroPL은 생체인식 원본 정보를 받지 않습니다. 권한은 시스템 설정에서 변경할 수 있습니다. 파일 제공자의 동기화, 기기 백업, 사용자가 Apple과 공유하도록 선택한 진단 정보는 운영체제 및 해당 서비스 제공자의 설정과 방침에 따릅니다."
+        },
+        {
+          "heading": "보관과 삭제",
+          "body": "기기의 설정과 저장 데이터는 사용자가 지우거나 시스템이 해당 앱 데이터를 제거할 때까지 남습니다. zeroPL은 재생 기록이나 생성된 자막에 고정된 보관 만료일을 두지 않습니다. iPhone·iPad에서는 설정 > 재생 정보 > 재생 정보 삭제로 재생 기록, 미리보기 이미지와 저장된 재생 메타데이터를 지울 수 있습니다. Mac에서는 zeroPL 메뉴의 재생 정보 항목을 사용하세요. 이 작업은 자동 번역 자막, 저장한 재생목록, 서버 연결 설정, 원본 미디어를 삭제하지 않습니다.\n\n현재 영상의 생성된 자막 내용은 번역 조작부의 생성 자막 초기화로 지울 수 있습니다. 자막을 다시 생성하지 않으려면 먼저 자동 번역을 끄세요. 과거 자막이 복원되지 않도록 최소한의 식별·초기화 기록은 남을 수 있습니다. 재생목록과 즐겨찾기는 각 목록에서 삭제하세요. 저장된 네트워크 연결을 삭제하면 연결 설정을 지우고 키체인에 저장된 비밀번호 삭제를 요청합니다. 비밀번호 삭제에 실패하면 앱에 오류가 표시됩니다.\n\niPhone·iPad에서 앱을 삭제하면 기기의 앱 저장 영역은 제거되지만, 키체인 항목과 기존 백업은 시스템 정책에 따라 남을 수 있습니다. 저장한 비밀번호도 지우려면 앱 삭제 전에 저장된 연결을 삭제하세요. Mac에서는 앱 파일만 삭제해도 Application Support 데이터, 설정, 키체인 항목은 남습니다. 내보낸 파일, 원본 미디어, 서버에 있는 사본과 백업은 보관된 위치에서 별도로 삭제해야 합니다."
+        },
+        {
+          "heading": "문의와 진단 정보",
+          "body": "사용자가 개발자에게 이메일을 보내면 개발자는 발신 이메일 주소, 메시지와 사용자가 보낸 첨부파일을 받습니다. 이 정보는 문의 답변, 문제 해결 또는 라이선스 자료 요청 처리에 사용하며, 해당 목적과 적용되는 기록 보관 의무에 필요한 기간만 보관합니다. 이메일 처리에는 이 연락처의 Gmail을 포함한 송수신 이메일 서비스 제공자가 관여합니다. 같은 주소로 열람·정정·삭제를 요청할 수 있으며, 적용되는 보관 의무가 있는 정보는 보관이 필요할 수 있습니다.\n\n개발자가 활성화한 번역 시간 측정 로그는 기기에만 저장되며 자동 전송되지 않습니다. 해당 로그에는 자막 본문, 미디어 URL, 비밀번호가 포함되지 않습니다. 진단 자료를 보낼 때는 내용을 먼저 확인하고, 필요한 경우에 의도적으로 공유하는 것이 아니라면 비밀번호나 개인 미디어를 첨부하지 마세요."
+        },
+        {
+          "heading": "외부 링크와 방침 변경",
+          "body": "공개 처리방침 페이지, 소스코드 링크 또는 이메일 연락처를 열면 브라우저나 이메일 앱을 사용합니다. 해당 서비스에는 선택한 주소를 열기 위한 요청이 전달되며, 웹 호스팅 제공자는 IP 주소 등 통상적인 접속 정보를 처리할 수 있습니다. 이 방침은 zeroPL 안에서 인터넷 없이 읽을 수 있으며 공개 웹페이지 주소는 https://defby.ai/zeropl/privacy입니다. 방침을 변경하면 시행일을 갱신합니다. 향후 버전에서 새로운 정보 수집을 도입하는 경우, 수집을 시작하기 전에 고지와 필요한 선택 절차를 반영합니다."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,73 @@
+---
+interface Props {
+  language: "ko" | "en";
+  title: string;
+  sections: { heading: string; body: string }[];
+}
+
+const { language, title, sections } = Astro.props;
+---
+
+<article id={language} lang={language} data-policy aria-labelledby={`${language}-title`}>
+  <div class="policy-heading">
+    <p class="eyebrow">{language === "ko" ? "개인정보 처리방침" : "Privacy policy"}</p>
+    <h2 id={`${language}-title`}>{title}</h2>
+  </div>
+  <div class="policy-layout">
+    <nav class="contents" aria-label={language === "ko" ? "처리방침 목차" : "Policy contents"}>
+      <ol>
+        {sections.map((section, index) => (
+          <li><a href={`#${language}-${index + 1}`}><span>{String(index + 1).padStart(2, "0")}</span>{section.heading}</a></li>
+        ))}
+      </ol>
+    </nav>
+    <div class="policy-sections">
+      {sections.map((section, index) => (
+        <section id={`${language}-${index + 1}`} aria-labelledby={`${language}-${index + 1}-title`}>
+          <p class="section-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</p>
+          <h3 id={`${language}-${index + 1}-title`}>{section.heading}</h3>
+          {section.body.split("\n\n").map((paragraph) => <p>{paragraph}</p>)}
+        </section>
+      ))}
+    </div>
+  </div>
+</article>
+
+<style>
+  article { scroll-margin-top: 28px; }
+  article + article { margin-top: 96px; }
+  article[hidden] { display: none; }
+  .policy-heading { margin-bottom: 40px; }
+  .eyebrow { margin: 0 0 12px; font-size: 13px; color: var(--accent); font-weight: 500; }
+  h2 { margin: 0; font-size: clamp(24px, 3vw, 34px); font-weight: 500; letter-spacing: -0.035em; }
+  .policy-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 72px; align-items: start; }
+  .contents { position: sticky; top: 32px; }
+  ol { list-style: none; margin: 0; padding: 0; }
+  li + li { margin-top: 15px; }
+  .contents a { display: flex; gap: 12px; font-size: 13px; line-height: 1.65; text-decoration: none; color: var(--muted); }
+  .contents a:hover { color: var(--accent); }
+  .contents span { flex-shrink: 0; font-variant-numeric: tabular-nums; color: var(--accent); }
+  section { padding: 0 0 36px; border-bottom: 1px solid var(--line); scroll-margin-top: 32px; }
+  section + section { padding-top: 36px; }
+  .section-number { margin: 0 0 12px; font-size: 12px; color: var(--accent); font-variant-numeric: tabular-nums; }
+  h3 { margin: 0 0 20px; font-size: 21px; line-height: 1.5; font-weight: 500; letter-spacing: -0.025em; }
+  section p:not(.section-number) { margin: 0 0 18px; font-size: 16px; line-height: 1.95; word-break: keep-all; overflow-wrap: anywhere; }
+  section p:last-child { margin-bottom: 0; }
+  @media (max-width: 850px) {
+    .policy-layout { grid-template-columns: 1fr; gap: 32px; }
+    .contents { position: static; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+    ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; }
+    li + li { margin-top: 0; }
+  }
+  @media (max-width: 480px) {
+    .policy-heading { margin-bottom: 28px; }
+    ol { grid-template-columns: 1fr; gap: 12px; }
+    h3 { font-size: 20px; }
+    section p:not(.section-number) { font-size: 15px; }
+  }
+  @media print {
+    .contents { display: none; }
+    .policy-layout { display: block; }
+    section { break-inside: avoid; }
+  }
+</style>

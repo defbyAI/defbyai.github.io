@@ -1,0 +1,24 @@
+---
+import type { DeviceCapture } from "../../data/zeropl-captures";
+import type { Language } from "../../data/zeropl";
+
+interface Props {
+  capture: DeviceCapture;
+  lang: Language;
+  priority?: boolean;
+}
+
+const { capture, lang, priority = false } = Astro.props;
+---
+<img
+  class="app-capture"
+  src={capture.light}
+  data-capture-light={capture.dark ? capture.light : undefined}
+  data-capture-dark={capture.dark}
+  width={capture.width}
+  height={capture.height}
+  alt={capture.alt[lang]}
+  loading={priority ? "eager" : "lazy"}
+  fetchpriority={priority ? "high" : "auto"}
+  decoding="async"
+/>

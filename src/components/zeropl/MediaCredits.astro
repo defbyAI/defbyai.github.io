@@ -1,0 +1,26 @@
+---
+import { films, filmLicense, mediaText, type FilmId } from "../../data/zeropl-media";
+import type { Language } from "../../data/zeropl";
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const t = mediaText[lang];
+---
+<section class="container media-credits" id="media-credits" aria-labelledby="credits-title">
+  <p class="eyebrow">OPEN MOVIES · CC BY 3.0</p>
+  <h2 id="credits-title">{t.heading}</h2>
+  <p class="credits-intro">{t.introduction}</p>
+  <div class="credits-grid">
+    {(Object.keys(films) as FilmId[]).map(id => {
+      const f = films[id];
+      return <article id={`credit-${id}`}>
+        <img src={f.poster} alt="" width="480" height="270" loading="lazy" />
+        <p class="credit-placement">{f.placement[lang]}</p>
+        <h3>{f.title} <span>({f.year})</span></h3>
+        <p class="credit-attribution">{f.credit}</p>
+        <p class="credit-range">{f.range} · <a href={filmLicense}>CC BY 3.0</a></p>
+        <p class="credit-edits">{f.edits[lang]}</p>
+        <div class="credit-links"><a href={f.source}>{t.original} ↗</a><a href={f.terms}>{t.terms} ↗</a></div>
+      </article>;
+    })}
+  </div>
+</section>

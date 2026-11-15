@@ -1,0 +1,14 @@
+---
+import { films, filmLicense, mediaText, type FilmId } from "../../data/zeropl-media";
+import type { Language } from "../../data/zeropl";
+interface Props { film: FilmId; lang: Language; }
+const { film, lang } = Astro.props;
+const f = films[film];
+const t = mediaText[lang];
+---
+<div class="media-credit">
+  <span><a href={f.source}>{f.title}</a> · Blender Foundation · <a href={filmLicense}>CC BY 3.0</a></span>
+  <span class="media-credit-actions">
+    <a href={`#credit-${film}`}>{t.details}</a>
+  </span>
+</div>

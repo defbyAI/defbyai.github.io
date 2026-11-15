@@ -1,0 +1,98 @@
+---
+import CaptureImage from "./CaptureImage.astro";
+import MediaCredit from "./MediaCredit.astro";
+import { duoPoseCaptures } from "../../data/zeropl-captures";
+import { zeropl, type Language } from "../../data/zeropl";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const t = zeropl[lang];
+const poses = t.poses.flatMap(pose => {
+  const capture = duoPoseCaptures[pose.id];
+  return capture ? [{ ...pose, capture }] : [];
+});
+---
+<div class="duo-showcase" id="duo-demo" data-pause-label={t.pause} data-play-label={t.play}>
+  <div class="duo-stage">
+    {poses.map((pose, index) => <div class="duo-frame" aria-hidden={index !== 0}>
+      <CaptureImage capture={pose.capture} lang={lang} />
+    </div>)}
+  </div>
+  {poses.length > 1 && <div class="pose-controls" hidden>
+    <div class="pose-buttons" role="group" aria-label={t.poseGroup}>
+      {poses.map((pose, index) => <button type="button" data-pose-button aria-pressed={index === 0}>{pose.label}</button>)}
+    </div>
+    <button type="button" class="autoplay-button" aria-label={t.pause} aria-pressed="true">
+      <span class="pause-symbol" aria-hidden="true">Ⅱ</span><span>{t.auto}</span>
+    </button>
+  </div>}
+  <div class="pose-descriptions">
+    {poses.map((pose, index) => <div class="pose-description" hidden={index !== 0}><h3>{pose.label}</h3><p>{pose.text}</p></div>)}
+  </div>
+  <p class="demo-caption">{lang === "ko" ? "iPhone Duo에서 캡처한 실제 zeroPL 화면" : "Captured in zeroPL on iPhone Duo"}</p>
+  <MediaCredit film="bunny" lang={lang} />
+</div>
+
+<script>
+  const demo = document.querySelector<HTMLElement>("#duo-demo");
+  const controls = demo?.querySelector<HTMLElement>(".pose-controls");
+  if (demo && controls) {
+    const stage = demo.querySelector<HTMLElement>(".duo-stage")!;
+    const frames = [...stage.querySelectorAll<HTMLElement>(".duo-frame")];
+    const descriptions = [...demo.querySelectorAll<HTMLElement>(".pose-description")];
+    const buttons = [...controls.querySelectorAll<HTMLButtonElement>("[data-pose-button]")];
+    const toggle = controls.querySelector<HTMLButtonElement>(".autoplay-button")!;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let index = 0;
+    let playing = !reducedMotion.matches;
+    let visible = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const select = (next: number) => {
+      index = next;
+      buttons.forEach((button, position) => {
+        const active = position === index;
+        button.setAttribute("aria-pressed", String(active));
+        frames[position].setAttribute("aria-hidden", String(!active));
+        descriptions[position].hidden = !active;
+      });
+    };
+    const schedule = () => {
+      clearTimeout(timer);
+      if (playing && visible && !document.hidden && !reducedMotion.matches) {
+        timer = setTimeout(() => { select((index + 1) % buttons.length); schedule(); }, 4600);
+      }
+    };
+    const updatePlayback = () => {
+      toggle.hidden = reducedMotion.matches;
+      toggle.setAttribute("aria-pressed", String(playing));
+      toggle.setAttribute("aria-label", (playing ? demo.dataset.pauseLabel : demo.dataset.playLabel)!);
+      toggle.querySelector(".pause-symbol")!.textContent = playing ? "Ⅱ" : "▷";
+      schedule();
+    };
+
+    buttons.forEach((button, position) => {
+      button.addEventListener("click", () => {
+        playing = false;
+        select(position);
+        updatePlayback();
+      });
+      button.addEventListener("keydown", event => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const offset = event.key === "ArrowRight" ? 1 : -1;
+        const next = event.key === "Home" ? 0 : event.key === "End" ? buttons.length - 1
+          : (position + offset + buttons.length) % buttons.length;
+        buttons[next].focus();
+        buttons[next].click();
+      });
+    });
+    toggle.addEventListener("click", () => { playing = !playing; updatePlayback(); });
+    reducedMotion.addEventListener("change", () => { if (reducedMotion.matches) playing = false; updatePlayback(); });
+    document.addEventListener("visibilitychange", schedule);
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; schedule(); }, { threshold: 0.3 });
+    observer.observe(stage);
+    controls.hidden = false;
+    updatePlayback();
+  }
+</script>

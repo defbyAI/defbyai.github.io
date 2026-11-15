@@ -3,6 +3,42 @@ defbyai.github.io
 
 A simple website for `defby.ai`
 
+## zeroPL introduction draft
+
+`/zeropl/` (English) and `/ko/zeropl/` (Korean) share
+`src/components/zeropl/ProductPage.astro` and copy in `src/data/zeropl.ts`.
+The page introduces on-device translation, iPhone Duo layouts,
+web video, AirPlay, PiP, background playback, network drives, and gestures.
+The home page links to both languages.
+
+The hero shows Cosmos Laundromat in the installed Mac player. The platform
+comparison uses the same Big Buck Bunny frame at 01:07 on Mac, iPad, and iPhone
+Duo. Use the Light and Dark controls to switch the physical mobile captures
+across the page. The Mac player uses a dark appearance in both system modes.
+The translation demo shows Korean subtitles zeroPL generated on iPhone Duo
+from Sintel's English audio. The original dialogue is available beneath it.
+The browser demo shows Big Buck Bunny in the built-in browser and mini-player
+on iPhone Duo.
+
+Optimized app captures are in `public/zeropl/captures/`. Film excerpts, posters,
+and caption assets are in `public/zeropl/media/`. Each demo links to the bilingual film credits section,
+including the original attribution, CC BY 3.0 license, selected range, and edits.
+See [MEDIA-LICENSES.md](MEDIA-LICENSES.md) for exact sources and preparation notes.
+The icon comes from zeroPL's `Resources/AppIcon/zeropl.png`. No external app
+repository or remote media is needed to build. Store/download links await
+confirmed URLs.
+
+The Duo section shows five physical poses in light and dark. Each pose can be
+selected manually or shown in an automatic cycle that pauses outside the
+viewport and when the tab is hidden. Reduced-motion mode uses immediate manual
+transitions.
+The default captures, original Sintel dialogue, and film credits are available
+without JavaScript.
+
+Run `npm run astro check` and `npm run build`. Inspect both routes in
+`npm run dev` and `npm run preview`, including narrow widths, keyboard selection,
+the Light and Dark switch, language links, and reduced-motion mode.
+
 ## zeroPL privacy policy
 
 `src/pages/zeropl/privacy.astro` builds the public `/zeropl/privacy` route.

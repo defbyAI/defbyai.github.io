@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@100;200;300;400;500;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300;400;500;700;800&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -102,11 +102,31 @@
         font-size: clamp(1rem, 1.6vw, 1.28rem);
         line-height: 1.2;
         letter-spacing: 0.01em;
-        font-weight: 100;
+        font-weight: 300;
         font-family: "Asta Sans", "Helvetica Neue", Arial, sans-serif;
         text-align: center;
         white-space: nowrap;
       }
+
+      .product-links {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        margin-top: 28px;
+        font-size: 13px;
+      }
+
+      .product-links a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        color: #466e68;
+        text-decoration: none;
+        text-underline-offset: 5px;
+      }
+
+      .product-links a:hover { text-decoration: underline; }
+      .product-links a:focus-visible { outline: 2px solid #466e68; outline-offset: 5px; }
     </style>
   </head>
   <body>
@@ -128,6 +148,10 @@
           <h1>defby.ai</h1>
         </div>
         <p class="tagline">&nbsp;&nbsp;&nbsp;AI defines everything. You make it matter.</p>
+        <nav class="product-links" aria-label="Explore zeroPL">
+          <a href="/zeropl/">Explore zeroPL ↗</a>
+          <a href="/ko/zeropl/" lang="ko">한국어 ↗</a>
+        </nav>
       </section>
     </main>
 

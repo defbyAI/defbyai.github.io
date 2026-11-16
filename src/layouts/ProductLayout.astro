@@ -1,5 +1,6 @@
 ---
 import type { Language } from "../data/zeropl";
+import "../styles/theme.css";
 import "../styles/zeropl.css";
 interface Props { lang: Language; title: string; description: string; }
 const { lang, title, description } = Astro.props;
@@ -12,7 +13,7 @@ const canonical = new URL(lang === "ko" ? "/ko/zeropl/" : "/zeropl/", Astro.site
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#efefef" />
+    <meta name="theme-color" content="#F6F6F1" />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="en" href="https://defby.ai/zeropl/" />
     <link rel="alternate" hreflang="ko" href="https://defby.ai/ko/zeropl/" />

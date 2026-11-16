@@ -15,8 +15,8 @@ The hero shows Cosmos Laundromat in the installed Mac player. The platform
 comparison uses the same Big Buck Bunny frame at 01:07 on Mac, iPad, and iPhone
 Duo. Use the Light and Dark controls to switch the physical mobile captures
 across the page. The Mac player uses a dark appearance in both system modes.
-The translation demo shows Korean subtitles zeroPL generated on iPhone Duo
-from Sintel's English audio. The original dialogue is available beneath it.
+The translation demo is a 19-second recording of zeroPL on macOS. It includes
+Sintel's English dialogue and the Korean subtitles generated during playback.
 The browser demo shows Big Buck Bunny in the built-in browser and mini-player
 on iPhone Duo.
 
@@ -28,11 +28,12 @@ The icon comes from zeroPL's `Resources/AppIcon/zeropl.png`. No external app
 repository or remote media is needed to build. Store/download links await
 confirmed URLs.
 
-The Duo section shows five physical poses in light and dark. Each pose can be
-selected manually or shown in an automatic cycle that pauses outside the
-viewport and when the tab is hidden. Reduced-motion mode uses immediate manual
-transitions.
-The default captures, original Sintel dialogue, and film credits are available
+The Duo section animates five poses with a Three.js foldable model and real
+light and dark app captures. Scroll through the section or select a pose with
+the buttons. The renderer loads near the section and adapts to display density
+and zoom. Reduced motion uses manual capture switching, and short viewports
+keep the pose controls in the normal page flow.
+The default captures, Sintel recording, and film credits are available
 without JavaScript.
 
 Run `npm run astro check` and `npm run build`. Inspect both routes in
@@ -42,7 +43,7 @@ the Light and Dark switch, language links, and reduced-motion mode.
 ## zeroPL privacy policy
 
 `src/pages/zeropl/privacy.astro` builds the public `/zeropl/privacy` route.
-It uses the site's logo, Asta Sans typography, gray background, and green accents.
+It uses the site's logo, Asta Sans typography, and shared palette with an ivory background.
 Korean and English policies are rendered as static HTML; JavaScript enhances the
 language switch, while both complete policies remain available without it.
 

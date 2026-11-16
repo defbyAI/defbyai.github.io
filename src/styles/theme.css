@@ -1,0 +1,18 @@
+:root {
+  --color-bg: #F6F6F1;
+  --color-accent-1: #56807B;
+  --color-accent-2: #3562A6;
+  --color-accent-2-active: #3C5E9E;
+  --color-accent-3: #C85A48;
+  --color-brand-text: #5F5F5F;
+  --color-text: #3D4844;
+  --color-muted: #636B68;
+  --color-line: color-mix(in srgb, var(--color-accent-1) 22%, var(--color-bg));
+  --color-surface: color-mix(in srgb, var(--color-accent-1) 8%, var(--color-bg));
+  --color-control: color-mix(in srgb, var(--color-accent-2) 9%, var(--color-bg));
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent-2) 16%, var(--color-bg));
+  color: var(--color-text);
+}

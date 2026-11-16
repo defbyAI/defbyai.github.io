@@ -81,16 +81,6 @@ export const captures = {
       en: "Cosmos Laundromat’s pink forest playing in zeroPL on a Mac",
     },
   },
-  translation: {
-    light: "/zeropl/captures/duo-sintel-light.webp",
-    dark: "/zeropl/captures/duo-sintel-dark.webp",
-    width: 1200,
-    height: 511,
-    alt: {
-      ko: "iPhone Duo에서 Sintel을 재생하며 zeroPL이 생성한 자막 ‘저는 누군가를 찾고 있습니다.’",
-      en: "Sintel on iPhone Duo, with zeroPL’s Korean translation of ‘I’m searching for someone.’",
-    },
-  },
   web: {
     light: "/zeropl/captures/duo-web-light.webp",
     dark: "/zeropl/captures/duo-web-dark.webp",

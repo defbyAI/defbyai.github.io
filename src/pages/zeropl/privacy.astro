@@ -1,6 +1,7 @@
 ---
 import PrivacyDocument from "../../components/PrivacyDocument.astro";
 import policy from "../../data/zeropl-privacy.json";
+import "../../styles/theme.css";
 
 const effectiveDates = {
   ko: new Intl.DateTimeFormat("ko-KR", { dateStyle: "long", timeZone: "UTC" }).format(new Date(policy.effectiveDate + "T00:00:00Z")),
@@ -38,6 +39,7 @@ const copy = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F6F6F1" />
     <title>zeroPL 개인정보 처리방침 · Privacy Policy — defby.ai</title>
     <meta name="description" content="zeroPL의 로컬 저장과 기기 내 AI 처리 원칙. iPhone, iPad, Mac용 개인정보 처리방침 / Privacy policy for zeroPL." />
     <link rel="canonical" href={policy.websiteURL} />
@@ -147,27 +149,28 @@ const copy = {
 </html>
 
 <style is:global>
-  :root { --bg: #efefef; --text: #505453; --muted: #636b68; --accent: #466e68; --line: #cfd7d3; }
+  :root { --bg: var(--color-bg); --text: var(--color-text); --muted: var(--color-muted); --accent: var(--color-accent-2); --line: var(--color-line); }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; background: var(--bg); }
   body { margin: 0; color: var(--text); background: var(--bg); font-family: "Asta Sans", "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: var(--accent); text-underline-offset: 5px; }
+  a:hover { color: var(--color-accent-2-active); }
   a:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 2px; }
-  ::selection { background: #cddfda; color: #2c4843; }
   [hidden] { display: none !important; }
   .page { width: min(1120px, 100% - 96px); margin: 0 auto; }
   .skip-link { position: absolute; top: -100px; left: 24px; z-index: 10; padding: 12px; background: var(--bg); }
   .skip-link:focus { top: 12px; }
   header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 36px 0; }
-  .brand { display: inline-flex; align-items: center; gap: 12px; color: #5f5f5f; text-decoration: none; }
+  .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--color-brand-text); text-decoration: none; }
   .brand img { display: block; }
   .brand span { font-size: 25px; font-weight: 700; letter-spacing: -0.035em; }
   .language-nav { display: flex; align-items: center; gap: 14px; font-size: 13px; }
   .language-nav a { color: var(--muted); text-decoration: none; padding: 10px 0; }
-  .language-nav a[aria-current] { color: var(--accent); text-decoration: underline; font-weight: 500; }
+  .language-nav a[aria-current] { color: var(--color-accent-2-active); text-decoration: underline; font-weight: 500; }
+  .language-nav a:hover { color: var(--color-accent-2-active); text-decoration: underline; }
   .language-nav span { color: #9da8a4; }
   .hero { position: relative; padding: 80px 0 52px; isolation: isolate; }
-  .hero-dots { position: absolute; z-index: -1; top: 12px; right: -24px; width: 50%; height: 310px; opacity: 0.4; background-image: radial-gradient(#a5b9b0 0.9px, transparent 0.9px), radial-gradient(#a5b9b0 0.7px, transparent 0.7px); background-size: 29px 31px, 43px 47px; background-position: 0 0, 12px 17px; mask-image: linear-gradient(90deg, transparent, black); pointer-events: none; }
+  .hero-dots { position: absolute; z-index: -1; top: 12px; right: -24px; width: 50%; height: 310px; opacity: 0.22; background-image: radial-gradient(var(--color-accent-1) 0.9px, transparent 0.9px), radial-gradient(var(--color-accent-1) 0.7px, transparent 0.7px); background-size: 29px 31px, 43px 47px; background-position: 0 0, 12px 17px; mask-image: linear-gradient(90deg, transparent, black); pointer-events: none; }
   .product { margin: 0 0 26px; color: var(--accent); font-size: 15px; font-weight: 500; }
   .product span { margin-left: 16px; color: var(--muted); font-size: 12px; font-weight: 400; }
   h1 { margin: 0 0 28px; font-size: clamp(36px, 4.8vw, 60px); line-height: 1.3; font-weight: 500; letter-spacing: -0.045em; word-break: keep-all; }
@@ -207,6 +210,6 @@ const copy = {
     .hero-dots, .language-nav, .skip-link, .back-top { display: none; }
     .hero { padding-top: 20px; }
     .network-note { margin-bottom: 36px; }
-    a { color: inherit; }
+    a, a:hover { color: inherit; }
   }
 </style>

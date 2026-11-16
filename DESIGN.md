@@ -11,15 +11,16 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 사용자 요청에 따라 Infuse의 기능별 구성과 IINA의 차분한 앱 중심 표현을 참고한 초안을 추가했다. 아래 초기 계획 중 zeroPL 관련 항목의 최신 상태는 다음과 같다.
 
 - 영어 `/zeropl/`, 한국어 `/ko/zeropl/`를 정적 페이지로 구현했다. 홈에서 두 언어의 소개로 이동할 수 있다.
+- 첫 화면의 흰색 App Store 배지는 가운데에 둔다. 공개 전에는 배지 아래에 한국어로 ‘출시 예정’, 영어로 ‘Coming soon’을 표시하고, 그 아래에 iPhone, iPad, Mac 지원을 안내한다. [Apple 배지 원본](https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us)
 - 로컬 AI 실시간 번역과 번역 추가 비용·구독 없음을 주요 메시지로 사용한다. 웹 영상, AirPlay, PiP, 백그라운드 재생, SMB·WebDAV, 제스처도 소개한다.
 - 첫 화면은 Mac의 zeroPL에서 캡처한 Cosmos Laundromat 08:48–08:54 구간을 사용한다. 플랫폼 비교에는 Mac·iPad·iPhone Duo에서 일시정지한 Big Buck Bunny Sunflower 배포본의 01:07 프레임을 사용한다.
-- 플랫폼 비교의 라이트·다크 버튼은 페이지 전체의 모바일 캡처를 바꾼다. Mac 플레이어는 시스템 설정과 관계없이 다크 테마를 사용한다.
-- Duo의 접은 세로·접은 가로·펼친 세로·펼친 가로·세워 보기에는 실제 기기에서 캡처한 라이트·다크 화면을 사용한다. 각 포즈는 수동으로 선택하거나 자동 전환할 수 있다.
-- 번역 데모에는 Sintel 02:07–02:26 구간의 영어 음성을 zeroPL이 인식하고 한국어로 번역한 Duo 캡처를 사용한다. 영어 원본 대화는 별도로 재생할 수 있다.
+- 플랫폼 비교와 Duo 데모의 라이트·다크 버튼은 페이지 전체의 모바일 캡처를 함께 바꾼다. Mac 플레이어는 시스템 설정과 관계없이 다크 테마를 사용한다.
+- Duo 섹션의 3D 모형은 스크롤과 자세 버튼에 따라 접은 세로, 접은 가로, 펼친 가로, 펼친 세로, 세워 보기로 전환된다. 기기 외형은 레티나와 확대 배율에 맞춰 렌더링하며, 각 화면에는 실기기 캡처를 사용한다.
+- 번역 데모에는 `zeroPL-website-demo/Sintel.mp4`를 Mac의 zeroPL에서 재생하며 녹화한 19초 영상을 사용한다. 원본의 02:07–02:26 구간에 해당하며 영어 음성과 화면에 표시된 한국어 번역 자막을 함께 담았다.
 - 웹 데모에는 Big Buck Bunny 페이지를 띄운 Duo 내장 브라우저와 미니 플레이어를 사용한다.
 - 캡처에는 `clips/zeroPL-website-demo`의 지정 영상을 사용한다. 세워 보기에는 최근 재생한 승인 데모 영상만 표시한다. 펼친 세로 캡처는 화면 끝의 기록 한 칸을 가린다.
 - 영상 옆에 원작·라이선스·상세 크레딧 링크를 제공한다. 하단 크레딧에 공식 저작자 표시, 발췌 구간, 음성 제거·크기 조정 등 편집 내역을 한·영으로 표시한다. 원본 배포 URL과 재생성 정보는 `MEDIA-LICENSES.md`에 기록한다.
-- 모션 감소 설정에서는 자동 전환과 전환 효과를 끈다. 뷰포트 밖과 비활성 탭에서는 포즈 자동 전환을 멈춘다.
+- 3D 데모는 Duo 섹션에 가까워질 때 불러온다. 모션 감소 설정에서는 자세 버튼으로 실기기 캡처를 전환한다. 뷰포트가 짧으면 스크롤 고정을 해제한다.
 - Asta Sans의 요청 굵기를 지원 범위로 정리했다. zeroPL 제품 페이지에 공통 레이아웃·스타일·번역 데이터를 도입했다.
 - 제품 배포 링크와 twoRT 소개는 후속 범위다. 로컬 초안이며 공개 배포 상태를 의미하지 않는다.
 
@@ -32,7 +33,8 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 | 홈 `/` | 화면 중앙의 로고·브랜드명·영문 태그라인 | `src/pages/index.astro` |
 | 홈 배경 | 회색 점을 그리는 8개 Canvas 레이어, 포인터·기기 기울기에 반응하는 패럴랙스 | `src/pages/index.astro` |
 | 브랜드 자산 | 녹색 원형 심벌, 흰색 다각형 조각, 파비콘·앱 아이콘 세트 | `public/defby_logo.svg`, `public/favicon.svg`, `public/site.webmanifest` |
-| 타이포그래피 | 두 페이지에 Asta Sans 및 시스템 대체 서체 선언, Google Fonts 사용 | `src/pages/index.astro`, `src/pages/zeropl/privacy.astro` |
+| 타이포그래피 | 홈, 제품 소개, 정책에 Asta Sans 및 시스템 대체 서체 선언, Google Fonts 사용 | `src/pages/index.astro`, `src/layouts/ProductLayout.astro`, `src/pages/zeropl/privacy.astro` |
+| 테마 | 기본 배경과 강조색을 홈, zeroPL 한·영 소개, 정책에 공통 적용 | `src/styles/theme.css` |
 | zeroPL 개인정보 처리방침 | `/zeropl/privacy`, 한국어·영어 본문, 언어 전환, 목차, 요약, 문의 링크 | `src/pages/zeropl/privacy.astro`, `src/components/PrivacyDocument.astro` |
 | 정책 원문 | 앱의 검토된 정책 JSON을 웹 저장소에 복사하여 사용 | `src/data/zeropl-privacy.json`, `README.md` |
 | twoRT 도메인 연동 | Connect·iOS 클라이언트·Mac 클라이언트용 `webcredentials` 선언 | `public/.well-known/apple-app-site-association` |
@@ -48,7 +50,7 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 - defby.ai를 브랜드의 중심으로 두고, zeroPL과 twoRT를 각각의 제품명으로 소개한다.
 - 제품명은 언어와 관계없이 `zeroPL`, `twoRT`로 표기한다. 원격 접속을 받을 Mac의 앱은 `twoRT Connect`로 구분한다.
 - 영어와 한국어 모두에서 같은 정보와 사용 경로를 제공한다.
-- Asta Sans, 밝은 회색 배경, 차분한 녹색, 절제된 점 패턴을 공통 시각 언어로 이어간다.
+- Asta Sans, 아이보리 배경, 청록·파랑·코럴 강조색, 절제된 점 패턴을 공통으로 사용한다.
 
 ### 디자인 방향
 
@@ -157,23 +159,23 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 
 ### 색상
 
-기존 홈과 정책 페이지의 값을 공통 팔레트로 정리한다. 토큰 이름은 향후 공통 스타일로 추출할 때 사용할 제안이다.
+홈, zeroPL 한·영문 소개, 개인정보 처리방침의 밝은 테마는 `src/styles/theme.css`의 공통 팔레트를 사용한다.
 
-| 제안 토큰 | 값 | 현재 출처 / 용도 |
-| --- | --- | --- |
-| `--color-bg` | `#efefef` | 두 페이지의 기본 배경 |
-| `--color-brand` | `#56807b` | 로고 심벌의 녹색 |
-| `--color-brand-text` | `#5f5f5f` | 홈 브랜드명, 정책 페이지 로고 텍스트 |
-| `--color-text` | `#505453` | 정책 본문; 제품 소개의 기본 텍스트로 확장 |
-| `--color-muted` | `#636b68` | 정책 페이지 보조 설명 |
-| `--color-accent` | `#466e68` | 링크, 강조, 키보드 포커스 |
-| `--color-line` | `#cfd7d3` | 섹션 구분선 |
-| `--color-selection-bg` | `#cddfda` | 텍스트 선택 배경 |
-| `--color-selection-text` | `#2c4843` | 선택된 텍스트 |
+| 구분 | 토큰 | 값 | 용도 |
+| --- | --- | --- | --- |
+| 기본 배경 | `--color-bg` | `#F6F6F1` | 페이지 배경, 브라우저 및 웹 매니페스트 배경색 |
+| 강조색 1 | `--color-accent-1` | `#56807B` | 브랜드 심벌, 큰 제목, 기능 아이콘과 점 패턴 |
+| 강조색 2 | `--color-accent-2` | `#3562A6` | 링크, 주 버튼 배경, 키보드 포커스 |
+| 강조색 2 상태 | `--color-accent-2-active` | `#3C5E9E` | 링크와 주 버튼의 호버, 현재 언어, 선택된 전환 버튼 |
+| 강조색 3 | `--color-accent-3` | `#C85A48` | 로컬 AI 실시간 번역의 큰 제목과 데모 아이콘 |
+| 브랜드명 | `--color-brand-text` | `#5F5F5F` | defby.ai 워드마크 텍스트 |
+| 본문 | `--color-text` | `#3D4844` | 제목과 본문 |
+| 보조 텍스트 | `--color-muted` | `#636B68` | 보조 문구와 캡션 |
+| 구분선 | `--color-line` | 기본 배경에 강조색 1을 22% 혼합 | 헤더 경계, 섹션 구분선 |
+| 섹션 바탕 | `--color-surface` | 기본 배경에 강조색 1을 8% 혼합 | iPhone Duo 섹션, 번역 데모 카드 |
+| 컨트롤 바탕 | `--color-control` | 기본 배경에 강조색 2를 9% 혼합 | 자세 전환 버튼 그룹과 전환 버튼의 호버 바탕 |
 
-로고 녹색과 본문 링크용 녹색의 역할을 구분한다. 본문은 기본 텍스트색, 보조 설명은 muted, 동작은 accent를 사용한다. 색만으로 선택·호버·포커스를 구분하지 않는다. 채운 버튼을 추가할 경우 accent 배경과 흰색 글자를 출발점으로 삼고 실제 대비를 확인한다.
-
-초기 범위는 현재의 밝은 테마다. 다크 테마와 제품별 전용 강조색은 별도 검토 항목으로 둔다.
+작은 링크와 라벨에는 파랑 또는 본문색을 사용한다. 파랑으로 채운 버튼의 텍스트는 흰색을 사용한다. 선택된 전환 버튼에는 채운 배경과 `aria-pressed` 상태를 적용하고, 현재 언어에는 밑줄을 표시한다. 키보드 포커스는 윤곽선으로 표시한다.
 
 ### 타이포그래피: Asta Sans
 
@@ -256,7 +258,7 @@ https://fonts.googleapis.com/css2?family=Asta+Sans:wght@400;500;700&display=swap
 
 ### 우선 구현 제안
 
-1. 공통 색상·서체·레이아웃을 추출하고 Asta Sans 요청 굵기를 정리한다.
+1. 공통 서체·레이아웃을 추출하고 Asta Sans 요청 굵기를 정리한다.
 2. 홈에 zeroPL·twoRT 소개와 실제 제품 이미지를 추가한다.
 3. 영어·한국어 콘텐츠와 언어 전환을 적용한다.
 4. 준비된 제품 상세 페이지 및 배포 링크를 연결한다.

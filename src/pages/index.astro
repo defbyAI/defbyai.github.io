@@ -1,8 +1,12 @@
+---
+import "../styles/theme.css";
+---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F6F6F1" />
     <title>defby.ai</title>
     <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
     <link rel="shortcut icon" href="/favicon.ico?v=2" />
@@ -19,11 +23,6 @@
       rel="stylesheet"
     />
     <style>
-      :root {
-        --bg: #efefef;
-        --text: #5f5f5f;
-      }
-
       * {
         box-sizing: border-box;
       }
@@ -36,7 +35,7 @@
 
       body {
         font-family: "Asta Sans", "Helvetica Neue", Arial, sans-serif;
-        background: var(--bg);
+        background: var(--color-bg);
       }
 
       .page {
@@ -89,7 +88,7 @@
 
       .brand h1 {
         margin: 0;
-        color: var(--text);
+        color: var(--color-brand-text);
         font-size: clamp(2rem, 5.5vw, 4.4rem);
         line-height: 0.95;
         font-weight: 700;
@@ -98,7 +97,7 @@
 
       .tagline {
         margin: 20px 0 0;
-        color: #6b6b6b;
+        color: var(--color-muted);
         font-size: clamp(1rem, 1.6vw, 1.28rem);
         line-height: 1.2;
         letter-spacing: 0.01em;
@@ -120,13 +119,13 @@
         display: inline-flex;
         align-items: center;
         min-height: 44px;
-        color: #466e68;
+        color: var(--color-accent-2);
         text-decoration: none;
         text-underline-offset: 5px;
       }
 
-      .product-links a:hover { text-decoration: underline; }
-      .product-links a:focus-visible { outline: 2px solid #466e68; outline-offset: 5px; }
+      .product-links a:hover { color: var(--color-accent-2-active); text-decoration: underline; }
+      .product-links a:focus-visible { outline: 2px solid var(--color-accent-2); outline-offset: 5px; }
     </style>
   </head>
   <body>

@@ -32,17 +32,8 @@ const themes = platformCaptures.some(({ capture }) => capture.dark);
 </section>
 
 <script>
+  import "../../lib/zeropl/capture-appearance";
+
   const selector = document.querySelector<HTMLElement>(".capture-mode");
-  if (selector) {
-    const buttons = [...selector.querySelectorAll<HTMLButtonElement>("button[data-capture-mode]")];
-    selector.hidden = false;
-    buttons.forEach(button => button.addEventListener("click", () => {
-      const dark = button.dataset.captureMode === "dark";
-      buttons.forEach(option => option.setAttribute("aria-pressed", String(option === button)));
-      document.querySelectorAll<HTMLImageElement>("img[data-capture-dark]").forEach(image => {
-        const source = dark ? image.dataset.captureDark : image.dataset.captureLight;
-        if (source && image.getAttribute("src") !== source) image.src = source;
-      });
-    }));
-  }
+  if (selector) selector.hidden = false;
 </script>

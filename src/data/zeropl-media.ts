@@ -26,11 +26,17 @@ export const films = {
     credit: "© copyright Blender Foundation | www.sintel.org",
     video: "/zeropl/media/sintel-conversation.mp4",
     poster: "/zeropl/media/sintel-conversation.webp",
+    recording: {
+      video: "/zeropl/captures/sintel-translation-mac.mp4",
+      poster: "/zeropl/captures/sintel-translation-mac.webp",
+      width: 1280,
+      height: 720,
+    },
     range: "02:07–02:26",
     placement: { ko: "실시간 번역 · 누군가를 찾는 이야기", en: "Live translation · Searching for someone" },
     edits: {
-      ko: "영어 음성을 포함한 19초 발췌, 크기 조정 및 재인코딩. Duo에서 자막 없이 재생한 뒤 zeroPL이 생성한 한국어 자막을 캡처했습니다. 크레딧 이미지는 02:14에서 추출했습니다.",
-      en: "19-second excerpt with English audio, resized and re-encoded. zeroPL generated the Korean subtitle shown in the Duo capture. The credit still comes from 02:14.",
+      ko: "19초 발췌를 Mac의 zeroPL에서 재생하며 영어 음성과 앱이 만든 한국어 자막을 녹화했습니다. 화면 여백을 잘라내고 음량을 조정했습니다. 크레딧 이미지는 02:14에서 추출했습니다.",
+      en: "The 19-second excerpt was recorded in zeroPL on macOS with the English audio and the app’s Korean subtitles. The recording was cropped and the audio level adjusted. The credit still comes from 02:14.",
     },
   },
   bunny: {

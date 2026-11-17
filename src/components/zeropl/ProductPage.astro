@@ -1,6 +1,7 @@
 ---
 import ProductLayout from "../../layouts/ProductLayout.astro";
 import Icon from "./Icon.astro";
+import KeylineIcon from "./KeylineIcon.astro";
 import CaptureImage from "./CaptureImage.astro";
 import PlayerPreview from "./PlayerPreview.astro";
 import PlatformComparison from "./PlatformComparison.astro";
@@ -47,10 +48,7 @@ const promiseIcons = ["lock", "sparkles", "laptop-smartphone"];
       <div class="container promise-row">
         {t.promise.map((promise, index) => (
           <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <use href={`/zeropl/promise-icons.svg#${promiseIcons[index]}`} />
-            </svg>
+            <KeylineIcon name={promiseIcons[index]} size={18} />
             {promise}
           </span>
         ))}
@@ -87,7 +85,19 @@ const promiseIcons = ["lock", "sparkles", "laptop-smartphone"];
       <div class="section-copy"><p class="eyebrow">{t.webEyebrow}</p><h2 id="web-title">{t.webTitle[0]}<br /><span>{t.webTitle[1]}</span></h2><p class="section-body">{t.webBody}</p></div>
     </section>
 
-    <section class="container features-section" id="features" aria-labelledby="features-title"><p class="eyebrow">{t.everyEyebrow}</p><h2 id="features-title">{t.everyTitle}</h2><div class="feature-grid">{t.featureList.map(feature => <article><Icon name={feature.icon} size={29} /><h3>{feature.title}</h3><p>{feature.text}</p></article>)}</div></section>
+    <section class="container features-section" id="features" aria-labelledby="features-title">
+      <p class="eyebrow">{t.everyEyebrow}</p>
+      <h2 id="features-title">{t.everyTitle}</h2>
+      <div class="feature-grid">
+        {t.featureList.map(feature => (
+          <article>
+            <KeylineIcon name={feature.icon} size={29} />
+            <h3>{feature.title}</h3>
+            <p>{feature.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
 
     <section class="container closing"><img src="/zeropl/app-icon.png" alt="zeroPL" width="76" height="76" loading="lazy" /><h2>{t.endTitle}</h2><p>{t.endBody}</p><a class="text-link" href={`/zeropl/privacy#${lang}`}><Icon name="lock" size={15} />{t.privacy}<Icon name="arrow" size={16} /></a></section>
     <MediaCredits lang={lang} />

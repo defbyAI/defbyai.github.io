@@ -106,13 +106,7 @@ video { display: block; max-width: 100%; }
 .hero-preview .app-capture { box-shadow: 0 25px 60px -28px #263e3a66; }
 .platform-comparison { padding-block: 82px; border-bottom: 1px solid var(--line); }
 .platform-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
-.platform-heading h2 { margin-bottom: 12px; }
-.platform-heading .section-body { margin-bottom: 0; }
-.platform-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 25px; }
-.platform-capture { display: flex; flex-direction: column; gap: 16px; min-width: 0; margin: 0; }
-.platform-capture .app-capture { border-radius: 10px; }
-.platform-capture h3 { margin: 0 0 7px; font-size: 18px; font-weight: 550; }
-.platform-capture figcaption p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.platform-heading h2 { margin-bottom: 0; }
 .capture-mode { display: flex; padding: 3px; border: 1px solid var(--line); border-radius: 22px; }
 .capture-mode button { min-height: 44px; padding-inline: 14px; border: 0; border-radius: inherit; background: transparent; color: var(--muted); white-space: nowrap; font-size: 12px; }
 .capture-mode button:hover { background: var(--color-control); color: var(--color-accent-2-active); }
@@ -120,14 +114,7 @@ video { display: block; max-width: 100%; }
 .platform-comparison .media-credit { justify-content: start; }
 @media (max-width: 760px) {
   .platform-comparison { padding-block: 55px; }
-  .platform-heading { flex-direction: column; align-items: start; }
-  .platform-grid { grid-template-columns: minmax(0, 1fr); gap: 27px; }
-}
-.media-credit { justify-content: start; }
-@media (max-width: 760px) {
-  .platform-comparison { padding-block: 55px; }
-  .platform-heading { flex-direction: column; align-items: start; }
-  .platform-grid { grid-template-columns: minmax(0, 1fr); gap: 27px; }
+  .platform-heading { flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
 }
 
 .mock-track i { width: 73%; }

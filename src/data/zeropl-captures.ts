@@ -10,12 +10,6 @@ export interface DeviceCapture {
   alt: Localized;
 }
 
-interface PlatformCapture {
-  name: string;
-  description: Localized;
-  capture: DeviceCapture;
-}
-
 const duoLandscape: DeviceCapture = {
   light: "/zeropl/captures/comparison-duo-light.webp",
   dark: "/zeropl/captures/comparison-duo-dark.webp",
@@ -92,47 +86,3 @@ export const captures = {
     },
   },
 } satisfies Record<string, DeviceCapture>;
-
-export const platformCaptures: PlatformCapture[] = [
-  {
-    name: "Mac",
-    description: {
-      ko: "데스크톱 창에 재생과 볼륨 조절을 모았습니다. Mac 플레이어는 시스템 외관과 관계없이 어두운 테마를 사용합니다.",
-      en: "Playback and volume controls share a desktop window. The Mac player has a dark appearance in both system modes.",
-    },
-    capture: {
-      light: "/zeropl/captures/comparison-mac.webp",
-      width: 1120,
-      height: 743,
-      alt: {
-        ko: "Mac의 zeroPL에서 Big Buck Bunny를 일시정지한 화면과 하단 재생 컨트롤",
-        en: "Big Buck Bunny paused in the zeroPL Mac window, with playback controls along the bottom",
-      },
-    },
-  },
-  {
-    name: "iPad",
-    description: {
-      ko: "넓은 화면에서 영상과 파일 목록을 나란히 열어 두고, 아래에서 재생을 조절합니다.",
-      en: "Keep your video and file browser side by side, with playback controls below.",
-    },
-    capture: {
-      light: "/zeropl/captures/comparison-ipad-light.webp",
-      dark: "/zeropl/captures/comparison-ipad-dark.webp",
-      width: 1200,
-      height: 900,
-      alt: {
-        ko: "iPad의 zeroPL에서 일시정지한 Big Buck Bunny와 왼쪽 파일 탐색 패널",
-        en: "Big Buck Bunny paused in zeroPL on iPad, with the file browser open on the left",
-      },
-    },
-  },
-  {
-    name: "iPhone Duo",
-    description: {
-      ko: "펼친 가로 화면을 넓게 쓰고, 오른쪽의 세로 도구 모음에서 라이브러리와 네트워크 드라이브를 열 수 있습니다.",
-      en: "Use the full inner display in open landscape, with a vertical toolbar for the library and network drives.",
-    },
-    capture: duoLandscape,
-  },
-];

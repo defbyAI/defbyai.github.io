@@ -55,12 +55,20 @@ in `src/data/zeropl-media.ts`. Preserve these credits when reusing the assets.
   release. A sunny meadow with the bunny approaching flowers; the character
   remains readable on small displays.
 - Output: `bunny-meadow.mp4`, H.264, 960 × 540, 30 fps, no audio.
-- Poster and platform comparison frame: **01:07.000**. The clip prepared for
+- Poster and original comparison captures: **01:07.000**. The clip prepared for
   the platform comparison holds that frame so each device displays the same
   moment. The web demo played the approved excerpt on iPhone Duo while the
   same film was open in the built-in browser.
+- The platform mosaic at `/zeropl/#platforms` and
+  `/ko/zeropl/#platforms` uses **01:09.000** from the same Sunflower
+  release. A silent clip holds the frame while zeroPL displays its playback
+  controls. The Mac captures come from the running macOS app with cursor
+  capture disabled. Mobile captures come from the corresponding simulator
+  displays in light and dark appearance. The Duo's unfolded portrait tile
+  shows the complete inner display, including the demo folder in the
+  player's built-in file pane. The website serves resized WebPs.
 - Edits: excerpted, resized, re-encoded, audio removed. The iPad and browser
-  captures conceal internal addresses. The open-portrait Duo capture also
+  captures conceal internal addresses. The separate Duo pose showcase's open-portrait capture also
   conceals one history card at the edge. Seated playback shows the approved
   demo titles in recent history. Playback preserves the original aspect ratio.
 

@@ -1,13 +1,11 @@
 ---
-import CaptureImage from "./CaptureImage.astro";
+import PlatformMosaic from "./PlatformMosaic.astro";
 import MediaCredit from "./MediaCredit.astro";
-import { platformCaptures } from "../../data/zeropl-captures";
 import type { Language } from "../../data/zeropl";
 
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === "ko";
-const themes = platformCaptures.some(({ capture }) => capture.dark);
 ---
 
 <section class="container platform-comparison" id="platforms" aria-labelledby="platform-title">
@@ -15,20 +13,14 @@ const themes = platformCaptures.some(({ capture }) => capture.dark);
     <div>
       <p class="eyebrow">MAC · IPAD · IPHONE DUO</p>
       <h2 id="platform-title">{ko ? "같은 장면, 기기에 맞는 화면." : "Same scene. A view for every device."}</h2>
-      <p class="section-body">{ko ? "Big Buck Bunny의 01:07 장면을 일시정지해 재생 컨트롤과 화면 배치를 비교했습니다." : "See how the playback controls and layout differ with Big Buck Bunny paused on the same frame at 01:07."}</p>
     </div>
-    {themes && <div class="capture-mode" role="group" aria-label={ko ? "캡처 외관" : "Capture appearance"} hidden>
+    <div class="capture-mode" role="group" aria-label={ko ? "캡처 외관" : "Capture appearance"} hidden>
       <button type="button" data-capture-mode="light" aria-pressed="true">{ko ? "라이트" : "Light"}</button>
       <button type="button" data-capture-mode="dark" aria-pressed="false">{ko ? "다크" : "Dark"}</button>
-    </div>}
+    </div>
   </div>
-  <div class="platform-grid">
-    {platformCaptures.map(({ name, description, capture }) => <figure class="platform-capture">
-      <CaptureImage capture={capture} lang={lang} />
-      <figcaption><h3>{name}</h3><p>{description[lang]}</p></figcaption>
-    </figure>)}
-  </div>
-  <MediaCredit film="bunny" lang={lang} />
+  <PlatformMosaic {lang} />
+  <MediaCredit film="bunny" lang={lang} timecode="01:09" />
 </section>
 
 <script>

@@ -45,7 +45,7 @@ function mountFoldPreview(story: HTMLElement) {
 
   function draw(now: number) {
     frame = 0;
-    const elapsed = lastFrame ? now - lastFrame : 16;
+    const elapsed = lastFrame ? Math.min(now - lastFrame, 32) : 16;
     current = reducedMotion.matches || Math.abs(target - current) < 0.001
       ? target
       : current + (target - current) * (1 - Math.exp(-elapsed / 80));
@@ -104,9 +104,11 @@ function mountFoldPreview(story: HTMLElement) {
   async function loadAppearance() {
     const mode = captureAppearance;
     const id = ++request;
-    textures = undefined;
-    viewer.classList.remove("has-3d");
-    if (!shouldLoadScene || unavailable || reducedMotion.matches) return;
+    if (!shouldLoadScene || unavailable || reducedMotion.matches) {
+      textures = undefined;
+      viewer.classList.remove("has-3d");
+      return;
+    }
 
     try {
       scenePromise ??= import("./fold-preview-scene").then(({ createFoldPreviewScene }) => {
@@ -135,7 +137,10 @@ function mountFoldPreview(story: HTMLElement) {
         schedule();
       }
     } catch {
-      if (id === request) viewer.classList.remove("has-3d");
+      if (id === request) {
+        textures = undefined;
+        viewer.classList.remove("has-3d");
+      }
     }
   }
 
@@ -176,8 +181,8 @@ function mountFoldPreview(story: HTMLElement) {
     intersection.disconnect();
     shouldLoadScene = true;
     void loadAppearance();
-  }, { rootMargin: "320px 0px" });
-  intersection.observe(host);
+  }, { rootMargin: "640px 0px" });
+  intersection.observe(stage);
   followScroll();
   current = target;
   updateImage();

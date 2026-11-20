@@ -50,8 +50,8 @@ export const films = {
     range: "01:05–01:14",
     placement: { ko: "기기별 비교 · iPhone Duo · 브라우저", en: "Device comparison · iPhone Duo · Browser" },
     edits: {
-      ko: "Sunflower 배포본의 9초 발췌, 음성 제거, 크기 조정 및 재인코딩. Mac·iPad·Duo 비교와 크레딧 정지 화면은 01:07 장면을 사용합니다.",
-      en: "9-second excerpt from the Sunflower release, resized and re-encoded without audio. The comparison and credit still use the frame at 01:07.",
+      ko: "Sunflower 배포본의 9초 발췌, 음성 제거, 크기 조정 및 재인코딩. 기기별 재생 화면은 01:09, 크레딧 이미지는 01:07의 장면입니다.",
+      en: "9-second excerpt from the Sunflower release, resized and re-encoded without audio. The device mosaic shows 01:09. The credit still shows 01:07.",
     },
   },
 };
@@ -64,13 +64,13 @@ export const mediaText: Record<Language, {
 }> = {
   ko: {
     credits: "영상 출처·라이선스", details: "출처·편집 내역",
-    heading: "이야기를 빌려온 곳.",
+    heading: "데모에 사용한 영화",
     introduction: "이 페이지의 세 작품은 Blender Foundation의 오픈 무비입니다. 각 발췌 영상과 정지 장면은 CC BY 3.0에 따라 사용합니다.",
     original: "원작 보기", terms: "원작 사용 조건", edits: "편집 내역",
   },
   en: {
     credits: "Film credits & licenses", details: "Credits & edits",
-    heading: "The stories on our screens.",
+    heading: "Films used in the demos",
     introduction: "The three films on this page are Blender Foundation open movies. Excerpts and still frames are used under CC BY 3.0.",
     original: "View original", terms: "Original usage terms", edits: "Edits",
   },

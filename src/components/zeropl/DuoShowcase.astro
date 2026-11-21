@@ -38,7 +38,6 @@ const first = poses[0].capture;
           <img class="capture-fallback" data-fold-fallback src={first.light} alt={first.alt[lang]}
             width={first.width} height={first.height} loading={standalone ? "eager" : "lazy"} decoding="async" />
         </div>
-        <figcaption>{ko ? "iPhone Duo 실기기 캡처 · 설명용 폴더블 모형" : "iPhone Duo captures · Illustrative foldable frame"}</figcaption>
       </figure>
     </div>
 
@@ -83,7 +82,7 @@ const first = poses[0].capture;
   .pose-copy { margin-top: clamp(16px, 3svh, 32px); min-height: 88px; }
   .pose-copy :is(h2, h3) { margin: 0 0 7px; font-size: 14px; font-weight: 700; color: var(--color-accent-2); }
   .pose-copy p { max-width: 355px; margin: 0; color: var(--color-muted); font-size: 15px; line-height: 1.65; }
-  .phone-demo { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; margin: 0; }
+  .phone-demo { display: grid; grid-template-rows: minmax(0, 1fr); min-height: 0; margin: 0; }
   .phone-viewer {
     position: relative;
     height: clamp(240px, 57svh, 560px);
@@ -123,7 +122,6 @@ const first = poses[0].capture;
   @media (prefers-reduced-motion: no-preference) {
     .canvas-host, .capture-fallback { transition: opacity 300ms ease-in-out; }
   }
-  figcaption { text-align: center; margin-top: 7px; font-size: 11px; color: var(--color-muted); }
   .fold-controls { margin-top: 16px; }
   .control-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   .pose-buttons, .appearance-buttons { display: flex; gap: 4px; padding: 4px; border-radius: 10px; background: var(--color-control); }
@@ -158,7 +156,6 @@ const first = poses[0].capture;
     .pose-copy :is(h2, h3) { margin-bottom: 4px; font-size: 13px; }
     .pose-copy p { max-width: 480px; font-size: 13px; line-height: 1.55; }
     .phone-viewer { height: clamp(240px, 52svh, 400px); }
-    figcaption { margin-top: 2px; font-size: 10px; }
     .fold-controls { margin-top: 12px; }
     .pose-buttons, .appearance-buttons { padding: 2px; }
     .control-row button { padding-inline: 8px; font-size: 12px; }

@@ -2,7 +2,7 @@
 import Icon from "./Icon.astro";
 import MediaCredit from "./MediaCredit.astro";
 import { films } from "../../data/zeropl-media";
-import type { Language } from "../../data/zeropl";
+import { zeropl, type Language } from "../../data/zeropl";
 
 interface Props { lang: Language; }
 const { lang } = Astro.props;
@@ -11,7 +11,10 @@ const recording = films.sintel.recording;
 ---
 <div class="translation-demo" id="translation-demo">
   <figure class="translation-capture">
-    <div class="translation-demo-heading"><span><Icon name="spark" size={16} />English <Icon name="arrow" size={13} /> 한국어</span><span>macOS</span></div>
+    <figcaption class="translation-demo-heading">
+      <Icon name="spark" size={16} /><span lang="en">English</span>
+      <Icon name="arrow" size={13} /><span><span lang="ko">한국어</span> ({zeropl[lang].translation})</span>
+    </figcaption>
     <video
       class="translation-video"
       width={recording.width}
@@ -20,12 +23,11 @@ const recording = films.sintel.recording;
       playsinline
       preload="none"
       poster={recording.poster}
-      aria-label={ko ? "Mac의 zeroPL에서 녹화한 Sintel 영상과 한국어 실시간 번역 자막" : "Sintel recorded in zeroPL on macOS with live Korean subtitles"}
+      aria-label={ko ? "영어 대사를 한국어 자막으로 실시간 번역하는 예시 영상" : "English dialogue with live Korean subtitles"}
     >
       <source src={recording.video} type="video/mp4" />
       <a href={recording.video}>{ko ? "녹화 영상 열기" : "Open recording"}</a>
     </video>
-    <figcaption>{ko ? "Sintel · Mac에서 녹화한 19초" : "Sintel · 19 seconds recorded on Mac"}</figcaption>
   </figure>
   <MediaCredit film="sintel" lang={lang} />
 </div>

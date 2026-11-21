@@ -64,7 +64,7 @@ export const mediaText: Record<Language, {
 }> = {
   ko: {
     credits: "영상 출처·라이선스", details: "출처·편집 내역",
-    heading: "데모에 사용한 영화",
+    heading: "사용한 영상",
     introduction: "이 페이지의 세 작품은 Blender Foundation의 오픈 무비입니다. 각 발췌 영상과 정지 장면은 CC BY 3.0에 따라 사용합니다.",
     original: "원작 보기", terms: "원작 사용 조건", edits: "편집 내역",
   },

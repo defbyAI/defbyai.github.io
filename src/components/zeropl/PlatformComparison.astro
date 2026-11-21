@@ -1,18 +1,22 @@
 ---
 import PlatformMosaic from "./PlatformMosaic.astro";
 import MediaCredit from "./MediaCredit.astro";
-import type { Language } from "../../data/zeropl";
+import { zeropl, type Language } from "../../data/zeropl";
 
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === "ko";
+const t = zeropl[lang];
 ---
 
 <section class="container platform-comparison" id="platforms" aria-labelledby="platform-title">
   <div class="platform-heading">
     <div>
-      <p class="eyebrow">MAC · IPAD · IPHONE DUO</p>
-      <h2 id="platform-title">{ko ? "같은 장면, 기기에 맞는 화면." : "Same scene. A view for every device."}</h2>
+      <p class="eyebrow" lang="en">PER-DEVICE DESIGN</p>
+      <h2 id="platform-title">
+        {t.platformTitle.before}{ko && <br />}<span>{t.platformTitle.accent}</span>{!ko && <br />}{t.platformTitle.after}
+      </h2>
+      <p class="section-body">{t.platformBody}</p>
     </div>
     <div class="capture-mode" role="group" aria-label={ko ? "캡처 외관" : "Capture appearance"} hidden>
       <button type="button" data-capture-mode="light" aria-pressed="true">{ko ? "라이트" : "Light"}</button>

@@ -66,15 +66,6 @@ export const duoPoseCaptures: Partial<Record<string, DeviceCapture>> = {
 };
 
 export const captures = {
-  hero: {
-    light: "/zeropl/captures/mac-cosmos.webp",
-    width: 1480,
-    height: 981,
-    alt: {
-      ko: "Mac의 zeroPL에서 Cosmos Laundromat의 분홍빛 숲을 재생하는 화면",
-      en: "Cosmos Laundromat’s pink forest playing in zeroPL on a Mac",
-    },
-  },
   web: {
     light: "/zeropl/captures/duo-web-light.webp",
     dark: "/zeropl/captures/duo-web-dark.webp",

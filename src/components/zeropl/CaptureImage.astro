@@ -10,15 +10,16 @@ interface Props {
 
 const { capture, lang, priority = false } = Astro.props;
 ---
-<img
-  class="app-capture"
-  src={capture.light}
-  data-capture-light={capture.dark ? capture.light : undefined}
-  data-capture-dark={capture.dark}
-  width={capture.width}
-  height={capture.height}
-  alt={capture.alt[lang]}
-  loading={priority ? "eager" : "lazy"}
-  fetchpriority={priority ? "high" : "auto"}
-  decoding="async"
-/>
+<picture>
+  {capture.dark && <source media="(prefers-color-scheme: dark)" srcset={capture.dark} />}
+  <img
+    class="app-capture"
+    src={capture.light}
+    width={capture.width}
+    height={capture.height}
+    alt={capture.alt[lang]}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+    decoding="async"
+  />
+</picture>

@@ -1,0 +1,204 @@
+---
+import type { Language } from "../../data/products";
+import DesktopScene from "./DesktopScene.astro";
+import DuoLandscapeScreen from "./DuoLandscapeScreen.astro";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const ko = lang === "ko";
+const modes = [
+  {
+    id: "phone", label: ko ? "iPhone만" : "iPhone Only",
+    description: ko ? "Mac 화면과 조작 버튼이 iPhone에 표시됩니다. 외장 모니터에는 현재 모드가 표시됩니다."
+      : "Your Mac desktop and session controls appear on iPhone. The monitor shows which mode is active.",
+  },
+  {
+    id: "mirror", label: ko ? "미러링" : "Mirror",
+    description: ko ? "두 화면에 같은 Mac 데스크탑이 보입니다. 조작 버튼은 iPhone에만 표시됩니다."
+      : "Both screens show the same Mac desktop. Session controls stay on iPhone.",
+  },
+  {
+    id: "monitor", label: ko ? "외장 디스플레이만" : "External Display Only",
+    description: ko ? "Mac 데스크탑을 모니터에 띄웁니다. iPhone 화면을 트랙패드로 쓰거나 화면 키보드를 열어 입력하세요."
+      : "See your Mac desktop on the monitor. Use iPhone as a trackpad or open its keyboard to type.",
+  },
+  {
+    id: "extend", label: ko ? "확장 디스플레이" : "Extended Display",
+    description: ko ? "왼쪽의 iPhone Duo를 가로로 펼쳐 메모를 보세요. 포인터를 오른쪽 모니터로 옮겨 색상표에서 색을 고를 수 있습니다."
+      : "Unfold iPhone Duo in landscape to keep your notes open on the left. Move the pointer to the monitor on the right to choose a color from the palette.",
+  },
+] as const;
+---
+<section id="displays" class="display-feature" aria-labelledby="displays-title">
+  <div class="container">
+    <header class="intro">
+      <h2 id="displays-title">{ko ? "Mac 작업 공간을 두 화면으로." : "Your Mac workspace on two screens."}</h2>
+      <p class="section-body">
+        {ko
+          ? "iPhone에 USB-C로 모니터를 연결하세요. 세션 메뉴에서 ‘외장 디스플레이’를 열고 Mac의 작업 공간을 어디에 띄울지 선택할 수 있습니다."
+          : "Connect a monitor to your iPhone with USB-C. Open External Display in the session menu to choose where your Mac workspace appears."}
+      </p>
+    </header>
+    <figure class="display-demo">
+      <fieldset class="mode-picker">
+        <legend>{ko ? "디스플레이 모드 미리 보기" : "Preview a display mode"}</legend>
+        <div class="choices">
+          {modes.map(mode => (
+            <label>
+              <input type="radio" name="display-mode" value={mode.id} checked={mode.id === "extend"}
+                aria-describedby={`display-detail-${mode.id}`} />
+              <span>{mode.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div class="stage" aria-hidden="true">
+        <div class="devices">
+          <div class="phone-device">
+            <div class="phone-shell">
+              <div class="phone-desktop"><DesktopScene lang={lang} /></div>
+              <DuoLandscapeScreen lang={lang} />
+              <div class="inactive phone-inactive">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <rect x="2" y="3.5" width="20" height="14" rx="2" /><path d="M12 18v3m-4 0h8" />
+                </svg>
+                <span>{modes[2].label}</span>
+              </div>
+              <div class="phone-tools"><b>•••</b><i></i></div>
+            </div>
+            <span class="device-name iphone-label">iPhone</span>
+            <span class="device-name duo-label">iPhone Duo</span>
+          </div>
+          <div class="external-device">
+            <div class="monitor-shell">
+              <div class="monitor-desktop"><DesktopScene lang={lang} /></div>
+              <div class="palette-desktop">
+                <div class="palette-menu">{ko ? "색상표" : "Color palette"}</div>
+                <div class="palette-paper">
+                  <strong>{ko ? "해안의 색" : "Coastal colors"}</strong>
+                  <div class="palette-swatches"><i></i><i></i><i></i><i></i><i></i></div>
+                </div>
+              </div>
+              <div class="inactive monitor-inactive">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <rect x="6.5" y="1.5" width="11" height="21" rx="2.5" /><path d="M10 4h4m-3.5 16h3" />
+                </svg>
+                <span>{modes[0].label}</span>
+              </div>
+            </div>
+            <div class="monitor-foot"></div>
+            <span class="device-name">{ko ? "외장 모니터" : "External monitor"}</span>
+          </div>
+        </div>
+      </div>
+
+      <figcaption>
+        {modes.map(mode => (
+          <p class={`detail detail-${mode.id}`} id={`display-detail-${mode.id}`}>{mode.description}</p>
+        ))}
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .display-feature {
+    padding-block: clamp(58px, 7vw, 100px);
+    border-block: 1px solid var(--line);
+    background: var(--color-surface);
+  }
+  .intro { text-align: center; }
+  h2 { margin-bottom: 14px; text-wrap: balance; }
+  .intro p { max-width: 610px; margin: 0 auto; text-wrap: balance; }
+  .display-demo { max-width: 920px; margin: 30px auto 0; }
+  fieldset { min-width: 0; margin: 0; border: 0; padding: 0; text-align: center; }
+  legend { margin: 0 auto 7px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .choices { display: inline-grid; grid-auto-flow: column; gap: 2px; padding: 3px; border: 1px solid #becbc4; border-radius: 25px; background: var(--color-bg); }
+  label { position: relative; cursor: pointer; }
+  input {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip-path: inset(50%); margin: 0; padding: 0; white-space: nowrap;
+  }
+  label span { display: grid; place-items: center; min-height: 42px; border-radius: 22px; padding: 6px 15px; color: #4b5752; font-size: 14px; line-height: 1.3; }
+  label:hover span { background: var(--color-control); }
+  input:checked + span { background: var(--color-accent-2-active); color: white; }
+  input:focus-visible + span { outline: 2px solid var(--color-accent-2); outline-offset: 2px; }
+
+  .stage { container-type: inline-size; margin: 30px auto 12px; }
+  .devices { display: flex; justify-content: center; align-items: flex-end; gap: 5.3%; }
+  .phone-device { width: 27%; }
+  .external-device { width: 53%; }
+  .phone-shell, .monitor-shell {
+    display: grid; place-items: center; position: relative; isolation: isolate;
+    overflow: hidden; color: #b1b4b3; background: #101211;
+    border: max(1px, 0.24cqi) solid #454a48; box-shadow: 0 1.2cqi 1.6cqi -1.1cqi #2d3c344f;
+  }
+  .phone-shell { aspect-ratio: 2.16; border-radius: 2.1cqi; padding: 0.45cqi 0.9cqi; }
+  .phone-desktop { height: 100%; max-width: 100%; aspect-ratio: 16 / 10; overflow: hidden; }
+  .phone-tools {
+    position: absolute; left: 0.9cqi; top: 50%; transform: translateY(-50%);
+    display: grid; justify-items: center; gap: 0.75cqi; padding: 0.6cqi 0.3cqi;
+    color-scheme: light dark;
+    border-radius: 1cqi; background: light-dark(#46504dd9, #282d2deb); color: white; font: bold 0.52cqi/1 sans-serif;
+  }
+  .phone-tools i { width: 1cqi; height: 0.64cqi; border: 0.12cqi solid currentColor; border-radius: 0.16cqi; }
+  .monitor-shell { aspect-ratio: 16 / 10; padding: 0.7cqi; border-radius: 1.4cqi; }
+  .monitor-desktop, .palette-desktop { width: 100%; height: 100%; overflow: hidden; border-radius: 0.4cqi; }
+  .monitor-foot {
+    width: 27%; height: 3.9cqi; margin: 0 auto;
+    background: linear-gradient(#69706c, #bec3bd 78%, #848c86);
+    clip-path: polygon(30% 0, 70% 0, 75% 81%, 100% 94%, 100% 100%, 0 100%, 0 94%, 25% 81%);
+  }
+  .device-name { display: block; margin-top: 0.8cqi; text-align: center; font-size: clamp(11px, 1.6cqi, 14px); color: #52615a; }
+  .duo-label, .phone-shell :global(.duo-screen) { display: none; }
+  .phone-shell :global(.duo-screen) { width: 100%; border-radius: 1.1cqi; }
+  .inactive { position: absolute; inset: 0; display: none; align-content: center; justify-items: center; gap: 0.6cqi; }
+  .inactive svg { width: 3cqi; height: 3cqi; }
+  .inactive span { font-size: 1.4cqi; }
+  .phone-inactive svg { width: 2cqi; height: 2cqi; }
+  .phone-inactive span { font-size: 1cqi; }
+  .palette-desktop { display: none; position: relative; color-scheme: light dark; background: light-dark(#d2dacf, #27312e); color: light-dark(#34433b, #edf0e8); }
+  .palette-menu { padding: 0.3cqi 1cqi; background: light-dark(#f6f5eb, #323b38); font-size: 0.8cqi; font-weight: 600; }
+  .palette-paper {
+    position: absolute; inset: 15% 11% 12%; padding: 2.05cqi;
+    display: flex; flex-direction: column; gap: 1.35cqi;
+    background: light-dark(#fbf7ec, #414845); box-shadow: 0 0.6cqi 1.7cqi #32443c32;
+  }
+  .palette-paper strong { font-size: 2.65cqi; line-height: 1.15; font-weight: 600; letter-spacing: -0.06em; }
+  .palette-swatches { flex: 1; display: flex; }
+  .palette-swatches i { flex: 1; background: #234f53; }
+  .palette-swatches i:nth-child(2) { background: #4e897d; }
+  .palette-swatches i:nth-child(3) { background: #9fb5a1; }
+  .palette-swatches i:nth-child(4) { background: #d3ad78; }
+  .palette-swatches i:nth-child(5) { background: #ad6846; }
+
+  figcaption { text-align: center; }
+  .detail { display: none; margin: 0 auto; max-width: 650px; font-size: 16px; line-height: 1.7; text-wrap: balance; }
+  .display-demo:has([value="phone"]:checked) .detail-phone,
+  .display-demo:has([value="mirror"]:checked) .detail-mirror,
+  .display-demo:has([value="monitor"]:checked) .detail-monitor,
+  .display-demo:has([value="extend"]:checked) :is(.detail-extend, .palette-desktop, .duo-label),
+  .display-demo:has([value="extend"]:checked) .phone-shell :global(.duo-screen) { display: block; }
+  .display-demo:has([value="extend"]:checked) .phone-device { width: 33%; }
+  .display-demo:has([value="extend"]:checked) .phone-shell {
+    display: block; aspect-ratio: auto; padding: 0.5cqi; border-radius: 1.7cqi;
+  }
+  .display-demo:has([value="extend"]:checked) :is(.phone-tools, .iphone-label, .phone-desktop) { display: none; }
+  .display-demo:has([value="phone"]:checked) .monitor-inactive,
+  .display-demo:has([value="monitor"]:checked) .phone-inactive { display: grid; }
+  .display-demo:has([value="phone"]:checked, [value="extend"]:checked) .monitor-desktop,
+  .display-demo:has([value="monitor"]:checked) .phone-desktop { display: none; }
+
+  @media (max-width: 760px) {
+    .devices { gap: 4.5%; }
+    .phone-device { width: 31%; }
+    .external-device { width: 60%; }
+    .stage { margin-top: 24px; }
+  }
+  @media (max-width: 610px) {
+    .mode-picker .choices { grid-auto-flow: row; grid-template-columns: 1fr 1fr; border-radius: 17px; }
+    .mode-picker label span { border-radius: 13px; }
+    .detail { font-size: 15px; }
+  }
+</style>

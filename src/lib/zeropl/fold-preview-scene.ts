@@ -129,7 +129,10 @@ function createStudioReflections(renderer: THREE.WebGLRenderer) {
 
 export function createFoldPreviewScene(
   host: HTMLElement,
-  options: { pageTurnProjection?: typeof createPageTurnProjection } = {},
+  { pageTurnProjection, keyboardModule }: {
+    pageTurnProjection?: typeof createPageTurnProjection;
+    keyboardModule?: typeof import("../twort/keyboard-model");
+  } = {},
 ) {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -139,7 +142,8 @@ export function createFoldPreviewScene(
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 40);
-  scene.add(new THREE.HemisphereLight(0xf7faf9, 0x797d73, 2.15));
+  const fill = new THREE.HemisphereLight(0xf7faf9, 0x797d73, 2.15);
+  scene.add(fill);
   const key = new THREE.DirectionalLight(0xfff9ed, 2.6);
   key.position.set(-3, 5, 5);
   scene.add(key);
@@ -168,8 +172,10 @@ export function createFoldPreviewScene(
   const glass = new THREE.MeshBasicMaterial({ color: 0x0d100f, toneMapped: false });
   const leftShell = createShell(false);
   const rightShell = createShell(true);
-  fixed.add(new THREE.Mesh(rightShell.geometry, shell));
-  leaf.add(new THREE.Mesh(leftShell.geometry, shell));
+  const fixedShell = new THREE.Mesh(rightShell.geometry, shell);
+  const movingShell = new THREE.Mesh(leftShell.geometry, shell);
+  fixed.add(fixedShell);
+  leaf.add(movingShell);
 
   const spine = createBackSpine();
   const spineMesh = new THREE.Mesh(spine.geometry, spineMaterial);
@@ -192,7 +198,7 @@ export function createFoldPreviewScene(
 
   const outer = displayMaterials();
   const inner = displayMaterials(true);
-  const updateProjection = options.pageTurnProjection?.(outer, inner);
+  const updateProjection = pageTurnProjection?.(outer, inner);
   addDisplay(hinge, innerScreen.geometry, inner);
   addDisplay(leaf, flatScreenGeometry(displays.cover.width, displays.cover.height, mm(1.25), enclosure.corner - mm(2.7)), outer,
     (enclosure.foldedWidth - enclosure.width) / 2, -enclosure.thickness - mm(0.23), true);
@@ -204,6 +210,51 @@ export function createFoldPreviewScene(
   const [maxViewportWidth, maxViewportHeight] = gl.getParameter(gl.MAX_VIEWPORT_DIMS) as Int32Array;
   const halfWidth = enclosure.width / 2;
   const halfHeight = enclosure.height / 2;
+  const keyboard = keyboardModule?.createKeyboardModel();
+  const keyboardBack = halfWidth + mm(60);
+  const keyboardCorners: THREE.Vector3[] = [];
+  const deskShadow = new THREE.ShadowMaterial({ opacity: 0, depthWrite: false });
+  if (keyboard && keyboardModule) {
+    const size = keyboardModule.keyboardSize;
+    // The model uses millimetres. On the seated lower panel, +Y runs along the
+    // hinge, +X points toward the typist, and +Z is above the desk.
+    const unit = mm(1);
+    keyboard.group.matrixAutoUpdate = false;
+    keyboard.group.matrix.set(
+      0, unit, 0, keyboardBack,
+      unit, 0, 0, 0,
+      0, 0, unit, -enclosure.thickness,
+      0, 0, 0, 1,
+    );
+    for (const x of [-size.width / 2, size.width / 2]) {
+      for (const y of [0, size.depth]) {
+        for (const z of [0, size.height]) {
+          keyboardCorners.push(new THREE.Vector3(x, y, z).applyMatrix4(keyboard.group.matrix));
+        }
+      }
+    }
+    keyboard.group.visible = false;
+    fixed.add(keyboard.group);
+
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
+    key.position.multiplyScalar(3);
+    key.shadow.mapSize.set(1024, 1024);
+    Object.assign(key.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 0.5, far: 40 });
+    key.shadow.camera.updateProjectionMatrix();
+    key.shadow.normalBias = mm(0.18);
+    key.shadow.bias = -0.00015;
+    key.shadow.radius = 2.5;
+    key.shadow.intensity = 0.7;
+    fixedShell.castShadow = movingShell.castShadow = true;
+    keyboard.group.traverse(object => {
+      if (object instanceof THREE.Mesh) object.castShadow = object.receiveShadow = true;
+    });
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(mm(900), mm(900)), deskShadow);
+    floor.position.set(keyboardBack, 0, -enclosure.thickness - mm(0.15));
+    floor.receiveShadow = true;
+    fixed.add(floor);
+  }
   const panelCorners = (edge: number) => [0, edge].flatMap(x => [-halfHeight, halfHeight].flatMap(y =>
     [-enclosure.thickness, mm(0.23)].map(z => new THREE.Vector3(x, y, z))));
   const panelBounds = [
@@ -215,6 +266,8 @@ export function createFoldPreviewScene(
   const cameraRight = new THREE.Vector3();
   const cameraUp = new THREE.Vector3();
   const cornerInView = new THREE.Vector3();
+  const deskBounds = [...panelBounds, { panel: fixed, corners: keyboardCorners }];
+  const deskCenter = new THREE.Vector3();
   const verticalSlope = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 0.9;
   let width = 0;
   let height = 0;
@@ -232,7 +285,7 @@ export function createFoldPreviewScene(
       }
       return textures;
     },
-    render(pose: FoldSample, textures: THREE.Texture[]) {
+    render(pose: FoldSample, textures: THREE.Texture[], reveal = 0, dark = false) {
       const nextWidth = host.clientWidth;
       const nextHeight = host.clientHeight;
       if (nextWidth === 0 || nextHeight === 0) return;
@@ -283,8 +336,8 @@ export function createFoldPreviewScene(
       blendDisplay(outer, textures[Math.min(pose.previous, lastCoverPose)], textures[Math.min(pose.next, lastCoverPose)], pose.dissolve, coverLight);
       blendDisplay(inner, textures[Math.max(pose.previous, firstInnerPose)], textures[Math.max(pose.next, firstInnerPose)], pose.dissolve, 1);
 
-      const yaw = THREE.MathUtils.degToRad(pose.yaw);
-      const elevation = THREE.MathUtils.degToRad(pose.elevation);
+      const yaw = THREE.MathUtils.degToRad(THREE.MathUtils.lerp(pose.yaw, -17, reveal));
+      const elevation = THREE.MathUtils.degToRad(THREE.MathUtils.lerp(pose.elevation, 35, reveal));
       const plane = Math.cos(elevation);
       target.set(0, pose.targetY, 0);
       cameraDirection.set(Math.sin(yaw) * plane, Math.sin(elevation), Math.cos(yaw) * plane);
@@ -305,6 +358,44 @@ export function createFoldPreviewScene(
           );
           distance = Math.max(distance, cornerInView.dot(cameraDirection) + required);
         }
+      }
+      if (keyboard) {
+        keyboard.group.visible = key.castShadow = reveal > 0;
+        // Raking studio light separates the curved crowns, key skirts and chassis lip.
+        key.position.set(-9 + 17 * reveal, 15 + 7 * reveal, 15 - 20 * reveal);
+        fill.intensity = THREE.MathUtils.lerp(2.15, 1.82, reveal);
+        deskShadow.opacity = 0.12 * reveal;
+        if (keyboard.group.visible) {
+          keyboard.setDark(dark);
+          // Fit both objects in perspective at their real sizes. For a corner (x,y,z)
+          // in the camera basis, each horizontal frustum limit is x ± z * slope.
+          let left = Infinity, right = -Infinity, bottom = Infinity, top = -Infinity;
+          for (const { panel, corners } of deskBounds) {
+            for (const corner of corners) {
+              cornerInView.copy(corner).applyMatrix4(panel.matrixWorld);
+              const x = cornerInView.dot(cameraRight);
+              const y = cornerInView.dot(cameraUp);
+              const z = cornerInView.dot(cameraDirection);
+              left = Math.min(left, x - z * horizontalSlope);
+              right = Math.max(right, x + z * horizontalSlope);
+              bottom = Math.min(bottom, y - z * verticalSlope);
+              top = Math.max(top, y + z * verticalSlope);
+            }
+          }
+          deskCenter.copy(cameraRight).multiplyScalar((left + right) / 2)
+            .addScaledVector(cameraUp, (bottom + top) / 2);
+          const deskDistance = Math.max((right - left) / (2 * horizontalSlope), (top - bottom) / (2 * verticalSlope));
+          target.lerp(deskCenter, reveal);
+          distance = THREE.MathUtils.lerp(distance, deskDistance, reveal);
+          // Slide in along the desk; never scale the keyboard or tilt it away from the Duo.
+          keyboard.group.matrix.elements[12] = keyboardBack + distance * 1.25 * (1 - reveal) ** 2;
+          keyboard.group.matrixWorldNeedsUpdate = true;
+        }
+      }
+      const far = Math.max(40, distance + 20);
+      if (camera.far !== far) {
+        camera.far = far;
+        camera.updateProjectionMatrix();
       }
       camera.position.copy(target).addScaledVector(cameraDirection, distance);
       camera.lookAt(target);

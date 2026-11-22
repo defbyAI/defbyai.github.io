@@ -1,0 +1,15 @@
+---
+import type { Language } from "../../data/products";
+
+interface Props { lang: Language; }
+const image = `/twort/duo/${Astro.props.lang === "ko" ? "ko/" : ""}open-landscape`;
+---
+<picture class="duo-screen">
+  <source media="(prefers-color-scheme: dark)" srcset={`${image}-dark.webp`} />
+  <img src={`${image}.webp`} width="1068" height="752" alt="" loading="lazy" decoding="async" />
+</picture>
+
+<style>
+  picture { display: block; overflow: hidden; }
+  img { display: block; width: 100%; height: auto; }
+</style>

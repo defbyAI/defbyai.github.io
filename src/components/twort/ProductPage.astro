@@ -1,0 +1,106 @@
+---
+import ProductLayout from "../../layouts/ProductLayout.astro";
+import ProductHeader from "../ProductHeader.astro";
+import { productPath, type Language } from "../../data/products";
+import { twort } from "../../data/twort";
+import DisplayModes from "./DisplayModes.astro";
+import DuoPoses from "./DuoPoses.astro";
+import SessionFeatures from "./SessionFeatures.astro";
+import ShortcutDemo from "./ShortcutDemo.astro";
+import WorkspacePreview from "./WorkspacePreview.astro";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const t = twort[lang];
+const links = [
+  { href: "#workspace", label: t.workspace },
+  { href: "#controls", label: t.controls },
+  { href: "#duo", label: "iPhone Duo" },
+  { href: "#displays", label: t.displays },
+  { href: "#connect", label: t.setup },
+];
+---
+<ProductLayout product="twort" lang={lang} title={t.title} description={t.intro}>
+  <slot name="head" slot="head" />
+  <ProductHeader product="twort" lang={lang} links={links} />
+  <main id="main">
+    <section class="product-hero" aria-labelledby="hero-title">
+      <div class="hero-dots" aria-hidden="true"></div>
+      <div class="container hero-heading">
+        <div class="hero-wordmark">
+          <img src="/twort/app-icon.webp" alt="" width="50" height="50" />
+          <span>twoRT</span>
+        </div>
+        <h1 id="hero-title">{t.hero}</h1>
+        <p class="hero-intro">{t.intro}</p>
+        <a class="action" href="#connect">{t.setup}</a>
+      </div>
+      <WorkspacePreview lang={lang} />
+    </section>
+
+    <ShortcutDemo lang={lang} />
+    <DuoPoses lang={lang} />
+    <DisplayModes lang={lang} />
+    <SessionFeatures lang={lang} />
+
+    <section id="connect" class="setup" aria-labelledby="setup-title">
+      <div class="container split-section">
+        <div>
+          <h2 id="setup-title">{t.connectTitle[0]}<br /><span>{t.connectTitle[1]}</span></h2>
+          <a class="action" href="https://github.com/defbyAI/twoRT-Connect/releases/latest">{t.download}</a>
+          <p class="requirements">{t.requirements}</p>
+        </div>
+        <div class="setup-apps">
+          <div>
+            <p class="device-role">{t.host}</p>
+            <h3>twoRT Connect</h3>
+            <p>{t.hostText}</p>
+          </div>
+          <div>
+            <p class="device-role">{t.client}</p>
+            <h3>twoRT</h3>
+            <p>{t.clientText}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="container site-footer">
+    <a class="site-brand" href="/"><img src="/defby_logo.svg" width="24" height="24" alt="" />defby.ai</a>
+    <div class="footer-links">
+      <a href={productPath("zeropl", lang)}>{t.zeroPL}</a>
+      <a href={`/twort/privacy#${lang}`}>{t.privacy}</a>
+      <a href="#top">{t.top}</a>
+    </div>
+  </footer>
+</ProductLayout>
+
+<style>
+  .product-hero { padding-bottom: clamp(42px, 5vw, 80px); border-bottom: 1px solid var(--line); }
+  .hero-heading { padding-block: clamp(38px, 4.2vw, 64px) clamp(32px, 3.2vw, 48px); }
+  .hero-wordmark { gap: 12px; margin-bottom: 21px; }
+  .hero-wordmark img { margin: 0; width: 44px; height: 44px; border-radius: 22%; }
+  .hero-heading h1 { margin-bottom: 18px; }
+  .hero-intro { margin: 0 auto 20px; max-width: 750px; font-size: clamp(16px, 1.5vw, 19px); text-wrap: balance; }
+  .action {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 9px 23px; border-radius: 30px;
+    background: var(--color-accent-2); color: white;
+    font-weight: 500; font-size: 15px; text-decoration: none;
+  }
+  .action:hover { background: var(--color-accent-2-active); }
+  .setup { background: var(--color-surface); border-block: 1px solid var(--line); }
+  .setup .split-section { padding-block: clamp(60px, 7.5vw, 110px); }
+  .setup h2 { text-wrap: balance; margin-bottom: 30px; }
+  .requirements { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+  .setup-apps > div + div { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .device-role { margin: 0 0 4px; font-size: 14px; color: var(--muted); }
+  .setup-apps h3 { font-size: 25px; font-weight: 550; letter-spacing: -0.045em; margin: 0 0 8px; }
+  .setup-apps h3 + p { font-size: 16px; line-height: 1.75; margin: 0; }
+  .site-footer { border: none; align-items: center; }
+  .footer-links { font-size: 14px; }
+  @media (max-width: 480px) {
+    .hero-wordmark img { width: 38px; height: 38px; }
+    .site-footer { align-items: flex-start; }
+  }
+</style>

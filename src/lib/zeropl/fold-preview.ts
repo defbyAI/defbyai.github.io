@@ -1,4 +1,4 @@
-import { clampProgress, foldPoses, sampleFold } from "./fold-preview-poses";
+import { clampProgress, sampleFold, type FoldKeyframe } from "./fold-preview-poses";
 import type { createFoldPreviewScene } from "./fold-preview-scene";
 import { captureAppearance, captureAppearanceChange, type CaptureAppearance } from "./capture-appearance";
 
@@ -14,6 +14,8 @@ function mountFoldPreview(story: HTMLElement) {
   const controls = story.querySelector<HTMLElement>("[data-fold-controls]")!;
   const progressBar = story.querySelector<HTMLElement>("[data-fold-progress]")!;
   const copies = [...story.querySelectorAll<HTMLElement>("[data-fold-copy]")];
+  const frames: FoldKeyframe[] = JSON.parse(story.dataset.foldFrames!);
+  const accessoryIndex = copies.findIndex(copy => copy.hasAttribute("data-fold-accessory"));
   const buttons = [...story.querySelectorAll<HTMLButtonElement>("[data-fold-pose]")];
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const cache = new Map<CaptureAppearance, Promise<Textures>>();
@@ -50,7 +52,12 @@ function mountFoldPreview(story: HTMLElement) {
     current = reducedMotion.matches || Math.abs(target - current) < 0.001
       ? target
       : current + (target - current) * (1 - Math.exp(-elapsed / 80));
-    const sample = sampleFold(current);
+    const sample = sampleFold(current, frames);
+    const accessoryReveal = (sample.previous === accessoryIndex ? 1 - sample.dissolve : 0)
+      + (sample.next === accessoryIndex ? sample.dissolve : 0);
+    if (accessoryIndex >= 0) {
+      viewer.style.setProperty("--accessory-reveal", String(accessoryReveal));
+    }
     if (active !== sample.active) {
       active = sample.active;
       copies.forEach((copy, index) => { copy.hidden = index !== active; });
@@ -59,7 +66,7 @@ function mountFoldPreview(story: HTMLElement) {
     }
     progressBar.style.transform = `scaleX(${current})`;
     if (scene && textures && !unavailable && !reducedMotion.matches) {
-      scene.render(sample, textures);
+      scene.render(sample, textures, accessoryReveal, captureAppearance === "dark");
       viewer.classList.add("has-3d");
     }
     lastFrame = current === target ? 0 : now;
@@ -92,7 +99,7 @@ function mountFoldPreview(story: HTMLElement) {
   }
 
   function select(index: number) {
-    const position = foldPoses[index].at;
+    const position = frames[index].at;
     const distance = scrollDistance();
     if (distance > 0) {
       window.scrollTo({ top: window.scrollY + story.getBoundingClientRect().top + distance * position, behavior: "smooth" });
@@ -112,8 +119,11 @@ function mountFoldPreview(story: HTMLElement) {
     }
 
     try {
-      scenePromise ??= import("./fold-preview-scene").then(({ createFoldPreviewScene }) => {
-        const preview = createFoldPreviewScene(host);
+      scenePromise ??= Promise.all([
+        import("./fold-preview-scene"),
+        accessoryIndex >= 0 ? import("../twort/keyboard-model") : undefined,
+      ]).then(([{ createFoldPreviewScene }, keyboardModule]) => {
+        const preview = createFoldPreviewScene(host, { keyboardModule });
         preview.canvas.addEventListener("webglcontextlost", () => {
           unavailable = true;
           viewer.classList.remove("has-3d");

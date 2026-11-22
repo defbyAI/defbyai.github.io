@@ -1,5 +1,7 @@
 ---
+import { productEntryPath, productNames, productPath, type Product } from "../data/products";
 import "../styles/theme.css";
+const products: Product[] = ["zeropl", "twort"];
 ---
 <!doctype html>
 <html lang="en">
@@ -110,14 +112,18 @@ import "../styles/theme.css";
       .product-links {
         display: flex;
         align-items: center;
-        gap: 22px;
+        gap: 26px;
         margin-top: 28px;
-        font-size: 13px;
+        font-size: 14px;
       }
 
+      .product-group { display: flex; align-items: center; gap: 4px; }
+      .product-group + .product-group { padding-left: 26px; border-left: 1px solid var(--color-line); }
       .product-links a {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        min-width: 44px;
         min-height: 44px;
         color: var(--color-accent-2);
         text-decoration: none;
@@ -126,6 +132,11 @@ import "../styles/theme.css";
 
       .product-links a:hover { color: var(--color-accent-2-active); text-decoration: underline; }
       .product-links a:focus-visible { outline: 2px solid var(--color-accent-2); outline-offset: 5px; }
+      @media (max-width: 480px) {
+        .product-links { flex-direction: column; gap: 0; align-items: stretch; margin-top: 18px; }
+        .product-group { justify-content: center; }
+        .product-group + .product-group { padding-left: 0; border-left: 0; }
+      }
     </style>
   </head>
   <body>
@@ -147,27 +158,38 @@ import "../styles/theme.css";
           <h1>defby.ai</h1>
         </div>
         <p class="tagline">&nbsp;&nbsp;&nbsp;AI defines everything. You make it matter.</p>
-        <nav class="product-links" aria-label="Explore zeroPL">
-          <a href="/zeropl/" data-zeropl-link>Explore zeroPL ↗</a>
-          <noscript><a href="/ko/zeropl/" lang="ko">한국어 ↗</a></noscript>
+        <nav class="product-links" aria-label="Explore products">
+          {products.map(product => (
+            <div class="product-group">
+              <a href={productEntryPath(product)} data-product-link={product} lang="en">Explore {productNames[product]} ↗</a>
+              <noscript><a href={productPath(product, "ko")} lang="ko">{productNames[product]} 한국어 ↗</a></noscript>
+            </div>
+          ))}
         </nav>
       </section>
     </main>
 
     <script>
-      import { preferredLanguage, productPaths } from "../lib/zeropl/language";
+      import { productNames, productPath, type Product } from "../data/products";
+      import { preferredLanguage } from "../lib/language";
 
-      const link = document.querySelector<HTMLAnchorElement>("[data-zeropl-link]")!;
-      function updateProductLink() {
+      const nav = document.querySelector<HTMLElement>(".product-links")!;
+      const links = nav.querySelectorAll<HTMLAnchorElement>("[data-product-link]");
+      function updateProductLinks() {
         const language = preferredLanguage();
-        link.lang = language;
-        link.href = productPaths[language];
-        link.textContent = language === "ko" ? "zeroPL 둘러보기 ↗" : "Explore zeroPL ↗";
+        nav.lang = language;
+        nav.setAttribute("aria-label", language === "ko" ? "제품 둘러보기" : "Explore products");
+        for (const link of links) {
+          const product = link.dataset.productLink as Product;
+          link.lang = language;
+          link.href = productPath(product, language);
+          link.textContent = language === "ko" ? `${productNames[product]} 둘러보기 ↗` : `Explore ${productNames[product]} ↗`;
+        }
       }
-      updateProductLink();
-      window.addEventListener("pageshow", updateProductLink);
-      window.addEventListener("storage", updateProductLink);
-      window.addEventListener("languagechange", updateProductLink);
+      updateProductLinks();
+      window.addEventListener("pageshow", updateProductLinks);
+      window.addEventListener("storage", updateProductLinks);
+      window.addEventListener("languagechange", updateProductLinks);
     </script>
 
     <script is:inline>

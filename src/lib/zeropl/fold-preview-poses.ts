@@ -8,6 +8,8 @@ interface FoldPosition {
   targetY: number;
 }
 
+export interface FoldKeyframe extends FoldPosition { at: number; }
+
 export const foldPoses = [
   { id: "folded", at: 0, opening: 0, roll: 0, tilt: 0, yaw: -14, elevation: 5, distance: 7.2, targetY: 0 },
   { id: "folded-landscape", at: 0.22, opening: 0, roll: -90, tilt: 0, yaw: -8, elevation: 7, distance: 7, targetY: 0 },
@@ -20,11 +22,11 @@ export function clampProgress(progress: number) {
   return Math.max(0, Math.min(progress, 1));
 }
 
-export function sampleFold(progress: number) {
-  const next = foldPoses.findIndex((pose, index) => index > 0 && pose.at >= progress);
+export function sampleFold(progress: number, frames: readonly FoldKeyframe[]) {
+  const next = frames.findIndex((pose, index) => index > 0 && pose.at >= progress);
   const previous = next - 1;
-  const a = foldPoses[previous];
-  const b = foldPoses[next];
+  const a = frames[previous];
+  const b = frames[next];
   const t = (progress - a.at) / (b.at - a.at);
   const ease = (value: number) => value * value * (3 - 2 * value);
   const time = ease(t);

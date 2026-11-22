@@ -1,8 +1,8 @@
-The zeroPL Duo demo adapts the fold angle and cover-display handoff from
+The fold angle and cover-display handoff in the zeroPL and twoRT Duo demos are adapted from
 Fold Preview, published at https://github.com/chuspeeism/iphone-duo.
-The Duo title videos also adapt its fixed front-view projection and its
+The zeroPL Duo title videos also adapt its fixed front-view projection and its
 blur and darkening at the turning edge.
-The demo also bundles Three.js from https://threejs.org/.
+The demos also bundle Three.js from https://threejs.org/.
 
 MIT License
 

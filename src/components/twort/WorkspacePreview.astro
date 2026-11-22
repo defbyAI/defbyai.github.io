@@ -1,0 +1,123 @@
+---
+import type { Language } from "../../data/products";
+import { twort } from "../../data/twort";
+import DesktopScene from "./DesktopScene.astro";
+import DuoLandscapeScreen from "./DuoLandscapeScreen.astro";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const t = twort[lang];
+const devices = [
+  { id: "ipad", name: "iPad" },
+  { id: "iphone", name: "iPhone" },
+  { id: "duo", name: "iPhone Duo" },
+] as const;
+---
+<figure class="workspace container" id="workspace">
+  <div class="stage" role="img" aria-label={t.sceneLabel}>
+    <div class="scene" aria-hidden="true">
+      <div class="stand"></div>
+      <div class="monitor"><DesktopScene lang={lang} /></div>
+      <div class="guest"><div class="guest-glass">
+        <DesktopScene lang={lang} />
+        <DuoLandscapeScreen lang={lang} />
+      </div></div>
+    </div>
+  </div>
+  <figcaption>
+    <p class="scene-caption">{t.sceneCaption}</p>
+    <fieldset class="picker">
+      <legend class="sr-only">{t.selectDevice}</legend>
+      {devices.map(({ id, name }, index) => (
+        <label>
+          <input type="radio" name="device" value={id} checked={index === 0} aria-describedby={`detail-${id}`} />
+          <span>{name}</span>
+        </label>
+      ))}
+    </fieldset>
+    <div class="device-details">
+      {devices.map(({ id }) => <p id={`detail-${id}`}>{t.devices[id]}</p>)}
+    </div>
+  </figcaption>
+</figure>
+
+<style>
+  .workspace { max-width: 980px; text-align: center; margin-block: 0; }
+  .stage { container-type: inline-size; }
+  .scene { position: relative; aspect-ratio: 2.02; }
+  .monitor, .guest-glass {
+    padding: 0.84cqi;
+    border-radius: 1.68cqi;
+    background: #171919;
+    border: 1px solid #838583;
+    box-shadow: inset 0 0 0 1px #b7b8b5, 0 1.3cqi 2.5cqi -1.4cqi #26363288;
+    overflow: hidden;
+  }
+  .monitor { width: 64%; position: absolute; left: 5%; top: 0; }
+  .monitor :global(.desktop) { border-radius: 0.62cqi; }
+  .stand {
+    position: absolute; top: 80%; bottom: 4.5%; left: 29%; width: 16%;
+    background: linear-gradient(to bottom, #626966 0%, #b1b6b4 40%, #d1d4d0 78%, #a6ada9 95%);
+    clip-path: polygon(25% 0%, 75% 0%, 79% 76%, 100% 92%, 100% 100%, 0 100%, 0 92%, 21% 76%);
+  }
+  .guest {
+    position: absolute; right: 5%; bottom: 1.6%; width: 41%;
+    filter: drop-shadow(0 1cqi 1cqi #33423c32);
+  }
+  .guest-glass {
+    padding: 0.88cqi;
+    border-radius: 1.95cqi;
+    box-shadow: inset 0 0 0 1px #aeafab;
+    display: grid; align-items: center; aspect-ratio: 1.47;
+    background: #141616;
+  }
+  .guest-glass :global(.desktop) { border-radius: 0.52cqi; }
+  .guest-glass :global(.duo-screen) { display: none; border-radius: 1.4cqi; }
+  .workspace:has([value="iphone"]:checked) .guest { width: 33%; }
+  .workspace:has([value="iphone"]:checked) .guest-glass {
+    aspect-ratio: 2.13;
+    padding: 0.56cqi 0.95cqi;
+    grid-template-columns: 78%;
+    justify-content: center;
+    border-radius: 2.2cqi;
+  }
+  .workspace:has([value="duo"]:checked) .guest { width: 37%; }
+  .workspace:has([value="duo"]:checked) .guest-glass {
+    aspect-ratio: auto; padding: 0.58cqi; border-radius: 1.9cqi;
+  }
+  .workspace:has([value="duo"]:checked) .guest-glass :global(.desktop) { display: none; }
+  .workspace:has([value="duo"]:checked) .guest-glass :global(.duo-screen) { display: block; }
+  .scene-caption { margin: 13px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .picker {
+    display: inline-flex; gap: 3px; padding: 3px; border: 1px solid var(--line);
+    border-radius: 40px; margin: 24px 0 0;
+  }
+  .picker label { cursor: pointer; position: relative; }
+  .picker input, .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    clip-path: inset(50%); white-space: nowrap; overflow: hidden;
+  }
+  .picker label span {
+    display: grid; place-items: center; min-width: 78px; padding-inline: 10px; min-height: 44px;
+    border-radius: 30px; color: var(--muted); font-size: 14px; font-weight: 500;
+  }
+  .picker label:hover span { background: var(--color-control); }
+  .picker input:checked + span { background: var(--color-accent-2-active); color: #fff; }
+  .picker input:focus-visible + span { outline: 2px solid var(--color-accent-2); outline-offset: 3px; }
+  .device-details {
+    margin: 13px auto 0; max-width: 660px; color: var(--color-text);
+    font-size: 16px; line-height: 1.65; text-wrap: balance;
+  }
+  .device-details p { display: none; margin: 0; }
+  .workspace:has([value="ipad"]:checked) #detail-ipad,
+  .workspace:has([value="iphone"]:checked) #detail-iphone,
+  .workspace:has([value="duo"]:checked) #detail-duo { display: block; }
+  @media (max-width: 760px) {
+    .monitor { left: 0; width: 69%; }
+    .guest { right: 0; }
+    .scene { aspect-ratio: 1.84; }
+    .stand { left: 26.5%; }
+    figcaption { text-wrap: balance; }
+    .device-details { max-width: 34em; }
+  }
+</style>

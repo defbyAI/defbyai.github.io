@@ -1,0 +1,65 @@
+---
+import PrivacyDocument from "../../components/PrivacyDocument.astro";
+import policy from "../../data/twort-privacy.json";
+import PrivacyLayout from "../../layouts/PrivacyLayout.astro";
+
+const { ko } = policy.translations;
+---
+
+<PrivacyLayout
+  title={`${ko.title} — defby.ai`}
+  description={ko.summary}
+  canonical={policy.websiteURL}
+  shareTitle={ko.title}
+  shareDescription={ko.summary}
+  shareImage={new URL("/twort/app-icon.webp", policy.websiteURL).href}
+  contactEmail={policy.contactEmail}>
+  <div id="policy" class="twort-policy">
+    {(["ko", "en"] as const).map(language => {
+      const copy = policy.translations[language];
+      return (
+        <PrivacyDocument language={language} title={copy.title} sections={copy.sections}>
+          <div slot="heading">
+            <div class="hero">
+              <div class="hero-dots" aria-hidden="true"></div>
+              <p class="product">twoRT · twoRT Connect <span>iPhone · iPad · Mac</span></p>
+              <h1 id={`${language}-title`}>{copy.title}</h1>
+              <p class="intro">{copy.summary}</p>
+              <p class="effective-date">{language === "ko" ? "시행일" : "Effective date"} · {copy.date}</p>
+            </div>
+            <p class="scope">{copy.introduction}</p>
+          </div>
+        </PrivacyDocument>
+      );
+    })}
+  </div>
+  <script slot="script" is:inline>
+    document.addEventListener("policy-language-change", ({ detail: language }) => {
+      const article = document.getElementById(language);
+      const title = article.querySelector("h1").textContent;
+      const summary = article.querySelector(".intro").textContent;
+      document.title = title + " — defby.ai";
+      document.querySelector('meta[name="description"]').content = summary;
+      document.querySelector('meta[property="og:title"]').content = title;
+      document.querySelector('meta[property="og:description"]').content = summary;
+    });
+  </script>
+</PrivacyLayout>
+
+<style>
+  .twort-policy :global(article) { scroll-margin-top: 110px; }
+  .product { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+  .product span { margin-left: 0; white-space: nowrap; }
+  .scope {
+    margin: 0 0 clamp(36px, 5vw, 64px);
+    padding: 24px 0;
+    border-block: 1px solid var(--line);
+    font-size: 16px;
+    line-height: 1.85;
+    word-break: keep-all;
+    text-wrap: pretty;
+  }
+  @media (max-width: 600px) {
+    .scope { padding-block: 20px; font-size: 15px; }
+  }
+</style>

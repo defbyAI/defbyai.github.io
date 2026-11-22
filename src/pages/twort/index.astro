@@ -1,0 +1,12 @@
+---
+import ProductPage from "../../components/twort/ProductPage.astro";
+---
+<ProductPage lang="en">
+  <Fragment slot="head">
+    <script>
+      import { redirectToPreferredProduct } from "../../lib/language";
+
+      redirectToPreferredProduct("twort");
+    </script>
+  </Fragment>
+</ProductPage>

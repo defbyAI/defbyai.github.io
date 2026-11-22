@@ -15,13 +15,28 @@ in `src/data/zeropl-media.ts`. Preserve these credits when reusing the assets.
 - [Original project](https://gooseberry.blender.org/) · [Usage terms](https://gooseberry.blender.org/license/)
 - [Blender Studio source MP4](https://studio.blender.org/download-source/files/9e/9e18c8684db6ae04cc458477554f2976062f4d9d/9e18c8684db6ae04cc458477554f2976062f4d9d.mp4)
 - Downloaded source: 1718 × 720, 24 fps, 12:10.56.
-- Hero: **08:48.000–08:54.000** (6 seconds). Iridescent pink forest canopy;
+- Earlier Mac capture: **08:48.000–08:54.000** (6 seconds). Iridescent pink forest canopy;
   selected to echo the zeroPL icon's opal colors. No storm flashes or characters
   in the selected excerpt. The excerpt loops with an ordinary cut.
 - Output: `cosmos-forest.mp4`, H.264, 1280 × 536, 24 fps, no audio.
 - Poster: `cosmos-forest.webp`, extracted at **08:50.000**.
-- Edits: excerpted, resized, re-encoded, audio removed. The Mac hero capture
+- Edits: excerpted, resized, re-encoded, audio removed. The Mac capture
   crops the window's top edge. Color was preserved.
+- The six `public/zeropl/captures/cosmos-duo-*.mp4` title takes use **02:29.000–02:36.000**
+  from `cosmos-laundromat-first-cycle-2k-858p.mp4`. They show zeroPL on a physical
+  iPhone Duo in Light and Dark appearance, with the English interface and Korean
+  subtitles generated from the English dialogue. Each appearance includes folded
+  portrait and two open landscape takes with the playback controls shown or hidden.
+  The recordings are cropped to the device display and synchronized to the same
+  24 fps film excerpt and stereo soundtrack for editing between takes.
+- The product hero's light and dark title edits, `public/zeropl/media/cosmos-duo-title-{light,dark}.mp4`,
+  composite these recordings onto the Three.js Fold Preview. Each silent 1920 × 1080
+  edit runs for 7 seconds at 24 fps and starts with a front view of the folded cover.
+  The cover starts opening at 1.50 seconds and finishes at 3.29 seconds. The open controls remain
+  visible for 1 second, then fade over 5 frames. The clean view plays from 4.50 seconds
+  to the end. Run `node scripts/zeropl-duo-title/render.mjs` to render both appearances.
+  The matching WebP posters use each edit's first frame at **02:29.000**.
+  The film credit card displays the light poster.
 
 ## Sintel (2010)
 

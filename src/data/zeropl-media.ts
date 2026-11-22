@@ -2,6 +2,19 @@ import type { Language } from "./zeropl";
 
 export const filmLicense = "https://creativecommons.org/licenses/by/3.0/";
 
+const cosmosTitleRecording = {
+  light: {
+    video: "/zeropl/media/cosmos-duo-title-light.mp4",
+    poster: "/zeropl/media/cosmos-duo-title-light.webp",
+  },
+  dark: {
+    video: "/zeropl/media/cosmos-duo-title-dark.mp4",
+    poster: "/zeropl/media/cosmos-duo-title-dark.webp",
+  },
+  width: 1920,
+  height: 1080,
+};
+
 export const films = {
   cosmos: {
     title: "Cosmos Laundromat",
@@ -9,13 +22,14 @@ export const films = {
     source: "https://gooseberry.blender.org/",
     terms: "https://gooseberry.blender.org/license/",
     credit: "(CC) Blender Foundation | gooseberry.blender.org",
-    video: "/zeropl/media/cosmos-forest.mp4",
-    poster: "/zeropl/media/cosmos-forest.webp",
-    range: "08:48–08:54",
-    placement: { ko: "첫 화면 · 환상 속의 숲", en: "Opening scene · An otherworldly forest" },
+    video: cosmosTitleRecording.light.video,
+    poster: cosmosTitleRecording.light.poster,
+    recording: cosmosTitleRecording,
+    range: "02:29–02:36",
+    placement: { ko: "첫 화면 · iPhone Duo 펼치기", en: "Opening scene · Unfolding iPhone Duo" },
     edits: {
-      ko: "6초 발췌에 음성을 제거하고 크기 조정 및 재인코딩을 적용했습니다. 첫 화면은 Mac 재생 캡처이고, 크레딧 이미지는 08:50에서 추출했습니다.",
-      en: "6-second excerpt, resized and re-encoded without audio. The hero shows Mac playback, and the credit still comes from 08:50.",
+      ko: "iPhone Duo에서 zeroPL이 영어 대사를 한국어 자막으로 번역하는 모습을 녹화했습니다. 라이트·다크 모드의 화면을 펼침 애니메이션에 합성해 7초 무음 영상으로 편집했습니다.",
+      en: "Recorded on iPhone Duo as zeroPL translated the English dialogue into Korean subtitles. The light and dark recordings were composited into a seven-second silent unfolding animation.",
     },
   },
   sintel: {

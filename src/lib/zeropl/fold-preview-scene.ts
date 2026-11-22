@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import type { FoldSample } from "./fold-preview-poses";
 import { createBackSpine, createFoldSurface, createShell, displays, enclosure, foldProfile, mm, roundedRectangle } from "./fold-preview-geometry";
+import type { createPageTurnProjection } from "./fold-preview-projection";
 
 const lastCoverPose = 1;
 const firstInnerPose = 2;
@@ -110,7 +111,7 @@ function createStudioReflections(renderer: THREE.WebGLRenderer) {
       transparent: true,
       depthWrite: false,
     }));
-    card.position.set(...position);
+    card.position.fromArray(position);
     card.scale.set(width, height, 1);
     card.lookAt(0, 0, 0);
     studio.add(card);
@@ -126,7 +127,10 @@ function createStudioReflections(renderer: THREE.WebGLRenderer) {
   return reflections;
 }
 
-export function createFoldPreviewScene(host: HTMLElement) {
+export function createFoldPreviewScene(
+  host: HTMLElement,
+  options: { pageTurnProjection?: typeof createPageTurnProjection } = {},
+) {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -188,6 +192,7 @@ export function createFoldPreviewScene(host: HTMLElement) {
 
   const outer = displayMaterials();
   const inner = displayMaterials(true);
+  const updateProjection = options.pageTurnProjection?.(outer, inner);
   addDisplay(hinge, innerScreen.geometry, inner);
   addDisplay(leaf, flatScreenGeometry(displays.cover.width, displays.cover.height, mm(1.25), enclosure.corner - mm(2.7)), outer,
     (enclosure.foldedWidth - enclosure.width) / 2, -enclosure.thickness - mm(0.23), true);
@@ -272,7 +277,9 @@ export function createFoldPreviewScene(host: HTMLElement) {
       orientation.rotation.z = THREE.MathUtils.degToRad(pose.roll);
       stand.rotation.x = THREE.MathUtils.degToRad(pose.tilt);
 
-      const coverLight = 1 - THREE.MathUtils.smoothstep(pose.opening, 25, 150);
+      const coverLight = updateProjection
+        ? Number(pose.opening < 180)
+        : 1 - THREE.MathUtils.smoothstep(pose.opening, 25, 150);
       blendDisplay(outer, textures[Math.min(pose.previous, lastCoverPose)], textures[Math.min(pose.next, lastCoverPose)], pose.dissolve, coverLight);
       blendDisplay(inner, textures[Math.max(pose.previous, firstInnerPose)], textures[Math.max(pose.next, firstInnerPose)], pose.dissolve, 1);
 
@@ -288,6 +295,7 @@ export function createFoldPreviewScene(host: HTMLElement) {
       let distance = pose.distance * Math.max(1, 1.1 / camera.aspect);
       const horizontalSlope = verticalSlope * camera.aspect;
       stand.updateMatrixWorld(true);
+      updateProjection?.(hinge.matrixWorld, bend);
       for (const { panel, corners } of panelBounds) {
         for (const corner of corners) {
           cornerInView.copy(corner).applyMatrix4(panel.matrixWorld).sub(target);

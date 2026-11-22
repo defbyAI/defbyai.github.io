@@ -1,10 +1,130 @@
 ---
-import CaptureImage from "./CaptureImage.astro";
-import { captures } from "../../data/zeropl-captures";
-import type { Language } from "../../data/zeropl";
+import Icon from "./Icon.astro";
+import { films } from "../../data/zeropl-media";
+import { zeropl, type Language } from "../../data/zeropl";
 
 interface Props { lang: Language; }
 const { lang } = Astro.props;
+const ko = lang === "ko";
+const recording = films.cosmos.recording;
 ---
 
-<CaptureImage capture={captures.hero} lang={lang} priority />
+<div class="title-scene">
+  <video id="duo-title-video" width={recording.width} height={recording.height}
+    src={recording.light.video} poster={recording.light.poster} muted playsinline controls preload="none"
+    aria-label={zeropl[lang].preview}>
+    <a href={recording.light.video}>{ko ? "영상 열기" : "Open video"}</a>
+  </video>
+  <div class="title-controls" hidden>
+    <div class="capture-mode" role="group" aria-label={ko ? "영상 테마" : "Video appearance"}>
+      <button type="button" data-capture-mode="light" aria-pressed="true">{ko ? "라이트" : "Light"}</button>
+      <button type="button" data-capture-mode="dark" aria-pressed="false">{ko ? "다크" : "Dark"}</button>
+    </div>
+    <button type="button" class="title-playback" aria-controls="duo-title-video" data-state="play">
+      <span data-action="play"><Icon name="play" size={16} />{ko ? "재생" : "Play"}</span>
+      <span data-action="pause"><Icon name="pause" size={16} />{ko ? "일시 정지" : "Pause"}</span>
+      <span data-action="replay"><Icon name="replay" size={16} />{ko ? "다시 재생" : "Replay"}</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { films } from "../../data/zeropl-media";
+  import { captureAppearance, captureAppearanceChange } from "../../lib/zeropl/capture-appearance";
+
+  const video = document.querySelector<HTMLVideoElement>("#duo-title-video")!;
+  const controls = document.querySelector<HTMLElement>(".title-controls")!;
+  const playback = controls.querySelector<HTMLButtonElement>(".title-playback")!;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let wantsPlayback = !reducedMotion.matches;
+  let inView = false;
+
+  function updateButton() {
+    playback.dataset.state = video.ended ? "replay" : video.paused ? "play" : "pause";
+  }
+
+  function play() {
+    video.play().catch((error: DOMException) => {
+      if (error.name === "NotAllowedError") wantsPlayback = false;
+      updateButton();
+    });
+  }
+
+  function syncPlayback() {
+    if (inView && !document.hidden && wantsPlayback) play();
+    else video.pause();
+  }
+
+  video.addEventListener("play", updateButton);
+  video.addEventListener("pause", updateButton);
+  video.addEventListener("ended", () => {
+    wantsPlayback = false;
+    updateButton();
+  });
+  playback.addEventListener("click", () => {
+    wantsPlayback = video.paused || video.ended;
+    if (video.ended) video.currentTime = 0;
+    if (wantsPlayback) play();
+    else video.pause();
+  });
+
+  document.addEventListener(captureAppearanceChange, () => {
+    const take = films.cosmos.recording[captureAppearance];
+    video.poster = take.poster;
+    video.src = take.video;
+    wantsPlayback = !reducedMotion.matches;
+    updateButton();
+    syncPlayback();
+  });
+  document.addEventListener("visibilitychange", syncPlayback);
+  reducedMotion.addEventListener("change", () => {
+    if (reducedMotion.matches) {
+      wantsPlayback = false;
+      video.pause();
+    }
+  });
+
+  video.controls = false;
+  controls.hidden = false;
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.intersectionRatio >= 0.35;
+      syncPlayback();
+    }, { threshold: 0.35 });
+    observer.observe(video);
+  } else {
+    inView = true;
+    syncPlayback();
+  }
+</script>
+
+<style>
+  video {
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    background: var(--color-surface);
+  }
+  .title-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .title-playback {
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--color-text);
+    background: var(--color-bg);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .title-playback:hover { color: var(--color-accent-2-active); background: var(--color-control); }
+  .title-playback span { display: none; align-items: center; gap: 8px; }
+  [data-state="play"] [data-action="play"],
+  [data-state="pause"] [data-action="pause"],
+  [data-state="replay"] [data-action="replay"] { display: flex; }
+</style>

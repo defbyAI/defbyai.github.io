@@ -11,7 +11,8 @@ The page introduces on-device translation, iPhone Duo layouts,
 web video, AirPlay, PiP, background playback, network drives, and gestures.
 The home page links to both languages.
 
-The hero shows Cosmos Laundromat in the installed Mac player. The platform
+The hero plays a seven-second silent excerpt of Cosmos Laundromat as iPhone Duo
+unfolds from portrait to landscape. The replay button starts the scene again. The platform
 comparison uses the same Big Buck Bunny frame at 01:07 on Mac, iPad, and iPhone
 Duo. Use the Light and Dark controls to switch the physical mobile captures
 across the page. The Mac player uses a dark appearance in both system modes.

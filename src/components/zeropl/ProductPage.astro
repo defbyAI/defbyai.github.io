@@ -11,7 +11,7 @@ import TranslationDemo from "./TranslationDemo.astro";
 import MediaCredit from "./MediaCredit.astro";
 import MediaCredits from "./MediaCredits.astro";
 import { captures } from "../../data/zeropl-captures";
-import { mediaText } from "../../data/zeropl-media";
+import { films, mediaText } from "../../data/zeropl-media";
 import { zeropl, type Language } from "../../data/zeropl";
 interface Props { lang: Language; }
 const { lang } = Astro.props;
@@ -45,7 +45,7 @@ const promiseIcons = ["lock", "sparkles", "laptop-smartphone"];
       </div>
       <figure class="container hero-preview">
         <PlayerPreview lang={lang} />
-        <figcaption><MediaCredit film="cosmos" lang={lang} /></figcaption>
+        <figcaption><MediaCredit film="cosmos" lang={lang} timecode={films.cosmos.range} /></figcaption>
       </figure>
       <div class="container promise-row">
         {t.promise.map((promise, index) => (

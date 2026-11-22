@@ -13,7 +13,7 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 - 영어 `/zeropl/`, 한국어 `/ko/zeropl/`를 정적 페이지로 구현했다. 홈에서 두 언어의 소개로 이동할 수 있다.
 - 첫 화면의 흰색 App Store 배지는 가운데에 둔다. 공개 전에는 배지 아래에 한국어로 ‘출시 예정’, 영어로 ‘Coming soon’을 표시하고, 그 아래에 iPhone, iPad, Mac 지원을 안내한다. [Apple 배지 원본](https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us)
 - 로컬 AI 실시간 번역과 번역 추가 비용·구독 없음을 주요 메시지로 사용한다. 웹 영상, AirPlay, PiP, 백그라운드 재생, SMB·WebDAV, 제스처도 소개한다.
-- 첫 화면은 Mac의 zeroPL에서 캡처한 Cosmos Laundromat 08:48–08:54 구간을 사용한다. 플랫폼 비교에는 Mac·iPad·iPhone Duo에서 일시정지한 Big Buck Bunny Sunflower 배포본의 01:07 프레임을 사용한다.
+- 첫 화면은 iPhone Duo에서 Cosmos Laundromat 02:29–02:36 구간을 재생한 화면으로 구성한다. 접힌 기기가 정면에서 가로로 펼쳐지는 7초 무음 영상이며 다시 재생할 수 있다. 플랫폼 비교에는 Mac·iPad·iPhone Duo에서 일시정지한 Big Buck Bunny Sunflower 배포본의 01:07 프레임을 사용한다.
 - 플랫폼 비교와 Duo 데모의 라이트·다크 버튼은 페이지 전체의 모바일 캡처를 함께 바꾼다. Mac 플레이어는 시스템 설정과 관계없이 다크 테마를 사용한다.
 - Duo 섹션의 3D 모형은 스크롤과 자세 버튼에 따라 접은 세로, 접은 가로, 펼친 가로, 펼친 세로, 세워 보기로 전환된다. 기기 외형은 레티나와 확대 배율에 맞춰 렌더링하며, 각 화면에는 실기기 캡처를 사용한다.
 - 번역 데모에는 `zeroPL-website-demo/Sintel.mp4`를 Mac의 zeroPL에서 재생하며 녹화한 19초 영상을 사용한다. 원본의 02:07–02:26 구간에 해당하며 영어 음성과 화면에 표시된 한국어 번역 자막을 함께 담았다.

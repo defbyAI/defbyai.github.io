@@ -1,0 +1,38 @@
+---
+import Icon from "./Icon.astro";
+import MediaCredit from "./MediaCredit.astro";
+import { films } from "../../data/zeropl-media";
+import { zeropl, type Language } from "../../data/zeropl";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const ko = lang === "ko";
+const recording = films.sintel.recording;
+---
+<div class="translation-demo" id="translation-demo">
+  <figure class="translation-capture">
+    <figcaption class="translation-demo-heading">
+      <Icon name="spark" size={16} /><span lang="en">English</span>
+      <Icon name="arrow" size={13} /><span><span lang="ko">한국어</span> ({zeropl[lang].translation})</span>
+    </figcaption>
+    <video
+      class="translation-video"
+      width={recording.width}
+      height={recording.height}
+      controls
+      playsinline
+      preload="none"
+      poster={recording.poster}
+      aria-label={ko ? "영어 대사를 한국어 자막으로 실시간 번역하는 예시 영상" : "English dialogue with live Korean subtitles"}
+    >
+      <source src={recording.video} type="video/mp4" />
+      <a href={recording.video}>{ko ? "녹화 영상 열기" : "Open recording"}</a>
+    </video>
+  </figure>
+  <MediaCredit film="sintel" lang={lang} />
+</div>
+
+<script>
+  const recording = document.querySelector<HTMLVideoElement>("#translation-demo video");
+  document.addEventListener("visibilitychange", () => { if (document.hidden) recording?.pause(); });
+</script>

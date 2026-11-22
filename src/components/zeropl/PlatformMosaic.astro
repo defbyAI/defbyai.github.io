@@ -1,0 +1,106 @@
+---
+import { mosaicBoards, mosaicTiles } from "../../data/zeropl-mosaic";
+import type { Language } from "../../data/zeropl";
+import CaptureImage from "./CaptureImage.astro";
+
+interface Props { lang: Language }
+const { lang } = Astro.props;
+const sizes = ["wide", "medium", "narrow"] as const;
+const boardRatios = Object.fromEntries(sizes.map(size => {
+  const { width, height } = mosaicBoards[size];
+  return [`--${size}-ratio`, `${width} / ${height}`];
+}));
+
+function tileStyle(tile: (typeof mosaicTiles)[number], index: number) {
+  const style: Record<string, string> = {
+    "--screen-aspect": String(tile.capture.aspectRatio),
+    "--tilt": `${tile.tilt}deg`,
+    "--drift": `${-tile.tilt * 5}px`,
+    "--turn": `${tile.tilt * 1.2}deg`,
+    "--delay": `${80 + (index * 7 % mosaicTiles.length) * 42}ms`,
+  };
+  for (const size of sizes) {
+    const [x, y] = tile[size];
+    const board = mosaicBoards[size];
+    const inches = tile.capture.widthInches;
+    const width = inches === null ? board.macWidth : inches * board.unitsPerInch;
+    style[`--${size}-inset`] = `${y / board.height * 100}% auto auto ${x / board.width * 100}%`;
+    style[`--${size}-width`] = `${width / board.width * 100}%`;
+  }
+  return style;
+}
+---
+<div class="mosaic-frame">
+  <div class="mosaic" style={boardRatios}>
+    {mosaicTiles.map((tile, index) => (
+      <div class="tile" style={tileStyle(tile, index)}>
+        <CaptureImage capture={tile.capture} {lang} />
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  // Observe the resting footprint. The image moves independently, even after scrolling stops.
+  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (const mosaic of document.querySelectorAll(".mosaic")) {
+      const observer = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting || entry.intersectionRatio < 0.3) continue;
+          const tile = entry.target;
+          observer.unobserve(tile);
+          const image = tile.querySelector("img")!;
+          image.decode().catch(() => {}).then(() => tile.classList.add("placed"));
+        }
+      }, { rootMargin: "0px 0px -56px", threshold: 0.3 });
+      mosaic.classList.add("scattering");
+      mosaic.querySelectorAll(".tile").forEach(tile => observer.observe(tile));
+    }
+  }
+</script>
+
+<style>
+  .mosaic-frame { container-type: inline-size; }
+  .mosaic {
+    position: relative;
+    isolation: isolate;
+    aspect-ratio: var(--wide-ratio);
+  }
+  .tile {
+    position: absolute;
+    inset: var(--wide-inset);
+    width: var(--wide-width);
+    transform: translate(-50%, -50%) rotate(var(--tilt));
+  }
+  .tile :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--screen-aspect);
+    object-fit: contain;
+    border: 0;
+    border-radius: clamp(3px, .55cqi, 7px);
+    box-shadow: 0 2px 3px #182b2624, 0 8px 15px -7px #182b2640;
+  }
+  @container (max-width: 800px) {
+    .mosaic { aspect-ratio: var(--medium-ratio); }
+    .tile { inset: var(--medium-inset); width: var(--medium-width); }
+  }
+  @container (max-width: 460px) {
+    .mosaic { aspect-ratio: var(--narrow-ratio); }
+    .tile { inset: var(--narrow-inset); width: var(--narrow-width); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .scattering .tile:not(.placed) :global(img) { opacity: 0; }
+    .scattering .tile.placed :global(img) {
+      animation: lay-tile calc(1.45s / 1.5) cubic-bezier(.35,.08,.22,1) var(--delay) backwards;
+    }
+    @keyframes lay-tile {
+      from {
+        opacity: 0;
+        transform: perspective(750px) translate(var(--drift), -54px) rotateX(16deg) rotate(var(--turn)) scale(1.055);
+      }
+      to { opacity: 1; transform: none; }
+    }
+  }
+</style>

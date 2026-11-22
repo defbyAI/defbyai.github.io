@@ -1,0 +1,108 @@
+---
+import "../../styles/theme.css";
+import DuoShowcase from "./DuoShowcase.astro";
+import type { Language } from "../../data/zeropl";
+import { films, filmLicense, mediaText } from "../../data/zeropl-media";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const ko = lang === "ko";
+const product = ko ? "/ko/zeropl/" : "/zeropl/";
+const title = ko ? "zeroPL · 폴더블 자세 전환" : "zeroPL · Foldable pose preview";
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#F6F6F1" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="fold-header">
+      <div class="fold-width header-inner">
+        <a href="/" class="brand"><img src="/defby_logo.svg" width="26" height="26" alt="" />defby.ai</a>
+        <nav aria-label={ko ? "페이지 탐색" : "Page navigation"}>
+          <a href={`${product}#duo`}>{ko ? "zeroPL 소개" : "About zeroPL"}</a>
+          <a href={ko ? "/poc/zeropl-fold/" : "/ko/poc/zeropl-fold/"} lang={ko ? "en" : "ko"}>{ko ? "EN" : "한국어"}</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="fold-width" aria-labelledby="fold-title">
+        <DuoShowcase lang={lang} standalone>
+          <div class="wordmark"><img src="/zeropl/app-icon.png" width="42" height="42" alt="" />zeroPL</div>
+          <h1 id="fold-title">
+            {ko ? "자세가 달라지면," : "Change the pose."}
+            <span>{ko ? "화면도 따라갑니다." : "The view follows."}</span>
+          </h1>
+        </DuoShowcase>
+      </section>
+      <footer class="fold-width fold-footer">
+        <p>
+          <a href={films.bunny.source}>{films.bunny.title}</a> ·
+          <a href={films.cosmos.source}>{films.cosmos.title}</a> ·
+          <a href={films.sintel.source}>{films.sintel.title}</a> ·
+          Blender Foundation · <a href={filmLicense}>CC BY 3.0</a> ·
+          <a href={`${product}#media-credits`}>{mediaText[lang].details}</a>
+        </p>
+        <a href="/zeropl/fold-preview-notice.txt">Fold Preview · Three.js · MIT</a>
+      </footer>
+    </main>
+  </body>
+</html>
+
+<style>
+  :global(html) { background: var(--color-bg); color-scheme: light; }
+  :global(body) {
+    margin: 0;
+    color: var(--color-text);
+    font-family: "Asta Sans", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  :global(*), :global(*::before), :global(*::after) { box-sizing: border-box; }
+  :global([hidden]) { display: none !important; }
+  :global(button) { font: inherit; cursor: pointer; }
+  :global(a:focus-visible), :global(button:focus-visible) { outline: 2px solid var(--color-accent-2); outline-offset: 4px; }
+  a { color: var(--color-accent-2); text-underline-offset: 4px; }
+  a:hover { color: var(--color-accent-2-active); }
+  .fold-width { width: min(1160px, calc(100% - 96px)); margin-inline: auto; }
+  .fold-header {
+    position: fixed;
+    z-index: 2;
+    inset: 0 0 auto;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-bg);
+  }
+  .header-inner { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; color: var(--color-brand-text); font-weight: 700; font-size: 22px; letter-spacing: -.045em; text-decoration: none; }
+  nav { display: flex; gap: 22px; font-size: 13px; }
+  nav a { display: flex; align-items: center; min-height: 44px; text-decoration: none; }
+  nav a:hover { text-decoration: underline; }
+  .wordmark { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; font-weight: 700; font-size: 23px; letter-spacing: -.05em; }
+  .wordmark img { display: block; border-radius: 10px; }
+  h1, p { margin: 0; word-break: keep-all; overflow-wrap: anywhere; }
+  h1 { font-size: clamp(38px, 4.5vw, 65px); font-weight: 600; line-height: 1.13; letter-spacing: -.062em; }
+  h1 span { display: block; color: var(--color-accent-1); }
+  .fold-footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 28px 40px; border-top: 1px solid var(--color-line); color: var(--color-muted); font-size: 12px; line-height: 1.75; }
+
+  @media (max-width: 900px) {
+    .fold-width { width: calc(100% - 56px); }
+  }
+  @media (max-width: 760px) {
+    .fold-width { width: calc(100% - 36px); }
+    .header-inner { min-height: 58px; }
+    .brand { font-size: 20px; }
+    nav { gap: 14px; font-size: 12px; }
+    .wordmark { margin-bottom: 11px; font-size: 18px; }
+    .wordmark img { width: 32px; height: 32px; border-radius: 7px; }
+    h1 { font-size: clamp(32px, 8vw, 46px); line-height: 1.12; }
+  }
+</style>

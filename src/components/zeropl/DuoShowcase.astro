@@ -1,0 +1,177 @@
+---
+import { duoPoseCaptures } from "../../data/zeropl-captures";
+import { zeropl, type Language } from "../../data/zeropl";
+import { foldPoses } from "../../lib/zeropl/fold-preview-poses";
+
+interface Props { lang: Language; standalone?: boolean; }
+const { lang, standalone = false } = Astro.props;
+const t = zeropl[lang];
+const ko = lang === "ko";
+const PoseHeading = standalone ? "h2" : "h3";
+const poses = foldPoses.map(({ id }) => {
+  const pose = t.poses.find(pose => pose.id === id);
+  const capture = duoPoseCaptures[id];
+  if (!pose || !capture) throw new Error(`Missing fold preview pose: ${id}`);
+  return { ...pose, capture };
+});
+const first = poses[0].capture;
+---
+
+<div class:list={["fold-story", { "fold-standalone": standalone }]} id="duo-demo" data-fold-story>
+  <div class="fold-stage" data-fold-stage>
+    <div class="stage-main">
+      <div class="stage-copy">
+        <slot />
+        <div class="pose-copy">
+          {poses.map(({ label, text, capture }, index) => (
+            <div data-fold-copy data-light={capture.light} data-dark={capture.dark} data-alt={capture.alt[lang]}
+              data-width={capture.width} data-height={capture.height} hidden={index !== 0}>
+              <PoseHeading>{label}</PoseHeading>
+              <p>{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <figure class="phone-demo">
+        <div class="phone-viewer" data-fold-viewer>
+          <div class="canvas-host" data-fold-canvas aria-hidden="true"></div>
+          <img class="capture-fallback" data-fold-fallback src={first.light} alt={first.alt[lang]}
+            width={first.width} height={first.height} loading={standalone ? "eager" : "lazy"} decoding="async" />
+        </div>
+      </figure>
+    </div>
+
+    <div class="fold-controls" data-fold-controls hidden>
+      <div class="control-row">
+        <div class="pose-buttons" role="group" aria-label={t.poseGroup}>
+          {poses.map(({ label }, index) => (
+            <button type="button" data-fold-pose aria-pressed={index === 0}>{label}</button>
+          ))}
+        </div>
+        <div class="appearance-buttons" role="group" aria-label={ko ? "캡처 외관" : "Capture appearance"}>
+          <button type="button" data-capture-mode="light" aria-pressed="true">{ko ? "라이트" : "Light"}</button>
+          <button type="button" data-capture-mode="dark" aria-pressed="false">{ko ? "다크" : "Dark"}</button>
+        </div>
+      </div>
+      <div class="progress-track" aria-hidden="true"><span data-fold-progress></span></div>
+      <p class="scroll-hint">{t.poseHint}</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import "../../lib/zeropl/fold-preview";
+</script>
+
+<style>
+  .fold-stage {
+    display: flex;
+    flex-direction: column;
+    padding-block: clamp(32px, 6svh, 64px) 20px;
+  }
+  .fold-standalone .fold-stage { padding-top: 90px; }
+  .stage-main {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: 28px;
+    flex: 1;
+    min-height: 0;
+    align-items: center;
+  }
+  .stage-copy { padding-bottom: 10px; }
+  .pose-copy { margin-top: clamp(16px, 3svh, 32px); min-height: 88px; }
+  .pose-copy :is(h2, h3) { margin: 0 0 7px; font-size: 14px; font-weight: 700; color: var(--color-accent-2); }
+  .pose-copy p { max-width: 355px; margin: 0; color: var(--color-muted); font-size: 15px; line-height: 1.65; }
+  .phone-demo { display: grid; grid-template-rows: minmax(0, 1fr); min-height: 0; margin: 0; }
+  .phone-viewer {
+    position: relative;
+    height: clamp(240px, 57svh, 560px);
+    min-height: 0;
+    isolation: isolate;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 51% 51%, #56807b18 0%, transparent 67%);
+  }
+  .phone-viewer::before {
+    content: "";
+    position: absolute;
+    left: 24%;
+    bottom: 6%;
+    width: 52%;
+    height: 11%;
+    background: radial-gradient(ellipse, #3d48442b, transparent 71%);
+    filter: blur(9px);
+    z-index: -1;
+  }
+  .canvas-host { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+  .has-3d .canvas-host { opacity: 1; }
+  .canvas-host :global(canvas) { display: block; width: 100%; height: 100%; }
+  .capture-fallback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: auto;
+    max-width: 86%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: 13px;
+    box-shadow: 0 16px 44px -18px #17272157;
+  }
+  .has-3d .capture-fallback { opacity: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .canvas-host, .capture-fallback { transition: opacity 300ms ease-in-out; }
+  }
+  .fold-controls { margin-top: 16px; }
+  .control-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .pose-buttons, .appearance-buttons { display: flex; gap: 4px; padding: 4px; border-radius: 10px; background: var(--color-control); }
+  .pose-buttons { flex-wrap: wrap; }
+  .control-row button {
+    min-height: 44px;
+    min-width: 44px;
+    border: 0;
+    border-radius: 6px;
+    padding: 6px 13px;
+    background: transparent;
+    color: var(--color-text);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .control-row button:hover { background: var(--color-bg); }
+  .control-row button[aria-pressed="true"] { background: var(--color-accent-2-active); color: white; }
+  .progress-track { height: 2px; margin-top: 14px; background: var(--color-line); }
+  .progress-track span { display: block; height: 100%; background: var(--color-accent-2); transform: scaleX(0); transform-origin: left; }
+  .scroll-hint { display: none; margin: 8px 0 0; text-align: center; color: var(--color-muted); font-size: 12px; }
+
+  @media (max-width: 900px) {
+    .stage-main { gap: 16px; }
+    .control-row button { padding-inline: 9px; }
+  }
+  @media (max-width: 760px) {
+    .fold-stage { padding-block: 28px 14px; }
+    .fold-standalone .fold-stage { padding-top: 77px; }
+    .stage-main { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 8px; align-items: stretch; }
+    .stage-copy { padding: 0; }
+    .pose-copy { min-height: 70px; }
+    .pose-copy :is(h2, h3) { margin-bottom: 4px; font-size: 13px; }
+    .pose-copy p { max-width: 480px; font-size: 13px; line-height: 1.55; }
+    .phone-viewer { height: clamp(240px, 52svh, 400px); }
+    .fold-controls { margin-top: 12px; }
+    .pose-buttons, .appearance-buttons { padding: 2px; }
+    .control-row button { padding-inline: 8px; font-size: 12px; }
+    .progress-track { margin-top: 10px; }
+  }
+  @media (max-width: 480px) {
+    .pose-buttons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+    .control-row { justify-content: center; }
+  }
+  @media (prefers-reduced-motion: no-preference) and (min-width: 761px) and (min-height: 640px),
+    (prefers-reduced-motion: no-preference) and (min-height: 800px) {
+    .fold-story.is-interactive { min-height: 300svh; }
+    .fold-standalone.is-interactive { min-height: 400svh; }
+    .is-interactive .fold-stage { position: sticky; top: 0; height: 100svh; }
+    .is-interactive .phone-demo { height: 100%; }
+    .is-interactive .phone-viewer { height: auto; }
+    .is-interactive .scroll-hint { display: block; }
+  }
+</style>

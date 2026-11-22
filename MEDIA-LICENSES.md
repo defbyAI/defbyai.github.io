@@ -1,0 +1,109 @@
+# zeroPL website film excerpts
+
+Selected and prepared on 2026-11-15. The website uses these excerpts in
+physical zeroPL captures, as well as in standalone film and poster assets.
+All source films and the English subtitle excerpt use
+[Creative Commons Attribution 3.0 Unported](https://creativecommons.org/licenses/by/3.0/).
+
+The English and Korean product pages display concise credits next to each demo
+and complete attribution and edit notes in `#media-credits`. Credit metadata is
+in `src/data/zeropl-media.ts`. Preserve these credits when reusing the assets.
+
+## Cosmos Laundromat (2015)
+
+- Attribution: **(CC) Blender Foundation | gooseberry.blender.org**
+- [Original project](https://gooseberry.blender.org/) · [Usage terms](https://gooseberry.blender.org/license/)
+- [Blender Studio source MP4](https://studio.blender.org/download-source/files/9e/9e18c8684db6ae04cc458477554f2976062f4d9d/9e18c8684db6ae04cc458477554f2976062f4d9d.mp4)
+- Downloaded source: 1718 × 720, 24 fps, 12:10.56.
+- Hero: **08:48.000–08:54.000** (6 seconds). Iridescent pink forest canopy;
+  selected to echo the zeroPL icon's opal colors. No storm flashes or characters
+  in the selected excerpt. The excerpt loops with an ordinary cut.
+- Output: `cosmos-forest.mp4`, H.264, 1280 × 536, 24 fps, no audio.
+- Poster: `cosmos-forest.webp`, extracted at **08:50.000**.
+- Edits: excerpted, resized, re-encoded, audio removed. The Mac hero capture
+  crops the window's top edge. Color was preserved.
+
+## Sintel (2010)
+
+- Attribution: **© copyright Blender Foundation | www.sintel.org**
+- [Original project](https://durian.blender.org/) · [Usage terms](https://durian.blender.org/sharing/)
+- [Official source MKV](https://download.blender.org/durian/movies/Sintel.2010.1080p.mkv)
+- [Official download page](https://durian.blender.org/download/) links the Xiph
+  distribution host used for the [English subtitle file](https://media.xiph.org/sintel/subtitles/sintel_en.srt)
+  and its [license README](https://media.xiph.org/sintel/subtitles/README.txt).
+- Translation demo: **02:07.000–02:26.000** (19 seconds). A quiet conversation
+  about the person Sintel is searching for; selected for clear English dialogue.
+- Source excerpt: `sintel-conversation.mp4`, H.264, 960 × 410, 24 fps, stereo AAC 96 kbps.
+- Credit still: `sintel-conversation.webp`, extracted at **02:14.000**.
+- Product recording: `public/zeropl/captures/sintel-translation-mac.mp4`,
+  1280 × 720 H.264 with stereo AAC. Captured in the macOS zeroPL window while
+  playing `zeroPL-website-demo/Sintel.mp4` from the demo folder root. The recording
+  includes the original dialogue and the Korean subtitles displayed by the app.
+  The video was trimmed and centered in a 16:9 frame with equal top and bottom
+  letterboxing. The audio level was adjusted, and the poster uses the same framing.
+- Caption track retained from the first draft: `sintel-en-ko.vtt`. English
+  timings shifted by −127 seconds and original ellipsis typography normalized.
+- Korean illustrative translation in that track: **defby.ai**, also CC BY 3.0.
+
+## Big Buck Bunny (2008)
+
+- Attribution: **(c) copyright 2008, Blender Foundation / www.bigbuckbunny.org**
+- [Original project](https://peach.blender.org/) · [Usage terms](https://peach.blender.org/about/)
+- [Official Sunflower source ZIP](https://download.blender.org/demo/movies/BBB/bbb_sunflower_1080p_30fps_normal.mp4.zip)
+- Source inside archive: `bbb_sunflower_1080p_30fps_normal.mp4`.
+- Duo demo: **01:05.000–01:14.000** (9 seconds), timed against this Sunflower
+  release. A sunny meadow with the bunny approaching flowers; the character
+  remains readable on small displays.
+- Output: `bunny-meadow.mp4`, H.264, 960 × 540, 30 fps, no audio.
+- Poster and original comparison captures: **01:07.000**. The clip prepared for
+  the platform comparison holds that frame so each device displays the same
+  moment. The web demo played the approved excerpt on iPhone Duo while the
+  same film was open in the built-in browser.
+- The platform mosaic at `/zeropl/#platforms` and
+  `/ko/zeropl/#platforms` uses **01:09.000** from the same Sunflower
+  release. A silent clip holds the frame while zeroPL displays its playback
+  controls. The Mac captures come from the running macOS app with cursor
+  capture disabled. Mobile captures come from the corresponding simulator
+  displays in light and dark appearance. The Duo's unfolded portrait tile
+  shows the complete inner display, including the demo folder in the
+  player's built-in file pane. The website serves resized WebPs.
+- Edits: excerpted, resized, re-encoded, audio removed. The iPad and browser
+  captures conceal internal addresses. The separate Duo pose showcase's open-portrait capture also
+  conceals one history card at the edge. Seated playback shows the approved
+  demo titles in recent history. Playback preserves the original aspect ratio.
+
+## Preparation
+
+Full source films stay outside the repository. Only the short derived assets
+and caption track are needed for the build. Use FFmpeg with libx264; posters
+were encoded to WebP quality 82 with the project's installed Sharp dependency.
+
+Video recipes, with source filenames substituted for locally downloaded files:
+
+```sh
+# Cosmos: 6 seconds, no audio; limit bandwidth for the detailed forest scene.
+ffmpeg -ss 528 -i cosmos-source.mp4 -t 6 -map 0:v:0 -an \
+  -vf scale=1280:-2 -c:v libx264 -preset slow -crf 27 \
+  -maxrate 2400k -bufsize 2400k -pix_fmt yuv420p -movflags +faststart \
+  -map_metadata -1 cosmos-forest.mp4
+
+# Bunny: 9 seconds, no audio.
+ffmpeg -ss 65 -i bbb_sunflower_1080p_30fps_normal.mp4 -t 9 \
+  -map 0:v:0 -an -vf scale=960:-2 -r 30 -c:v libx264 -preset slow \
+  -crf 24 -pix_fmt yuv420p -movflags +faststart -map_metadata -1 bunny-meadow.mp4
+
+# Sintel: a temporary high-quality excerpt was prepared before web encoding.
+ffmpeg -ss 127 -i Sintel.2010.1080p.mkv -t 19 -map 0:v:0 -map 0:a:0 \
+  -c:v libx264 -preset fast -crf 18 -vf scale=1280:-2 \
+  -c:a aac -ac 2 -b:a 160k -movflags +faststart sintel-excerpt.mp4
+ffmpeg -i sintel-excerpt.mp4 -map 0:v:0 -map 0:a:0 -vf scale=960:-2 \
+  -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p \
+  -c:a aac -ac 2 -b:a 96k -movflags +faststart \
+  -map_metadata -1 -map_chapters -1 sintel-conversation.mp4
+```
+
+The committed MP4 files additionally contain the film title, original range,
+attribution string, and `CC BY 3.0` in their title/copyright metadata.
+There is no separate soundtrack asset. The selected excerpts do not include
+Blender/project logo graphics. Full-film redistribution has separate credit-roll
+instructions on the source sites; these website assets are edited excerpts.

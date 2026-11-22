@@ -1,0 +1,93 @@
+---
+import { filmLicense, films } from "../../data/zeropl-media";
+import PlatformMosaic from "./PlatformMosaic.astro";
+import type { Language } from "../../data/zeropl";
+import "../../styles/theme.css";
+
+interface Props { lang: Language }
+const { lang } = Astro.props;
+const ko = lang === "ko";
+const title = ko ? "zeroPL · 기기별 재생 화면" : "zeroPL · Playback gallery";
+const product = ko ? "/ko/zeropl/" : "/zeropl/";
+const alternate = ko ? "/poc/zeropl-platforms/" : "/ko/poc/zeropl-platforms/";
+const film = films.bunny;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#F6F6F1" />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <a class="wordmark" href={product}><img src="/zeropl/app-icon.png" width="30" height="30" alt="" />zeroPL</a>
+      <nav aria-label={ko ? "시안 탐색" : "Preview navigation"}>
+        <a href={product + "#platforms"}>{ko ? "현재 섹션 보기" : "Current section"}</a>
+        <a href={alternate} lang={ko ? "en" : "ko"}>{ko ? "EN" : "한국어"}</a>
+      </nav>
+    </header>
+    <main>
+      <h1 class="sr-only">{title}</h1>
+      <div class="toolbar">
+        <div class="modes" hidden role="group" aria-label={ko ? "캡처 테마" : "Capture appearance"}>
+          <button type="button" data-capture-mode="light" aria-pressed="true">{ko ? "라이트" : "Light"}</button>
+          <button type="button" data-capture-mode="dark" aria-pressed="false">{ko ? "다크" : "Dark"}</button>
+        </div>
+      </div>
+      <figure>
+        <PlatformMosaic {lang} />
+        <figcaption>
+          <a href={film.source}>{film.title}</a> (01:09) · {film.credit} · <a href={filmLicense}>CC BY 3.0</a>
+        </figcaption>
+      </figure>
+    </main>
+  </body>
+</html>
+
+<script>
+  import "../../lib/zeropl/capture-appearance";
+
+  const group = document.querySelector<HTMLElement>(".modes");
+  if (group) {
+    const system = window.matchMedia("(prefers-color-scheme: dark)");
+    let followsSystem = true;
+    const selectAppearance = () => {
+      const mode = system.matches ? "dark" : "light";
+      group.querySelector<HTMLButtonElement>(`[data-capture-mode="${mode}"]`)?.click();
+    };
+    group.addEventListener("click", event => { if (event.isTrusted) followsSystem = false; });
+    system.addEventListener("change", () => { if (followsSystem) selectAppearance(); });
+    selectAppearance();
+    group.hidden = false;
+  }
+</script>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(body) { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: "Asta Sans", sans-serif; }
+  header, main { margin-inline: auto; width: calc(100% - clamp(28px, 7vw, 144px)); }
+  header { display: flex; align-items: center; justify-content: space-between; padding-block: 12px; border-bottom: 1px solid var(--color-line); }
+  .wordmark, nav { display: flex; align-items: center; gap: 9px; }
+  .wordmark { color: inherit; text-decoration: none; font-size: 19px; font-weight: 700; }
+  .wordmark img { border-radius: 7px; }
+  nav { gap: 18px; }
+  nav a { display: grid; align-items: center; min-height: 44px; font-size: 12px; text-decoration: none; }
+  a { color: var(--color-accent-2); text-underline-offset: .22em; }
+  nav a:hover { text-decoration: underline; }
+  :is(a, button):focus-visible { outline: 2px solid var(--color-accent-2); outline-offset: 3px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .toolbar { display: flex; justify-content: flex-end; padding-block: clamp(15px, 2vw, 28px); }
+  .modes { display: inline-flex; padding: 3px; border: 1px solid var(--color-line); border-radius: 22px; }
+  .modes[hidden] { display: none; }
+  button { border: 0; border-radius: 20px; min-height: 36px; padding: 0 16px; color: var(--color-muted); background: transparent; font: inherit; font-size: 13px; cursor: pointer; }
+  button[aria-pressed="true"] { color: white; background: var(--color-accent-2-active); }
+  figure { margin: 0; }
+  figcaption { padding-block: 22px 40px; color: var(--color-muted); font-size: 11px; line-height: 1.7; }
+</style>

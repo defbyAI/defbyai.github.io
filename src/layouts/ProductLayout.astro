@@ -1,0 +1,35 @@
+---
+import type { Language } from "../data/zeropl";
+import "../styles/theme.css";
+import "../styles/zeropl.css";
+interface Props { lang: Language; title: string; description: string; }
+const { lang, title, description } = Astro.props;
+const canonical = new URL(lang === "ko" ? "/ko/zeropl/" : "/zeropl/", Astro.site);
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F6F6F1" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href="https://defby.ai/zeropl/" />
+    <link rel="alternate" hreflang="ko" href="https://defby.ai/ko/zeropl/" />
+    <link rel="alternate" hreflang="x-default" href="https://defby.ai/zeropl/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="defby.ai" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === "ko" ? "ko_KR" : "en_US"} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body><slot /></body>
+</html>

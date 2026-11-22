@@ -1,0 +1,10 @@
+---
+import CaptureImage from "./CaptureImage.astro";
+import { captures } from "../../data/zeropl-captures";
+import type { Language } from "../../data/zeropl";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+---
+
+<CaptureImage capture={captures.hero} lang={lang} priority />

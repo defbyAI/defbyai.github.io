@@ -104,16 +104,12 @@ h2 { font-size: clamp(32px, 3.8vw, 48px); line-height: 1.28; letter-spacing: -.0
 video { display: block; max-width: 100%; }
 .app-capture { display: block; width: 100%; height: auto; border: 1px solid #141c1b32; border-radius: 14px; background: #141a19; }
 .platform-comparison { padding-block: 82px; border-bottom: 1px solid var(--line); }
-.platform-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
+.platform-heading { margin-bottom: 30px; }
 .platform-heading .section-body { margin-bottom: 0; }
-.capture-mode { display: flex; padding: 3px; border: 1px solid var(--line); border-radius: 22px; }
-.capture-mode button { min-height: 44px; padding-inline: 14px; border: 0; border-radius: inherit; background: transparent; color: var(--muted); white-space: nowrap; font-size: 12px; }
-.capture-mode button:hover { background: var(--color-control); color: var(--color-accent-2-active); }
-.capture-mode button[aria-pressed="true"] { background: var(--color-accent-2-active); color: white; }
 .platform-comparison .media-credit { justify-content: start; }
 @media (max-width: 760px) {
   .platform-comparison { padding-block: 55px; }
-  .platform-heading { flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+  .platform-heading { margin-bottom: 18px; }
 }
 
 .mock-track i { width: 73%; }
@@ -131,12 +127,13 @@ video { display: block; max-width: 100%; }
 .credits-intro { font-size: 13px; line-height: 1.9; color: var(--muted); max-width: 690px; }
 .credits-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 35px; }
 .credits-grid article { scroll-margin-top: 30px; }
-.credits-grid article > img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; margin-bottom: 20px; }
+.credits-grid picture { display: block; margin-bottom: 20px; }
+.credits-grid picture img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; }
 .credit-placement { font-size: 10px; color: var(--color-accent-2); margin-bottom: 10px; }
 .credits-grid h3 { font-size: 17px; letter-spacing: -.025em; font-weight: 500; margin-bottom: 12px; }
 .credits-grid h3 > span { font-size: 11px; font-weight: 400; color: var(--muted); }
 .credit-attribution { font-size: 11px; line-height: 1.8; color: var(--muted); min-height: 3.6em; margin-bottom: 8px; }
-.credit-range { font-size: 11px; line-height: 1.8; font-variant-numeric: tabular-nums; }
+.credit-license { font-size: 11px; line-height: 1.8; }
 .credit-edits { font-size: 11px; line-height: 1.9; color: var(--muted); }
 .credit-links { display: flex; flex-wrap: wrap; gap: 20px; font-size: 11px; }
 .credit-links a { display: inline-flex; align-items: center; min-height: 44px; }
@@ -147,7 +144,7 @@ video { display: block; max-width: 100%; }
   .credits-grid { grid-template-columns: 1fr; gap: 35px; }
   .credits-grid article { max-width: 500px; }
   .credit-attribution { min-height: 0; }
-  .credits-grid article > img { aspect-ratio: 2.1; }
+  .credits-grid picture img { aspect-ratio: 2.1; }
   .media-credits { padding-block: 50px 40px; }
   .media-credits h2 { font-size: 26px; }
   .media-credit { font-size: 9px; }

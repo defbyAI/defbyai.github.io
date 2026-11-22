@@ -5,17 +5,20 @@ A simple website for `defby.ai`
 
 ## zeroPL introduction draft
 
-`/zeropl/` (English) and `/ko/zeropl/` (Korean) share
+`/en/zeropl/` (English) and `/ko/zeropl/` (Korean) share
 `src/components/zeropl/ProductPage.astro` and copy in `src/data/zeropl.ts`.
 The page introduces on-device translation, iPhone Duo layouts,
 web video, AirPlay, PiP, background playback, network drives, and gestures.
-The home page links to both languages.
+The home page product link and the general entry at `/zeropl/` use the first
+supported language in the browser’s preference list, with English as the fallback.
+Choosing EN or 한국어 saves that preference. Auto restores the browser setting.
+Explicit language URLs can be shared and language switches retain the current section.
 
 The hero plays a seven-second silent excerpt of Cosmos Laundromat as iPhone Duo
 unfolds from portrait to landscape. The replay button starts the scene again. The platform
 comparison uses the same Big Buck Bunny frame at 01:07 on Mac, iPad, and iPhone
-Duo. Use the Light and Dark controls to switch the physical mobile captures
-across the page. The Mac player uses a dark appearance in both system modes.
+Duo. The title video and device captures follow the system’s light or dark appearance
+and update when it changes. The Mac player uses a dark appearance in both system modes.
 The translation demo is a 19-second recording of zeroPL on macOS. It includes
 Sintel's English dialogue and the Korean subtitles generated during playback.
 The browser demo shows Big Buck Bunny in the built-in browser and mini-player
@@ -39,14 +42,15 @@ without JavaScript.
 
 Run `npm run astro check` and `npm run build`. Inspect both routes in
 `npm run dev` and `npm run preview`, including narrow widths, keyboard selection,
-the Light and Dark switch, language links, and reduced-motion mode.
+system appearance changes during playback, language links, and reduced-motion mode.
 
 ## zeroPL privacy policy
 
 `src/pages/zeropl/privacy.astro` builds the public `/zeropl/privacy` route.
 It uses the site's logo, Asta Sans typography, and shared palette with an ivory background.
-Korean and English policies are rendered as static HTML; JavaScript enhances the
-language switch, while both complete policies remain available without it.
+Korean and English policies are rendered as static HTML. The bare policy URL uses
+the product language preference. Language-specific section links open the matching
+policy. Both complete policies remain available without JavaScript.
 
 `src/data/zeropl-privacy.json` mirrors the approved app resource at
 `zeropl/Sources/ZeroplCore/Resources/privacy-policy.json`. When the app policy

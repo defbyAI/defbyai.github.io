@@ -8,6 +8,7 @@ const effectiveDates = {
   en: new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(new Date(policy.effectiveDate + "T00:00:00Z"))
 };
 
+const languages = ["ko", "en"] as const;
 const copy = {
   ko: {
     headline: ["로컬에 저장하고,", "기기 안에서 처리합니다."],
@@ -58,6 +59,7 @@ const copy = {
   <body>
     <a class="skip-link" href="#policy">처리방침으로 바로 가기 / Skip to policy</a>
     <div class="page" id="top">
+      {languages.map(lang => <div id={`${lang}-top`}></div>)}
       <header>
         <a class="brand" href="/" aria-label="defby.ai home">
           <img src="/defby_logo.svg" width="36" height="36" alt="" />
@@ -70,80 +72,80 @@ const copy = {
         </nav>
       </header>
       <main>
-        <section class="hero" aria-label="zeroPL privacy">
-          <div class="hero-dots" aria-hidden="true"></div>
-          <p class="product">zeroPL <span>iPhone · iPad · Mac</span></p>
-          <h1 data-headline>{copy.ko.headline[0]}<br />{copy.ko.headline[1]}</h1>
-          <p class="intro" data-description>{copy.ko.description}</p>
-          <p class="effective-date"><span data-date-label>{copy.ko.dateLabel}</span> <time datetime={policy.effectiveDate} data-date>{copy.ko.date}</time></p>
-        </section>
-        <div class="principles" aria-label="Privacy principles">
-          {copy.ko.principles.map((principle, index) => (
-            <div>
-              <span class="principle-marker" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-              <h2 data-principle-label={index}>{principle.label}</h2>
-              <p data-principle-text={index}>{principle.text}</p>
+        {languages.map(lang => (
+          <div data-policy-copy lang={lang} hidden={lang !== "ko"}>
+            <section class="hero" aria-label="zeroPL privacy">
+              <div class="hero-dots" aria-hidden="true"></div>
+              <p class="product">zeroPL <span>iPhone · iPad · Mac</span></p>
+              <h1>{copy[lang].headline[0]}<br />{copy[lang].headline[1]}</h1>
+              <p class="intro">{copy[lang].description}</p>
+              <p class="effective-date"><span>{copy[lang].dateLabel}</span> <time datetime={policy.effectiveDate}>{copy[lang].date}</time></p>
+            </section>
+            <div class="principles" aria-label="Privacy principles">
+              {copy[lang].principles.map((principle, index) => (
+                <div>
+                  <span class="principle-marker" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                  <h2>{principle.label}</h2>
+                  <p>{principle.text}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <p class="network-note" data-network>{copy.ko.network}</p>
+            <p class="network-note">{copy[lang].network}</p>
+          </div>
+        ))}
         <div id="policy">
           <PrivacyDocument language="ko" {...policy.translations.ko} />
           <PrivacyDocument language="en" {...policy.translations.en} />
         </div>
       </main>
       <footer>
-        <div><p data-contact>{copy.ko.contact}</p><a href={`mailto:${policy.contactEmail}`}>{policy.contactEmail}</a></div>
-        <a class="back-top" href="#top" data-top>{copy.ko.top}<span aria-hidden="true"> ↑</span></a>
+        <div>
+          {languages.map(lang => <p data-policy-copy lang={lang} hidden={lang !== "ko"}>{copy[lang].contact}</p>)}
+          <a href={`mailto:${policy.contactEmail}`}>{policy.contactEmail}</a>
+        </div>
+        <a class="back-top" href="#top">
+          {languages.map(lang => <span data-policy-copy lang={lang} hidden={lang !== "ko"}>{copy[lang].top}</span>)}<span aria-hidden="true"> ↑</span>
+        </a>
       </footer>
     </div>
-    <script define:vars={{ copy }}>
-      // Both complete policies remain readable when JavaScript is unavailable.
-      const languageLinks = document.querySelectorAll("[data-language]");
-      const documents = document.querySelectorAll("[data-policy]");
-      const setText = (selector, text) => {
-        const element = document.querySelector(selector);
-        if (element) element.textContent = text;
-      };
-      const languageFromHash = () => /^#en(?:-|$)/.test(window.location.hash) ? "en" : "ko";
-      const showLanguage = (language) => {
-        const text = copy[language];
+    <script>
+      import { preferredLanguage, rememberLanguage } from "../../lib/zeropl/language";
+      import type { Language } from "../../data/zeropl";
+
+      const languageLinks = document.querySelectorAll<HTMLAnchorElement>("[data-language]");
+      const localizedContent = document.querySelectorAll<HTMLElement>("[data-policy], [data-policy-copy]");
+      const skip = document.querySelector<HTMLAnchorElement>(".skip-link")!;
+      const backToTop = document.querySelector<HTMLAnchorElement>(".back-top")!;
+
+      function showLanguage(language: Language) {
         document.documentElement.lang = language;
-        documents.forEach((article) => { article.hidden = article.id !== language; });
+        skip.hash = language;
+        backToTop.hash = language + "-top";
+        localizedContent.forEach(element => { element.hidden = element.lang !== language; });
         languageLinks.forEach((link) => {
-          if (link.dataset.language === language) link.setAttribute("aria-current", "true");
+          if (link.lang === language) link.setAttribute("aria-current", "true");
           else link.removeAttribute("aria-current");
         });
-        const headline = document.querySelector("[data-headline]");
-        headline.replaceChildren(document.createTextNode(text.headline[0]), document.createElement("br"), document.createTextNode(text.headline[1]));
-        setText("[data-description]", text.description);
-        setText("[data-network]", text.network);
-        setText("[data-date-label]", text.dateLabel);
-        setText("[data-date]", text.date);
-        setText("[data-contact]", text.contact);
-        setText("[data-top]", text.top + " ↑");
-        text.principles.forEach((principle, index) => {
-          setText(`[data-principle-label="${index}"]`, principle.label);
-          setText(`[data-principle-text="${index}"]`, principle.text);
-        });
-      };
+      }
+
+      function showLocationLanguage() {
+        const anchor = location.hash.match(/^#(ko|en)(?:-|$)/)?.[1];
+        showLanguage(anchor === "ko" || anchor === "en" ? anchor : preferredLanguage());
+      }
+
       languageLinks.forEach((link) => {
         link.addEventListener("click", (event) => {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
           event.preventDefault();
-          history.pushState(null, "", link.getAttribute("href"));
-          showLanguage(link.dataset.language);
+          const language = link.lang === "ko" ? "ko" : "en";
+          rememberLanguage(language);
+          if (location.hash !== link.hash) history.pushState(null, "", link.hash);
+          showLanguage(language);
         });
       });
-      window.addEventListener("hashchange", () => {
-        const target = document.getElementById(window.location.hash.slice(1));
-        const language = target?.closest("[data-policy]")?.id;
-        if (language) showLanguage(language);
-        if (/^#(?:ko|en)$/.test(window.location.hash)) showLanguage(languageFromHash());
-      });
-      window.addEventListener("popstate", () => {
-        if (/^#(?:ko|en)(?:-|$)/.test(window.location.hash)) showLanguage(languageFromHash());
-      });
-      showLanguage(languageFromHash());
+      window.addEventListener("hashchange", showLocationLanguage);
+      window.addEventListener("languagechange", showLocationLanguage);
+      showLocationLanguage();
     </script>
   </body>
 </html>

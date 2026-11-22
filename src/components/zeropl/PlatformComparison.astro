@@ -11,25 +11,12 @@ const t = zeropl[lang];
 
 <section class="container platform-comparison" id="platforms" aria-labelledby="platform-title">
   <div class="platform-heading">
-    <div>
-      <p class="eyebrow" lang="en">PER-DEVICE DESIGN</p>
-      <h2 id="platform-title">
-        {t.platformTitle.before}{ko && <br />}<span>{t.platformTitle.accent}</span>{!ko && <br />}{t.platformTitle.after}
-      </h2>
-      <p class="section-body">{t.platformBody}</p>
-    </div>
-    <div class="capture-mode" role="group" aria-label={ko ? "캡처 외관" : "Capture appearance"} hidden>
-      <button type="button" data-capture-mode="light" aria-pressed="true">{ko ? "라이트" : "Light"}</button>
-      <button type="button" data-capture-mode="dark" aria-pressed="false">{ko ? "다크" : "Dark"}</button>
-    </div>
+    <p class="eyebrow" lang="en">PER-DEVICE DESIGN</p>
+    <h2 id="platform-title">
+      {t.platformTitle.before}{ko && <br />}<span>{t.platformTitle.accent}</span>{!ko && <br />}{t.platformTitle.after}
+    </h2>
+    <p class="section-body">{t.platformBody}</p>
   </div>
   <PlatformMosaic {lang} />
   <MediaCredit film="bunny" lang={lang} timecode="01:09" />
 </section>
-
-<script>
-  import "../../lib/zeropl/capture-appearance";
-
-  const selector = document.querySelector<HTMLElement>(".platform-comparison .capture-mode");
-  if (selector) selector.hidden = false;
-</script>

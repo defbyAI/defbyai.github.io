@@ -6,7 +6,6 @@ import { foldPoses } from "../../lib/zeropl/fold-preview-poses";
 interface Props { lang: Language; standalone?: boolean; }
 const { lang, standalone = false } = Astro.props;
 const t = zeropl[lang];
-const ko = lang === "ko";
 const PoseHeading = standalone ? "h2" : "h3";
 const poses = foldPoses.map(({ id }) => {
   const pose = t.poses.find(pose => pose.id === id);
@@ -35,23 +34,20 @@ const first = poses[0].capture;
       <figure class="phone-demo">
         <div class="phone-viewer" data-fold-viewer>
           <div class="canvas-host" data-fold-canvas aria-hidden="true"></div>
-          <img class="capture-fallback" data-fold-fallback src={first.light} alt={first.alt[lang]}
-            width={first.width} height={first.height} loading={standalone ? "eager" : "lazy"} decoding="async" />
+          <picture>
+            <source data-fold-dark media="(prefers-color-scheme: dark)" srcset={first.dark ?? first.light} />
+            <img class="capture-fallback" data-fold-fallback src={first.light} alt={first.alt[lang]}
+              width={first.width} height={first.height} loading={standalone ? "eager" : "lazy"} decoding="async" />
+          </picture>
         </div>
       </figure>
     </div>
 
     <div class="fold-controls" data-fold-controls hidden>
-      <div class="control-row">
-        <div class="pose-buttons" role="group" aria-label={t.poseGroup}>
-          {poses.map(({ label }, index) => (
-            <button type="button" data-fold-pose aria-pressed={index === 0}>{label}</button>
-          ))}
-        </div>
-        <div class="appearance-buttons" role="group" aria-label={ko ? "캡처 외관" : "Capture appearance"}>
-          <button type="button" data-capture-mode="light" aria-pressed="true">{ko ? "라이트" : "Light"}</button>
-          <button type="button" data-capture-mode="dark" aria-pressed="false">{ko ? "다크" : "Dark"}</button>
-        </div>
+      <div class="pose-buttons" role="group" aria-label={t.poseGroup}>
+        {poses.map(({ label }, index) => (
+          <button type="button" data-fold-pose aria-pressed={index === 0}>{label}</button>
+        ))}
       </div>
       <div class="progress-track" aria-hidden="true"><span data-fold-progress></span></div>
       <p class="scroll-hint">{t.poseHint}</p>
@@ -123,10 +119,8 @@ const first = poses[0].capture;
     .canvas-host, .capture-fallback { transition: opacity 300ms ease-in-out; }
   }
   .fold-controls { margin-top: 16px; }
-  .control-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-  .pose-buttons, .appearance-buttons { display: flex; gap: 4px; padding: 4px; border-radius: 10px; background: var(--color-control); }
-  .pose-buttons { flex-wrap: wrap; }
-  .control-row button {
+  .pose-buttons { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 10px; background: var(--color-control); }
+  .pose-buttons button {
     min-height: 44px;
     min-width: 44px;
     border: 0;
@@ -137,15 +131,15 @@ const first = poses[0].capture;
     font-size: 13px;
     line-height: 1.4;
   }
-  .control-row button:hover { background: var(--color-bg); }
-  .control-row button[aria-pressed="true"] { background: var(--color-accent-2-active); color: white; }
+  .pose-buttons button:hover { background: var(--color-bg); }
+  .pose-buttons button[aria-pressed="true"] { background: var(--color-accent-2-active); color: white; }
   .progress-track { height: 2px; margin-top: 14px; background: var(--color-line); }
   .progress-track span { display: block; height: 100%; background: var(--color-accent-2); transform: scaleX(0); transform-origin: left; }
   .scroll-hint { display: none; margin: 8px 0 0; text-align: center; color: var(--color-muted); font-size: 12px; }
 
   @media (max-width: 900px) {
     .stage-main { gap: 16px; }
-    .control-row button { padding-inline: 9px; }
+    .pose-buttons button { padding-inline: 9px; }
   }
   @media (max-width: 760px) {
     .fold-stage { padding-block: 28px 14px; }
@@ -157,13 +151,12 @@ const first = poses[0].capture;
     .pose-copy p { max-width: 480px; font-size: 13px; line-height: 1.55; }
     .phone-viewer { height: clamp(240px, 52svh, 400px); }
     .fold-controls { margin-top: 12px; }
-    .pose-buttons, .appearance-buttons { padding: 2px; }
-    .control-row button { padding-inline: 8px; font-size: 12px; }
+    .pose-buttons { padding: 2px; }
+    .pose-buttons button { padding-inline: 8px; font-size: 12px; }
     .progress-track { margin-top: 10px; }
   }
   @media (max-width: 480px) {
     .pose-buttons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
-    .control-row { justify-content: center; }
   }
   @media (prefers-reduced-motion: no-preference) and (min-width: 761px) and (min-height: 640px),
     (prefers-reduced-motion: no-preference) and (min-height: 800px) {

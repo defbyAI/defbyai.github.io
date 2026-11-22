@@ -1,22 +1,24 @@
 ---
 import type { Language } from "../data/zeropl";
+import { productPaths } from "../lib/zeropl/language";
 import "../styles/theme.css";
 import "../styles/zeropl.css";
 interface Props { lang: Language; title: string; description: string; }
 const { lang, title, description } = Astro.props;
-const canonical = new URL(lang === "ko" ? "/ko/zeropl/" : "/zeropl/", Astro.site);
+const canonical = new URL(productPaths[lang], Astro.site);
 ---
 <!doctype html>
 <html lang={lang}>
   <head>
     <meta charset="UTF-8" />
+    <slot name="head" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#F6F6F1" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="en" href="https://defby.ai/zeropl/" />
-    <link rel="alternate" hreflang="ko" href="https://defby.ai/ko/zeropl/" />
+    <link rel="alternate" hreflang="en" href={new URL(productPaths.en, Astro.site)} />
+    <link rel="alternate" hreflang="ko" href={new URL(productPaths.ko, Astro.site)} />
     <link rel="alternate" hreflang="x-default" href="https://defby.ai/zeropl/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="defby.ai" />

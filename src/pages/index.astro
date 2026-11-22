@@ -148,11 +148,27 @@ import "../styles/theme.css";
         </div>
         <p class="tagline">&nbsp;&nbsp;&nbsp;AI defines everything. You make it matter.</p>
         <nav class="product-links" aria-label="Explore zeroPL">
-          <a href="/zeropl/">Explore zeroPL ↗</a>
-          <a href="/ko/zeropl/" lang="ko">한국어 ↗</a>
+          <a href="/zeropl/" data-zeropl-link>Explore zeroPL ↗</a>
+          <noscript><a href="/ko/zeropl/" lang="ko">한국어 ↗</a></noscript>
         </nav>
       </section>
     </main>
+
+    <script>
+      import { preferredLanguage, productPaths } from "../lib/zeropl/language";
+
+      const link = document.querySelector<HTMLAnchorElement>("[data-zeropl-link]")!;
+      function updateProductLink() {
+        const language = preferredLanguage();
+        link.lang = language;
+        link.href = productPaths[language];
+        link.textContent = language === "ko" ? "zeroPL 둘러보기 ↗" : "Explore zeroPL ↗";
+      }
+      updateProductLink();
+      window.addEventListener("pageshow", updateProductLink);
+      window.addEventListener("storage", updateProductLink);
+      window.addEventListener("languagechange", updateProductLink);
+    </script>
 
     <script is:inline>
       const page = document.getElementById("page");

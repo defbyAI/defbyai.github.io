@@ -10,6 +10,7 @@ function mountFoldPreview(story: HTMLElement) {
   const viewer = story.querySelector<HTMLElement>("[data-fold-viewer]")!;
   const host = story.querySelector<HTMLElement>("[data-fold-canvas]")!;
   const image = story.querySelector<HTMLImageElement>("[data-fold-fallback]")!;
+  const darkImage = story.querySelector<HTMLSourceElement>("[data-fold-dark]")!;
   const controls = story.querySelector<HTMLElement>("[data-fold-controls]")!;
   const progressBar = story.querySelector<HTMLElement>("[data-fold-progress]")!;
   const copies = [...story.querySelectorAll<HTMLElement>("[data-fold-copy]")];
@@ -32,8 +33,8 @@ function mountFoldPreview(story: HTMLElement) {
 
   function updateImage() {
     const copy = copies[active];
-    const src = captureUrl(copy, captureAppearance);
-    if (image.getAttribute("src") !== src) image.src = src;
+    darkImage.srcset = captureUrl(copy, "dark");
+    image.src = captureUrl(copy, "light");
     image.alt = copy.dataset.alt!;
     image.width = Number(copy.dataset.width);
     image.height = Number(copy.dataset.height);
@@ -158,10 +159,7 @@ function mountFoldPreview(story: HTMLElement) {
       select(next);
     });
   });
-  document.addEventListener(captureAppearanceChange, () => {
-    updateImage();
-    void loadAppearance();
-  });
+  document.addEventListener(captureAppearanceChange, loadAppearance);
   window.addEventListener("scroll", followScroll, { passive: true });
   window.addEventListener("resize", resize, { passive: true });
   window.visualViewport?.addEventListener("resize", schedule, { passive: true });
@@ -185,7 +183,6 @@ function mountFoldPreview(story: HTMLElement) {
   intersection.observe(stage);
   followScroll();
   current = target;
-  updateImage();
 }
 
 const foldStory = document.querySelector<HTMLElement>("[data-fold-story]");

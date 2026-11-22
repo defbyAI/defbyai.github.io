@@ -7,19 +7,20 @@ interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === "ko";
 const recording = films.cosmos.recording;
+// A transparent poster lets CSS choose the matching first frame before scripts run.
+const transparentPoster = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'/%3E";
 ---
 
 <div class="title-scene">
   <video id="duo-title-video" width={recording.width} height={recording.height}
-    src={recording.light.video} poster={recording.light.poster} muted playsinline controls preload="none"
+    poster={transparentPoster} muted playsinline controls preload="none"
+    style={`--poster-light: url('${recording.light.poster}'); --poster-dark: url('${recording.dark.poster}')`}
     aria-label={zeropl[lang].preview}>
+    <source media="(prefers-color-scheme: dark)" src={recording.dark.video} type="video/mp4" />
+    <source src={recording.light.video} type="video/mp4" />
     <a href={recording.light.video}>{ko ? "영상 열기" : "Open video"}</a>
   </video>
   <div class="title-controls" hidden>
-    <div class="capture-mode" role="group" aria-label={ko ? "영상 테마" : "Video appearance"}>
-      <button type="button" data-capture-mode="light" aria-pressed="true">{ko ? "라이트" : "Light"}</button>
-      <button type="button" data-capture-mode="dark" aria-pressed="false">{ko ? "다크" : "Dark"}</button>
-    </div>
     <button type="button" class="title-playback" aria-controls="duo-title-video" data-state="play">
       <span data-action="play"><Icon name="play" size={16} />{ko ? "재생" : "Play"}</span>
       <span data-action="pause"><Icon name="pause" size={16} />{ko ? "일시 정지" : "Pause"}</span>
@@ -38,9 +39,10 @@ const recording = films.cosmos.recording;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let wantsPlayback = !reducedMotion.matches;
   let inView = false;
+  let finished = false;
 
   function updateButton() {
-    playback.dataset.state = video.ended ? "replay" : video.paused ? "play" : "pause";
+    playback.dataset.state = finished ? "replay" : video.paused ? "play" : "pause";
   }
 
   function play() {
@@ -58,24 +60,34 @@ const recording = films.cosmos.recording;
   video.addEventListener("play", updateButton);
   video.addEventListener("pause", updateButton);
   video.addEventListener("ended", () => {
+    finished = true;
     wantsPlayback = false;
     updateButton();
   });
   playback.addEventListener("click", () => {
-    wantsPlayback = video.paused || video.ended;
-    if (video.ended) video.currentTime = 0;
+    wantsPlayback = video.paused || finished;
+    if (finished) {
+      finished = false;
+      video.currentTime = 0;
+    }
     if (wantsPlayback) play();
     else video.pause();
   });
 
-  document.addEventListener(captureAppearanceChange, () => {
+  function applyAppearance() {
     const take = films.cosmos.recording[captureAppearance];
+    const position = video.currentTime;
     video.poster = take.poster;
+    // A paused or finished clip needs the new frame even when autoplay is disabled.
+    video.preload = position > 0 ? "auto" : "none";
     video.src = take.video;
-    wantsPlayback = !reducedMotion.matches;
+    video.load();
+    video.currentTime = position;
     updateButton();
     syncPlayback();
-  });
+  }
+  applyAppearance();
+  document.addEventListener(captureAppearanceChange, applyAppearance);
   document.addEventListener("visibilitychange", syncPlayback);
   reducedMotion.addEventListener("change", () => {
     if (reducedMotion.matches) {
@@ -103,13 +115,14 @@ const recording = films.cosmos.recording;
     width: 100%;
     height: auto;
     border-radius: 14px;
-    background: var(--color-surface);
+    background: var(--color-surface) var(--poster-light) center / cover no-repeat;
+  }
+  @media (prefers-color-scheme: dark) {
+    video { background-image: var(--poster-dark); }
   }
   .title-controls {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    justify-content: flex-end;
     margin-top: 12px;
   }
   .title-playback {

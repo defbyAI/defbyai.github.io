@@ -13,11 +13,14 @@ const t = mediaText[lang];
     {(Object.keys(films) as FilmId[]).map(id => {
       const f = films[id];
       return <article id={`credit-${id}`}>
-        <img src={f.poster} alt="" width="480" height="270" loading="lazy" />
+        <picture>
+          {id === "cosmos" && <source media="(prefers-color-scheme: dark)" srcset={films.cosmos.recording.dark.poster} />}
+          <img src={f.poster} alt="" width="480" height="270" loading="lazy" />
+        </picture>
         <p class="credit-placement">{f.placement[lang]}</p>
         <h3>{f.title} <span>({f.year})</span></h3>
         <p class="credit-attribution">{f.credit}</p>
-        <p class="credit-range">{f.range} · <a href={filmLicense}>CC BY 3.0</a></p>
+        <p class="credit-license"><a href={filmLicense}>CC BY 3.0</a></p>
         <p class="credit-edits">{f.edits[lang]}</p>
         <div class="credit-links"><a href={f.source}>{t.original} ↗</a><a href={f.terms}>{t.terms} ↗</a></div>
       </article>;

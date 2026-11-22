@@ -7,7 +7,7 @@ import { films, filmLicense, mediaText } from "../../data/zeropl-media";
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === "ko";
-const product = ko ? "/ko/zeropl/" : "/zeropl/";
+const product = ko ? "/ko/zeropl/" : "/en/zeropl/";
 const title = ko ? "zeroPL · 폴더블 자세 전환" : "zeroPL · Foldable pose preview";
 ---
 

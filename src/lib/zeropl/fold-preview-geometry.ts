@@ -37,12 +37,13 @@ export function roundedRectangle(width: number, height: number, leftRadius: numb
   return shape;
 }
 
-export function createShell(hingeOnLeft: boolean) {
+export function createShell(hingeSide?: "left" | "right") {
   const bevel = mm(0.45);
   const sideInset = mm(0.12);
   const sideDepth = enclosure.thickness - 2 * bevel;
   const cornerSegments = 12;
-  const xCenter = (hingeOnLeft ? 1 : -1) * leafWidth / 2;
+  const width = hingeSide ? leafWidth : enclosure.width;
+  const xCenter = hingeSide === "left" ? width / 2 : hingeSide === "right" ? -width / 2 : 0;
   const corners = [
     { x: 1, y: 1 }, { x: -1, y: 1 }, { x: -1, y: -1 }, { x: 1, y: -1 },
   ];
@@ -114,9 +115,9 @@ export function createShell(hingeOnLeft: boolean) {
       lastRadius = hingeRadius;
       rings.forEach(({ inset, z }, ring) => {
         outline.forEach(({ x, y, nx, ny }, index) => {
-          const atHinge = hingeOnLeft ? x < 0 : x > 0;
+          const atHinge = hingeSide === (x < 0 ? "left" : "right");
           const radius = atHinge ? hingeRadius : enclosure.corner;
-          const cx = xCenter + x * (leafWidth / 2 - radius);
+          const cx = xCenter + x * (width / 2 - radius);
           const cy = y * (enclosure.height / 2 - radius);
           positions.setXYZ(ring * perimeter + index, cx + (radius - inset) * nx, cy + (radius - inset) * ny, z);
         });

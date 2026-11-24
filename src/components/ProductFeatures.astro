@@ -1,0 +1,22 @@
+---
+import KeylineIcon from "./KeylineIcon.astro";
+
+interface Props {
+  title: string;
+  features: ReadonlyArray<{ icon: string; title: string; text: string }>;
+}
+const { title, features } = Astro.props;
+---
+
+<section class="container features-section" id="features" aria-labelledby="features-title">
+  <h2 id="features-title">{title}</h2>
+  <div class="feature-grid">
+    {features.map(feature => (
+      <article>
+        <KeylineIcon name={feature.icon} size={29} />
+        <h3>{feature.title}</h3>
+        <p>{feature.text}</p>
+      </article>
+    ))}
+  </div>
+</section>

@@ -38,7 +38,7 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 | zeroPL 개인정보 처리방침 | `/zeropl/privacy`, 한국어·영어 본문, 언어 전환, 목차, 요약, 문의 링크 | `src/pages/zeropl/privacy.astro`, `src/components/PrivacyDocument.astro` |
 | twoRT 개인정보 처리방침 | twoRT와 twoRT Connect의 한·영 게시 원고, 언어별 목차와 문의 링크 | `src/pages/twort/privacy.astro`, `src/data/twort-privacy.json` |
 | 정책 원문 | 앱의 검토된 정책 JSON을 웹 저장소에 복사하여 사용 | `src/data/zeropl-privacy.json`, `README.md` |
-| twoRT 소개 | 접속 기기별 작업 화면, 원격 단축키, Duo의 다섯 가지 자세와 외장 키보드 연결 시의 트랙패드, 네 가지 외장 디스플레이 모드, Connect 설치 안내 | `src/components/twort/ProductPage.astro` |
+| twoRT 소개 | 접속 기기별 작업 화면, 카메라·마이크 전달, Duo의 다섯 가지 자세와 외장 키보드 연결 시의 트랙패드, 네 가지 외장 디스플레이 모드, Connect 설치 안내 | `src/components/twort/ProductPage.astro` |
 | twoRT 도메인 연동 | Connect·iOS 클라이언트·Mac 클라이언트용 `webcredentials` 선언 | `public/.well-known/apple-app-site-association` |
 
 홈에서 zeroPL과 twoRT의 한·영문 소개로 이동할 수 있다. twoRT 소개에는 접속을 받을 Mac용 twoRT Connect의 공식 GitHub 릴리스 링크가 있다.

@@ -1,31 +1,47 @@
 ---
 import type { Language } from "../../data/products";
+import { displays, enclosure, mm } from "../../lib/zeropl/fold-preview-geometry";
 import DesktopScene from "./DesktopScene.astro";
 import DuoLandscapeScreen from "./DuoLandscapeScreen.astro";
 
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === "ko";
+const monitorAspect = 16 / 10;
+const monitorPanelWidth = mm(21.5 * 25.4) * monitorAspect / Math.hypot(monitorAspect, 1);
+const duoPanel = displays.inner;
+const duoPanelCorner = enclosure.corner - (enclosure.width - duoPanel.width) / 2;
+const cornerRadius = (radius: number, { width, height }: { width: number; height: number }) =>
+  `${radius / width * 100}% / ${radius / height * 100}%`;
+const deviceDimensions = {
+  "--monitor-aspect": monitorAspect,
+  "--duo-width-ratio": enclosure.width / monitorPanelWidth,
+  "--duo-aspect": enclosure.width / enclosure.height,
+  "--duo-radius": cornerRadius(enclosure.corner, enclosure),
+  "--duo-display-width": `${duoPanel.width / enclosure.width * 100}%`,
+  "--duo-display-height": `${duoPanel.height / enclosure.height * 100}%`,
+  "--duo-display-radius": cornerRadius(duoPanelCorner, duoPanel),
+};
 const modes = [
   {
     id: "phone", label: ko ? "iPhone만" : "iPhone Only",
-    description: ko ? "Mac 화면과 조작 버튼이 iPhone에 표시됩니다. 외장 모니터에는 현재 모드가 표시됩니다."
-      : "Your Mac desktop and session controls appear on iPhone. The monitor shows which mode is active.",
+    description: ko ? "왼쪽 iPhone Duo에 Mac 화면과 조작 버튼이 표시됩니다. 오른쪽 모니터에는 현재 모드가 표시됩니다."
+      : "Your Mac desktop and session controls appear on the iPhone Duo at left. The monitor shows which mode is active.",
   },
   {
     id: "mirror", label: ko ? "미러링" : "Mirror",
-    description: ko ? "두 화면에 같은 Mac 데스크탑이 보입니다. 조작 버튼은 iPhone에만 표시됩니다."
-      : "Both screens show the same Mac desktop. Session controls stay on iPhone.",
+    description: ko ? "두 화면에 같은 Mac 데스크톱이 보입니다. 조작 버튼은 iPhone Duo에만 표시됩니다."
+      : "Both screens show the same Mac desktop. Session controls stay on iPhone Duo.",
   },
   {
     id: "monitor", label: ko ? "외장 디스플레이만" : "External Display Only",
-    description: ko ? "Mac 데스크탑을 모니터에 띄웁니다. iPhone 화면을 트랙패드로 쓰거나 화면 키보드를 열어 입력하세요."
-      : "See your Mac desktop on the monitor. Use iPhone as a trackpad or open its keyboard to type.",
+    description: ko ? "Mac 데스크톱을 오른쪽 모니터에 띄웁니다. 왼쪽 iPhone Duo를 트랙패드로 쓰거나 화면 키보드로 입력할 수 있습니다."
+      : "See your Mac desktop on the monitor at right. Use the iPhone Duo at left as a trackpad or open its keyboard to type.",
   },
   {
     id: "extend", label: ko ? "확장 디스플레이" : "Extended Display",
-    description: ko ? "왼쪽의 iPhone Duo를 가로로 펼쳐 메모를 보세요. 포인터를 오른쪽 모니터로 옮겨 색상표에서 색을 고를 수 있습니다."
-      : "Unfold iPhone Duo in landscape to keep your notes open on the left. Move the pointer to the monitor on the right to choose a color from the palette.",
+    description: ko ? "원격으로 Mac을 쓸 때도 모니터 한 대를 더 연결해 두 화면에 다른 창을 띄울 수 있습니다."
+      : "Use an extra monitor while connected to your Mac remotely, with different windows on each screen.",
   },
 ] as const;
 ---
@@ -39,7 +55,7 @@ const modes = [
           : "Connect a monitor to your iPhone with USB-C. Open External Display in the session menu to choose where your Mac workspace appears."}
       </p>
     </header>
-    <figure class="display-demo">
+    <figure class="display-demo" style={deviceDimensions}>
       <fieldset class="mode-picker">
         <legend>{ko ? "디스플레이 모드 미리 보기" : "Preview a display mode"}</legend>
         <div class="choices">
@@ -57,18 +73,19 @@ const modes = [
         <div class="devices">
           <div class="phone-device">
             <div class="phone-shell">
-              <div class="phone-desktop"><DesktopScene lang={lang} /></div>
-              <DuoLandscapeScreen lang={lang} />
-              <div class="inactive phone-inactive">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-                  <rect x="2" y="3.5" width="20" height="14" rx="2" /><path d="M12 18v3m-4 0h8" />
-                </svg>
-                <span>{modes[2].label}</span>
+              <div class="duo-display">
+                <DuoLandscapeScreen lang={lang} />
+                <div class="phone-desktop"><DesktopScene lang={lang} /></div>
+                <div class="inactive phone-inactive">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <rect x="2" y="3.5" width="20" height="14" rx="2" /><path d="M12 18v3m-4 0h8" />
+                  </svg>
+                  <span>{modes[2].label}</span>
+                </div>
+                <div class="phone-tools"><b>•••</b><i></i></div>
               </div>
-              <div class="phone-tools"><b>•••</b><i></i></div>
             </div>
-            <span class="device-name iphone-label">iPhone</span>
-            <span class="device-name duo-label">iPhone Duo</span>
+            <span class="device-name">iPhone Duo</span>
           </div>
           <div class="external-device">
             <div class="monitor-shell">
@@ -126,38 +143,70 @@ const modes = [
   input:focus-visible + span { outline: 2px solid var(--color-accent-2); outline-offset: 2px; }
 
   .stage { container-type: inline-size; margin: 30px auto 12px; }
-  .devices { display: flex; justify-content: center; align-items: flex-end; gap: 5.3%; }
-  .phone-device { width: 27%; }
-  .external-device { width: 53%; }
+  .devices {
+    --duo-column-width: 33cqi;
+    --device-column-gap: 5.3cqi;
+    --monitor-width: 53cqi;
+    --monitor-padding: 0.7cqi;
+    --monitor-border: max(1px, 0.24cqi);
+    --monitor-panel-width: calc(var(--monitor-width) - 2 * (var(--monitor-padding) + var(--monitor-border)));
+    --duo-width: calc(var(--monitor-panel-width) * var(--duo-width-ratio));
+    --device-shadow: 0 1.2cqi 1.6cqi -1.1cqi #2d3c344f;
+    display: grid;
+    grid-template-columns: var(--duo-column-width) var(--monitor-width);
+    justify-content: center;
+    justify-items: center;
+    align-items: end;
+    column-gap: var(--device-column-gap);
+  }
+  .phone-device {
+    position: relative;
+    width: var(--duo-width);
+    /* The visible gap includes the unused half of the Duo column on its right. */
+    inset-inline-start: calc((var(--device-column-gap) + (var(--duo-column-width) - var(--duo-width)) / 2) * .2);
+  }
+  .external-device { width: 100%; min-width: 0; }
   .phone-shell, .monitor-shell {
-    display: grid; place-items: center; position: relative; isolation: isolate;
-    overflow: hidden; color: #b1b4b3; background: #101211;
-    border: max(1px, 0.24cqi) solid #454a48; box-shadow: 0 1.2cqi 1.6cqi -1.1cqi #2d3c344f;
+    position: relative; isolation: isolate; overflow: hidden; color: #b1b4b3; background: #101211;
   }
-  .phone-shell { aspect-ratio: 2.16; border-radius: 2.1cqi; padding: 0.45cqi 0.9cqi; }
-  .phone-desktop { height: 100%; max-width: 100%; aspect-ratio: 16 / 10; overflow: hidden; }
+  .phone-shell {
+    aspect-ratio: var(--duo-aspect);
+    border-radius: var(--duo-radius);
+    box-shadow: inset 0 0 0 max(1px, .16cqi) #454a48, var(--device-shadow);
+  }
+  .duo-display {
+    position: absolute; inset: 0; margin: auto;
+    display: grid; place-items: center; container-type: inline-size; overflow: hidden;
+    width: var(--duo-display-width); height: var(--duo-display-height);
+    border-radius: var(--duo-display-radius);
+  }
+  .duo-display :global(.duo-screen) { width: 100%; height: 100%; }
+  .duo-display :global(.duo-screen img) { height: 100%; object-fit: contain; }
+  .phone-desktop { display: none; width: 100%; overflow: hidden; }
   .phone-tools {
-    position: absolute; left: 0.9cqi; top: 50%; transform: translateY(-50%);
-    display: grid; justify-items: center; gap: 0.75cqi; padding: 0.6cqi 0.3cqi;
-    color-scheme: light dark;
-    border-radius: 1cqi; background: light-dark(#46504dd9, #282d2deb); color: white; font: bold 0.52cqi/1 sans-serif;
+    position: absolute; right: 2cqi; bottom: 3cqi;
+    display: none; justify-items: center; gap: 2cqi; padding: 2cqi 1.5cqi;
+    border-radius: 4cqi; background: #282d2deb; color: white; font: bold 3cqi/1 sans-serif;
   }
-  .phone-tools i { width: 1cqi; height: 0.64cqi; border: 0.12cqi solid currentColor; border-radius: 0.16cqi; }
-  .monitor-shell { aspect-ratio: 16 / 10; padding: 0.7cqi; border-radius: 1.4cqi; }
+  .phone-tools i { width: 4.4cqi; height: 2.8cqi; border: 0.5cqi solid currentColor; border-radius: 0.6cqi; }
+  .monitor-shell {
+    display: grid; place-items: center;
+    aspect-ratio: var(--monitor-aspect); padding: var(--monitor-padding); border-radius: 1.4cqi;
+    border: var(--monitor-border) solid #454a48; box-shadow: var(--device-shadow);
+  }
   .monitor-desktop, .palette-desktop { width: 100%; height: 100%; overflow: hidden; border-radius: 0.4cqi; }
   .monitor-foot {
     width: 27%; height: 3.9cqi; margin: 0 auto;
     background: linear-gradient(#69706c, #bec3bd 78%, #848c86);
     clip-path: polygon(30% 0, 70% 0, 75% 81%, 100% 94%, 100% 100%, 0 100%, 0 94%, 25% 81%);
   }
-  .device-name { display: block; margin-top: 0.8cqi; text-align: center; font-size: clamp(11px, 1.6cqi, 14px); color: #52615a; }
-  .duo-label, .phone-shell :global(.duo-screen) { display: none; }
-  .phone-shell :global(.duo-screen) { width: 100%; border-radius: 1.1cqi; }
+  .device-name { display: block; margin-top: 0.8cqi; text-align: center; white-space: nowrap; font-size: clamp(11px, 1.6cqi, 14px); color: #52615a; }
   .inactive { position: absolute; inset: 0; display: none; align-content: center; justify-items: center; gap: 0.6cqi; }
   .inactive svg { width: 3cqi; height: 3cqi; }
   .inactive span { font-size: 1.4cqi; }
-  .phone-inactive svg { width: 2cqi; height: 2cqi; }
-  .phone-inactive span { font-size: 1cqi; }
+  .phone-inactive { gap: 2.5cqi; }
+  .phone-inactive svg { width: 9cqi; height: 9cqi; }
+  .phone-inactive span { font-size: 5cqi; }
   .palette-desktop { display: none; position: relative; color-scheme: light dark; background: light-dark(#d2dacf, #27312e); color: light-dark(#34433b, #edf0e8); }
   .palette-menu { padding: 0.3cqi 1cqi; background: light-dark(#f6f5eb, #323b38); font-size: 0.8cqi; font-weight: 600; }
   .palette-paper {
@@ -177,23 +226,17 @@ const modes = [
   .detail { display: none; margin: 0 auto; max-width: 650px; font-size: 16px; line-height: 1.7; text-wrap: balance; }
   .display-demo:has([value="phone"]:checked) .detail-phone,
   .display-demo:has([value="mirror"]:checked) .detail-mirror,
+  .display-demo:has([value="mirror"]:checked) .phone-desktop,
   .display-demo:has([value="monitor"]:checked) .detail-monitor,
-  .display-demo:has([value="extend"]:checked) :is(.detail-extend, .palette-desktop, .duo-label),
-  .display-demo:has([value="extend"]:checked) .phone-shell :global(.duo-screen) { display: block; }
-  .display-demo:has([value="extend"]:checked) .phone-device { width: 33%; }
-  .display-demo:has([value="extend"]:checked) .phone-shell {
-    display: block; aspect-ratio: auto; padding: 0.5cqi; border-radius: 1.7cqi;
-  }
-  .display-demo:has([value="extend"]:checked) :is(.phone-tools, .iphone-label, .phone-desktop) { display: none; }
+  .display-demo:has([value="extend"]:checked) :is(.detail-extend, .palette-desktop) { display: block; }
   .display-demo:has([value="phone"]:checked) .monitor-inactive,
-  .display-demo:has([value="monitor"]:checked) .phone-inactive { display: grid; }
-  .display-demo:has([value="phone"]:checked, [value="extend"]:checked) .monitor-desktop,
-  .display-demo:has([value="monitor"]:checked) .phone-desktop { display: none; }
+  .display-demo:has([value="monitor"]:checked) .phone-inactive,
+  .display-demo:has([value="mirror"]:checked, [value="monitor"]:checked) .phone-tools { display: grid; }
+  .display-demo:has([value="mirror"]:checked, [value="monitor"]:checked) .duo-display :global(.duo-screen),
+  .display-demo:has([value="phone"]:checked, [value="extend"]:checked) .monitor-desktop { display: none; }
 
   @media (max-width: 760px) {
-    .devices { gap: 4.5%; }
-    .phone-device { width: 31%; }
-    .external-device { width: 60%; }
+    .devices { --monitor-width: 60cqi; --device-column-gap: 4.5cqi; }
     .stage { margin-top: 24px; }
   }
   @media (max-width: 610px) {

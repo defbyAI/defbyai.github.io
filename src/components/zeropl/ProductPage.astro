@@ -1,9 +1,11 @@
 ---
 import ProductLayout from "../../layouts/ProductLayout.astro";
+import AppStoreAvailability from "../AppStoreAvailability.astro";
 import ProductHeader from "../ProductHeader.astro";
+import ProductFeatures from "../ProductFeatures.astro";
 import "../../styles/zeropl.css";
 import Icon from "./Icon.astro";
-import KeylineIcon from "./KeylineIcon.astro";
+import KeylineIcon from "../KeylineIcon.astro";
 import keylineSymbols from "../../../public/zeropl/keyline-icons.svg?raw";
 import CaptureImage from "./CaptureImage.astro";
 import PlayerPreview from "./PlayerPreview.astro";
@@ -38,11 +40,7 @@ const links = [
         <h1 id="hero-title">{t.hero}</h1>
         <p class="hero-subtitle">{t.heroSubtitle}</p>
         <p class="hero-intro">{t.intro}</p>
-        <p class="store-availability">
-          <img src="/zeropl/app-store-badge.svg" width="144" height="48" lang="en" alt="App Store" />
-          <span class="store-availability-status">{t.storeStatus}</span>
-        </p>
-        <p class="platform-label">{t.platforms}</p>
+        <AppStoreAvailability status={t.storeStatus} platforms={t.platforms} />
       </div>
       <figure class="container hero-preview">
         <PlayerPreview lang={lang} />
@@ -93,18 +91,7 @@ const links = [
       <div class="section-copy"><p class="eyebrow">{t.webEyebrow}</p><h2 id="web-title">{t.webTitle[0]}<br /><span>{t.webTitle[1]}</span></h2><p class="section-body">{t.webBody}</p></div>
     </section>
 
-    <section class="container features-section" id="features" aria-labelledby="features-title">
-      <h2 id="features-title">{t.everyTitle}</h2>
-      <div class="feature-grid">
-        {t.featureList.map(feature => (
-          <article>
-            <KeylineIcon name={feature.icon} size={29} />
-            <h3>{feature.title}</h3>
-            <p>{feature.text}</p>
-          </article>
-        ))}
-      </div>
-    </section>
+    <ProductFeatures title={t.everyTitle} features={t.featureList} />
 
     <section class="container closing">
       <img src="/zeropl/app-icon.png" alt="" width="76" height="76" loading="lazy" />

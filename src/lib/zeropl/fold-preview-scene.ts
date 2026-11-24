@@ -6,7 +6,7 @@ import type { createPageTurnProjection } from "./fold-preview-projection";
 const lastCoverPose = 1;
 const firstInnerPose = 2;
 
-function flatScreenGeometry(width: number, height: number, hingeRadius: number, outerRadius: number) {
+function flatScreenGeometry(width: number, height: number, hingeRadius: number, outerRadius = hingeRadius) {
   const geometry = new THREE.ShapeGeometry(roundedRectangle(width, height, hingeRadius, outerRadius), 16);
   const points = geometry.getAttribute("position");
   const uv = geometry.getAttribute("uv");
@@ -27,12 +27,13 @@ function displayMaterials(vertexColors = false) {
 }
 
 function addDisplay(group: THREE.Group, shape: THREE.BufferGeometry, materials: ReturnType<typeof displayMaterials>, x = 0, z = 0, reverse = false) {
-  materials.forEach(material => {
+  return materials.map(material => {
     const mesh = new THREE.Mesh(shape, material);
     mesh.position.set(x, 0, z);
     mesh.rotation.y = reverse ? Math.PI : 0;
     mesh.frustumCulled = false;
     group.add(mesh);
+    return mesh;
   });
 }
 
@@ -129,12 +130,14 @@ function createStudioReflections(renderer: THREE.WebGLRenderer) {
 
 export function createFoldPreviewScene(
   host: HTMLElement,
-  { pageTurnProjection, keyboardModule }: {
+  { pageTurnProjection, keyboardModule, seamlessWhenOpen = false, antialias = true }: {
     pageTurnProjection?: typeof createPageTurnProjection;
     keyboardModule?: typeof import("../twort/keyboard-model");
+    seamlessWhenOpen?: boolean;
+    antialias?: boolean;
   } = {},
 ) {
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ antialias, alpha: true });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.setClearColor(0x000000, 0);
@@ -170,8 +173,8 @@ export function createFoldPreviewScene(
     side: THREE.DoubleSide,
   });
   const glass = new THREE.MeshBasicMaterial({ color: 0x0d100f, toneMapped: false });
-  const leftShell = createShell(false);
-  const rightShell = createShell(true);
+  const leftShell = createShell("right");
+  const rightShell = createShell("left");
   const fixedShell = new THREE.Mesh(rightShell.geometry, shell);
   const movingShell = new THREE.Mesh(leftShell.geometry, shell);
   fixed.add(fixedShell);
@@ -182,12 +185,14 @@ export function createFoldPreviewScene(
   spineMesh.frustumCulled = false;
   hinge.add(spineMesh);
 
-  const innerBezel = createFoldSurface(enclosure.width - mm(1.45), enclosure.height - mm(1.45),
-    enclosure.corner - mm(0.7), mm(0.13));
+  const bezelSize = { width: enclosure.width - mm(1.45), height: enclosure.height - mm(1.45) };
+  const bezelCorner = enclosure.corner - mm(0.7);
+  const screenCorner = enclosure.corner - mm(3.4);
+  const innerBezel = createFoldSurface(bezelSize.width, bezelSize.height, bezelCorner, mm(0.13));
   const innerBezelMesh = new THREE.Mesh(innerBezel.geometry, glass);
   innerBezelMesh.frustumCulled = false;
   hinge.add(innerBezelMesh);
-  const innerScreen = createFoldSurface(displays.inner.width, displays.inner.height, enclosure.corner - mm(3.4), mm(0.23));
+  const innerScreen = createFoldSurface(displays.inner.width, displays.inner.height, screenCorner, mm(0.23));
 
   const coverBezel = new THREE.Mesh(new THREE.ShapeGeometry(roundedRectangle(
     enclosure.width / 2 - mm(1.5), enclosure.height - mm(1.5), mm(1.15), enclosure.corner - mm(0.75),
@@ -199,9 +204,21 @@ export function createFoldPreviewScene(
   const outer = displayMaterials();
   const inner = displayMaterials(true);
   const updateProjection = pageTurnProjection?.(outer, inner);
-  addDisplay(hinge, innerScreen.geometry, inner);
+  const innerScreenMeshes = addDisplay(hinge, innerScreen.geometry, inner);
   addDisplay(leaf, flatScreenGeometry(displays.cover.width, displays.cover.height, mm(1.25), enclosure.corner - mm(2.7)), outer,
     (enclosure.foldedWidth - enclosure.width) / 2, -enclosure.thickness - mm(0.23), true);
+
+  const openShell = seamlessWhenOpen ? createShell() : undefined;
+  const openBezel = openShell && flatScreenGeometry(bezelSize.width, bezelSize.height, bezelCorner).translate(0, 0, mm(0.13));
+  const openScreen = openShell && flatScreenGeometry(displays.inner.width, displays.inner.height, screenCorner).translate(0, 0, mm(0.23));
+  const openBody = openShell && new THREE.Mesh(openShell.geometry, shell);
+  if (openShell && openBody && openScreen) {
+    openShell.update(0);
+    openBody.visible = false;
+    hinge.add(openBody);
+    const count = openScreen.getAttribute("position").count;
+    openScreen.setAttribute("color", new THREE.BufferAttribute(new Float32Array(count * 3).fill(1), 3));
+  }
 
   const anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   const { maxTextureSize } = renderer.capabilities;
@@ -323,6 +340,14 @@ export function createFoldPreviewScene(
         hinge.position.x = -(halfWidth + leftEdge) / 2;
         innerBezel.update(profile);
         innerScreen.update(profile);
+        if (openBody && openBezel && openScreen) {
+          // A flat, continuous face avoids the seam between the two folding halves.
+          const flat = bend === 0;
+          openBody.visible = flat;
+          fixedShell.visible = movingShell.visible = !flat;
+          innerBezelMesh.geometry = flat ? openBezel : innerBezel.geometry;
+          innerScreenMeshes.forEach(mesh => { mesh.geometry = flat ? openScreen : innerScreen.geometry; });
+        }
         spineMesh.visible = bend > 0.01;
         if (spineMesh.visible) spine.update(profile, hingeCorner);
         lastBend = bend;

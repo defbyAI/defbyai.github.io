@@ -1,0 +1,138 @@
+---
+import type { Language } from "../../data/products";
+import CallOverlay from "./CallOverlay.astro";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const ko = lang === "ko";
+---
+
+<section id="controls" aria-labelledby="camera-mic-title">
+  <div id="camera-mic" class="container split-section">
+    <div class="section-copy">
+      <h2 id="camera-mic-title">
+        {ko ? "내 카메라와 마이크를" : "Your camera and mic,"}<br />
+        <span>{ko ? "Mac의 입력으로." : "on your Mac."}</span>
+      </h2>
+      <p class="section-body">
+        {ko
+          ? "원격 Mac에서 화상 회의에 참여해 열어 둔 자료를 공유하고, 손에 든 iPhone이나 iPad로 얼굴과 목소리를 전할 수 있습니다."
+          : "Share a document or presentation from your remote Mac during a video call. The camera and microphone on your iPhone or iPad let others see and hear you."}
+      </p>
+    </div>
+
+    <figure class="media-demo">
+      <div class="call-stage">
+        <div class="participant local-feed">
+          <div class="video-frame">
+            <img src="/twort/call-local.webp" alt="" width="106" height="160" loading="lazy" decoding="async" />
+            <div class="camera-off" aria-hidden="true">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 6h9a2 2 0 0 1 2 2v3m0-1 5-3v10l-3-1.8M3 9v7a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1M3 3l18 18" />
+              </svg>
+            </div>
+          </div>
+          <p class="participant-label">
+            <span class="camera-on-label">{ko ? "내 영상" : "You"}</span>
+            <span class="camera-off-label">{ko ? "영상 꺼짐" : "Video off"}</span>
+          </p>
+        </div>
+        <div class="participant guest-feed">
+          <div class="video-frame">
+            <img src="/twort/call-guest.webp" alt="" width="632" height="1000" loading="lazy" decoding="async" />
+          </div>
+          <p class="participant-label">{ko ? "상대방" : "Guest"}</p>
+        </div>
+        <CallOverlay lang={lang} />
+      </div>
+      <figcaption>
+        <span class="demo-title">{ko ? "twoRT로 연결한 화상 회의 예시" : "Example call over twoRT"}</span>
+        <span class="image-credit">{ko ? "AI로 생성한 인물" : "AI-generated people"}</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .split-section {
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.25fr);
+    gap: clamp(36px, 4.7vw, 68px);
+    padding-block: clamp(56px, 8vw, 112px);
+  }
+  h2 { margin-bottom: 16px; }
+  h2 span { color: var(--color-accent-1); }
+  .section-body { margin-bottom: 0; }
+  .media-demo { margin: 0; container-type: inline-size; }
+  figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3px 12px;
+    padding: 9px 1px 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .demo-title { color: var(--color-text); font-weight: 550; }
+  .image-credit { font-size: 11px; }
+  .call-stage {
+    position: relative;
+    isolation: isolate;
+    aspect-ratio: 2853 / 2007;
+    overflow: hidden;
+    outline: 1px solid #303b34;
+    outline-offset: -1px;
+    border-radius: 10px;
+    background: linear-gradient(#181818, #000 22%, #000 75%, #181818);
+    box-shadow: 0 17px 28px -21px #172a21bf;
+  }
+  .participant { position: absolute; overflow: hidden; }
+  .guest-feed {
+    inset-block: 0;
+    inset-inline-start: calc(100% * 757 / 2853);
+    width: calc(100% * 1337 / 2853);
+  }
+  .local-feed {
+    inset: auto auto 5% 4%;
+    width: 14%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border: 1px solid #ffffff35;
+    border-radius: clamp(4px, 1.3cqi, 8px);
+    box-shadow: 0 4px 15px #0005;
+  }
+  .video-frame {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    width: 100%;
+    height: 100%;
+    background: #233029;
+  }
+  .video-frame img, .camera-off { grid-area: 1 / 1; }
+  .video-frame img { width: 100%; height: 100%; object-fit: cover; }
+  .guest-feed img { object-position: 50% 42%; }
+  .local-feed img { object-position: 50% 68%; }
+  .participant-label {
+    position: absolute;
+    inset: auto 0 0;
+    margin: 0;
+    padding: 8px clamp(3px, 1.25cqi, 8px) clamp(3px, 1.1cqi, 7px);
+    background: linear-gradient(transparent, #080c0bd9);
+    color: #fff;
+    font-size: clamp(9px, 1.65cqi, 11px);
+    line-height: 1.2;
+    font-weight: 550;
+  }
+  .camera-off, .camera-off-label { display: none; }
+  .camera-off { place-items: center; padding-bottom: 14%; color: #c5d4cb; }
+  .camera-off svg { width: clamp(15px, 4cqi, 23px); height: auto; }
+  .media-demo:has(input[value="camera"]:not(:checked)) .local-feed img { visibility: hidden; }
+  .media-demo:has(input[value="camera"]:not(:checked)) .camera-on-label { display: none; }
+  .media-demo:has(input[value="camera"]:not(:checked)) .camera-off { display: grid; }
+  .media-demo:has(input[value="camera"]:not(:checked)) .camera-off-label { display: inline; }
+  @media (max-width: 760px) {
+    .split-section { grid-template-columns: 1fr; gap: 30px; }
+  }
+</style>

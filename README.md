@@ -49,19 +49,26 @@ system appearance changes during playback, language links, and reduced-motion mo
 The English `/en/twort/` and Korean `/ko/twort/` routes share a product page.
 The general entry at `/twort/` uses the same browser or saved language preference
 as zeroPL. Both products keep the section and query string when switching languages.
-The device selector illustrates the same Mac workspace on an iPad, iPhone, or
-iPhone Duo unfolded in landscape. The five illustrated postures follow
-`DuoSessionLayout` in twoRT’s `DuoRemoteSession.swift` when “Match device aspect
+The opening animation unfolds iPhone Duo, then places it next to a 21.5-inch
+16:9 monitor at the same scale. The Duo shows field notes and the monitor shows
+a separate photo editor. Run `node scripts/twort-duo-title/render.mjs` with
+Chrome, FFmpeg, and ImageMagick to rebuild the four language and appearance
+variants. The five illustrated postures follow `DuoSessionLayout` in twoRT’s
+`DuoRemoteSession.swift` when “Match device aspect
 ratio” is selected. A sixth tab shows the seated Duo with its lower trackpad
 and a 60-key keyboard. The WebGL model uses the same millimetre scale as the Duo,
 with a 294 × 110 mm footprint and 19.05 mm key pitch.
 The keyboard finish and illustrated app screens follow the system appearance.
 [PFU specifications](https://www.pfu.ricoh.com/hhkeyboard/brochures/hhkb-series.pdf)
 The USB-C monitor demo follows the four modes in `ExternalDisplayArrangement.swift`
-and their output routing in `ClientExternalDisplay.swift`. Extended Display
-places the unfolded landscape Duo on the left and the monitor on the right.
-The coast photograph was generated for the example. The icon is
-from twoRT's `design/app-icon/production/guest/guest-default.png`. The
+and their output routing in `ClientExternalDisplay.swift`. Each mode places the
+unfolded landscape Duo on the left, scaled against the 21.5-inch monitor on the right.
+The camera and microphone demo shows a call on the connected Mac using the iPhone
+or iPad for video and audio. Its two portraits are AI-generated and labeled in
+the demo. The status bar uses the unfolded Notes example from the
+[Apple iPhone Duo design guide](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo#Dynamic-layouts).
+The coast photographs were also generated for the site. The icon is from twoRT's
+`design/app-icon/production/guest/guest-default.png`. The
 optimized assets live in `public/twort/`. The setup section links to the
 [official Connect releases](https://github.com/defbyAI/twoRT-Connect/releases/latest).
 

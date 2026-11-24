@@ -1,20 +1,24 @@
 ---
 import ProductLayout from "../../layouts/ProductLayout.astro";
+import AppStoreAvailability from "../AppStoreAvailability.astro";
 import ProductHeader from "../ProductHeader.astro";
+import ProductFeatures from "../ProductFeatures.astro";
+import keylineSymbols from "../../../public/zeropl/keyline-icons.svg?raw";
 import { productPath, type Language } from "../../data/products";
 import { twort } from "../../data/twort";
+import { twortFeatures } from "../../data/twort-features";
+import CameraMicDemo from "./CameraMicDemo.astro";
 import DisplayModes from "./DisplayModes.astro";
 import DuoPoses from "./DuoPoses.astro";
-import SessionFeatures from "./SessionFeatures.astro";
-import ShortcutDemo from "./ShortcutDemo.astro";
 import WorkspacePreview from "./WorkspacePreview.astro";
 
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const t = twort[lang];
+const features = twortFeatures.map(feature => ({ icon: feature.icon, ...feature[lang] }));
 const links = [
   { href: "#workspace", label: t.workspace },
-  { href: "#controls", label: t.controls },
+  { href: "#camera-mic", label: t.cameraMic },
   { href: "#duo", label: "iPhone Duo" },
   { href: "#displays", label: t.displays },
   { href: "#connect", label: t.setup },
@@ -22,6 +26,7 @@ const links = [
 ---
 <ProductLayout product="twort" lang={lang} title={t.title} description={t.intro}>
   <slot name="head" slot="head" />
+  <Fragment set:html={keylineSymbols} />
   <ProductHeader product="twort" lang={lang} links={links} />
   <main id="main">
     <section class="product-hero" aria-labelledby="hero-title">
@@ -33,15 +38,16 @@ const links = [
         </div>
         <h1 id="hero-title">{t.hero}</h1>
         <p class="hero-intro">{t.intro}</p>
+        <AppStoreAvailability status={t.storeStatus} platforms={t.platforms} />
         <a class="action" href="#connect">{t.setup}</a>
       </div>
       <WorkspacePreview lang={lang} />
     </section>
 
-    <ShortcutDemo lang={lang} />
+    <CameraMicDemo lang={lang} />
     <DuoPoses lang={lang} />
     <DisplayModes lang={lang} />
-    <SessionFeatures lang={lang} />
+    <ProductFeatures title={t.features} features={features} />
 
     <section id="connect" class="setup" aria-labelledby="setup-title">
       <div class="container split-section">
@@ -60,6 +66,9 @@ const links = [
             <p class="device-role">{t.client}</p>
             <h3>twoRT</h3>
             <p>{t.clientText}</p>
+            <div class="setup-client-store">
+              <AppStoreAvailability status={t.storeStatus} />
+            </div>
           </div>
         </div>
       </div>
@@ -82,6 +91,7 @@ const links = [
   .hero-wordmark img { margin: 0; width: 44px; height: 44px; border-radius: 22%; }
   .hero-heading h1 { margin-bottom: 18px; }
   .hero-intro { margin: 0 auto 20px; max-width: 750px; font-size: clamp(16px, 1.5vw, 19px); text-wrap: balance; }
+  .hero-heading .action { margin-top: 20px; }
   .action {
     display: inline-flex; align-items: center; justify-content: center;
     min-height: 44px; padding: 9px 23px; border-radius: 30px;
@@ -97,6 +107,7 @@ const links = [
   .device-role { margin: 0 0 4px; font-size: 14px; color: var(--muted); }
   .setup-apps h3 { font-size: 25px; font-weight: 550; letter-spacing: -0.045em; margin: 0 0 8px; }
   .setup-apps h3 + p { font-size: 16px; line-height: 1.75; margin: 0; }
+  .setup-client-store { width: fit-content; margin-top: 16px; }
   .site-footer { border: none; align-items: center; }
   .footer-links { font-size: 14px; }
   @media (max-width: 480px) {

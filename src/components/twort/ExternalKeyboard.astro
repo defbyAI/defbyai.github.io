@@ -1,0 +1,200 @@
+---
+import { keyboardRows } from "../../lib/twort/keyboard-layout";
+---
+<div class="hhkb-keyboard" aria-hidden="true">
+  <div class="view">
+    <div class="chassis">
+      <div class="deck">
+        {keyboardRows.map(row => (
+          <div class="key-row">
+            {row.map(({ label, quarters = 4, modifier, shift, front }) => (
+              <div class:list={["key", { modifier, space: !label }]} style={`grid-column: span ${quarters}`}>
+                <div class="key-shell">
+                  <div class="cap">
+                    {shift && <small>{shift}</small>}
+                    <span>{label}</span>
+                  </div>
+                  <div class="key-front">{front && <i>{front}</i>}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hhkb-keyboard {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 294 / 110;
+    container-type: inline-size;
+    color-scheme: light dark;
+    pointer-events: none;
+    user-select: none;
+    font-family: Arial, "Helvetica Neue", sans-serif;
+  }
+  .view {
+    position: absolute;
+    inset: 0;
+    perspective: 170cqi;
+    perspective-origin: 50% 55%;
+  }
+  .view::before {
+    content: "";
+    position: absolute;
+    inset: 61% 4% 1%;
+    border-radius: 40%;
+    background: #222b2539;
+    filter: blur(1.8cqi);
+  }
+  .chassis, .deck, .key-row, .key, .key-shell { transform-style: preserve-3d; }
+  .chassis {
+    --top: light-dark(#dfddd4, #484b4b);
+    --lip: light-dark(#efede6, #636766);
+    --wall: light-dark(#cdcdc3, #454949);
+    --seam: light-dark(#8e938c, #262c2d);
+    --base: light-dark(#babbb2, #373c3d);
+    position: absolute;
+    inset: 0;
+    border-radius: .95cqi;
+    background: linear-gradient(145deg, var(--lip), var(--top) 42%, var(--wall));
+    box-shadow: inset 0 .26cqi .18cqi var(--lip), inset 0 -.2cqi .16cqi var(--wall);
+    transform-origin: center;
+    transform: scale(.95) rotateX(41deg);
+  }
+  .chassis::before, .chassis::after {
+    content: "";
+    position: absolute;
+    backface-visibility: hidden;
+  }
+  .chassis::before {
+    top: .7cqi;
+    bottom: .7cqi;
+    left: 100%;
+    width: 5.2cqi;
+    transform-origin: left;
+    transform: rotateY(90deg);
+    background: linear-gradient(90deg, var(--wall) 0 55%, var(--seam) 58% 64%, var(--base) 67%);
+    border-radius: 0 .6cqi .6cqi 0;
+  }
+  .chassis::after {
+    top: calc(100% - .2cqi);
+    left: .65cqi;
+    right: .65cqi;
+    height: 5.2cqi;
+    transform-origin: top;
+    transform: rotateX(-90deg);
+    background: linear-gradient(var(--wall), var(--top) 45%, var(--wall) 51%, var(--seam) 55% 62%, var(--base) 66% 94%, var(--wall));
+    border-radius: 0 0 .65cqi .65cqi;
+  }
+  .deck {
+    --well: light-dark(#a1a196, #292d2c);
+    position: absolute;
+    inset: 5.1% 2.1% 8%;
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+  }
+  .key-row {
+    --lift: 0cqi;
+    --rake: 0deg;
+    display: grid;
+    grid-template-columns: repeat(60, minmax(0, 1fr));
+    background: var(--well);
+  }
+  .key-row:nth-child(1) { --lift: .54cqi; --rake: 7deg; }
+  .key-row:nth-child(2) { --lift: .28cqi; --rake: 4deg; }
+  .key-row:nth-child(4) { --lift: .1cqi; --rake: -3deg; }
+  .key-row:nth-child(5) {
+    --lift: .25cqi; --rake: -5deg;
+    background: linear-gradient(to right, transparent 10%, var(--well) 10% 83.333%, transparent 83.333%);
+  }
+  .key-row:last-child::before { content: ""; grid-column: span 6; }
+  .key {
+    --crown: light-dark(#f7f5e9, #535757);
+    --dish: light-dark(#e2e1d5, #434746);
+    --side: light-dark(#e6e6d8, #4a4f4f);
+    --wall: light-dark(#d4d4c5, #414646);
+    --foot: light-dark(#b1b2a4, #333737);
+    --ink: light-dark(#383b37, #edede3);
+    position: relative;
+    min-width: 0;
+    font-weight: 600;
+    transform: scaleZ(.9) translateZ(var(--lift)) rotateX(var(--rake));
+  }
+  .key.modifier {
+    --crown: light-dark(#d3d3c8, #484d4c);
+    --dish: light-dark(#bcbeb2, #3b403f);
+    --side: light-dark(#c4c7ba, #3f4342);
+    --wall: light-dark(#b4b7ab, #393e3d);
+    --foot: light-dark(#969a8f, #2d3232);
+  }
+  .key-shell {
+    position: absolute;
+    inset: .12cqi;
+    border-radius: .42cqi;
+    background: linear-gradient(var(--side), var(--foot));
+    box-shadow: 0 .26cqi .27cqi #1e221d3b;
+  }
+  .key-shell::before, .key-shell::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    width: 1.91cqi;
+    backface-visibility: hidden;
+  }
+  .key-shell::before {
+    left: 0;
+    transform-origin: left;
+    transform: rotateY(-75.2deg);
+    clip-path: polygon(0 0, 100% .48cqi, 100% calc(100% - 1cqi), 0 100%);
+    background: linear-gradient(90deg, var(--foot), var(--side));
+  }
+  .key-shell::after {
+    right: 0;
+    transform-origin: right;
+    transform: rotateY(75.2deg);
+    clip-path: polygon(0 .48cqi, 100% 0, 100% 100%, 0 calc(100% - 1cqi));
+    background: linear-gradient(90deg, var(--side), var(--foot));
+  }
+  .cap {
+    position: absolute;
+    inset: .48cqi .49cqi 1cqi;
+    transform: translateZ(1.85cqi);
+    display: flex;
+    flex-direction: column;
+    padding: .3cqi .32cqi;
+    border-radius: .45cqi;
+    background: linear-gradient(104deg, var(--crown), var(--dish) 43%, var(--dish) 62%, var(--crown));
+    box-shadow: inset 0 .1cqi .1cqi light-dark(#fff9, #ffffff25);
+    color: var(--ink);
+    font-size: 1.98cqi;
+    line-height: 1;
+    white-space: nowrap;
+    text-align: left;
+  }
+  .cap small { font-size: 1.12cqi; }
+  .modifier .cap { justify-content: center; font-size: 1.52cqi; letter-spacing: -.035em; }
+  .key-row:last-child .cap small { position: absolute; right: .3cqi; top: .18cqi; font-size: 1cqi; }
+  .space .cap { background: linear-gradient(var(--dish), var(--crown) 65%, var(--side)); }
+  .key-front {
+    position: absolute;
+    inset: auto 0 0;
+    height: 2.1cqi;
+    transform-origin: bottom;
+    transform: rotateX(-61.6deg);
+    clip-path: polygon(.49cqi 0, calc(100% - .49cqi) 0, 100% 100%, 0 100%);
+    background: linear-gradient(var(--side), var(--wall) 50%, var(--foot));
+  }
+  .key-front i {
+    position: absolute;
+    top: .3cqi;
+    left: .68cqi;
+    color: var(--ink);
+    font-size: .9cqi;
+    font-style: normal;
+    font-weight: 500;
+  }
+</style>

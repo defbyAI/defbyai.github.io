@@ -1,0 +1,140 @@
+---
+import FoldShowcase from "../FoldShowcase.astro";
+import ExternalKeyboard from "./ExternalKeyboard.astro";
+import type { Language } from "../../data/products";
+import { foldPoses } from "../../lib/zeropl/fold-preview-poses";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const ko = lang === "ko";
+const screens = {
+  folded: {
+    width: 704, height: 1024,
+    label: { ko: "접은 세로", en: "Folded portrait" },
+    text: {
+      ko: "바깥 화면에는 Mac 데스크톱의 일부가 보입니다. 아래쪽 막대를 좌우로 밀어 옆에 있는 창까지 살펴보세요.",
+      en: "The cover display shows a slice of your Mac desktop. Slide the bar at the bottom to reach windows on either side.",
+    },
+    alt: { ko: "해안 답사 메모가 크게 보이는 바깥 화면과 가로 이동 막대", en: "A close view of a coastal field note on the cover display, with a horizontal pan bar" },
+  },
+  "folded-landscape": {
+    width: 1024, height: 704,
+    label: { ko: "접은 가로", en: "Folded landscape" },
+    text: {
+      ko: "접은 채로 돌리면 가로로 넓어진 바깥 화면에서 작업할 수 있습니다. 연결 메뉴에서 더 넓은 해상도를 선택할 수도 있습니다.",
+      en: "Turn the closed phone sideways to work across the cover display. The connection menu also lets you switch to a wider desktop resolution.",
+    },
+    alt: { ko: "가로 바깥 화면에 펼쳐진 해안 사진과 메모, 하단 원격 제어 버튼", en: "The coastal desktop on the landscape cover display with session controls along the bottom" },
+  },
+  "open-landscape": {
+    width: 1068, height: 752,
+    label: { ko: "펼친 가로", en: "Open landscape" },
+    text: {
+      ko: "안쪽 화면을 가로로 펼치면 Mac 데스크톱 전체가 보입니다. 앱 전환과 키보드 버튼은 오른쪽 가장자리에 모입니다.",
+      en: "Unfold the inner display in landscape to see the full desktop. App switching and keyboard controls move to the right edge.",
+    },
+    alt: { ko: "전체 Mac 작업 공간과 오른쪽 제어 버튼을 표시한 가로 안쪽 화면", en: "The full coastal desktop across the inner display, with session controls on the right" },
+  },
+  open: {
+    width: 752, height: 1068,
+    label: { ko: "펼친 세로", en: "Open portrait" },
+    text: {
+      ko: "펼친 채로 돌리면 Mac 작업 공간도 세로로 길어집니다. 긴 문서를 읽을 때 위아래로 더 많은 내용을 볼 수 있습니다.",
+      en: "Rotate the open phone and your Mac workspace takes on portrait proportions, giving a long document more room from top to bottom.",
+    },
+    alt: { ko: "세로로 긴 Mac 데스크톱에 놓인 해안 답사 메모와 하단 제어 버튼", en: "A tall Mac desktop with a coastal field note and session controls at the bottom" },
+  },
+  seated: {
+    width: 752, height: 1068,
+    label: { ko: "세워서 쓰기", en: "Seated" },
+    text: {
+      ko: "위쪽에는 Mac 화면, 아래쪽에는 화면 키보드가 놓입니다. 스페이스 바를 길게 누른 채 손가락을 움직이면 Mac 포인터도 따라갑니다.",
+      en: "Your Mac stays above the fold, with the on-screen keyboard below. Hold the space bar and slide your finger to move the Mac pointer.",
+    },
+    alt: { ko: "위쪽의 Mac 데스크톱과 아래쪽의 한글 화면 키보드 및 마우스 버튼", en: "The Mac desktop above the hinge and a Korean on-screen keyboard with mouse buttons below" },
+  },
+  "seated-trackpad": {
+    width: 752, height: 1068,
+    label: { ko: "외장 키보드", en: "External keyboard" },
+    text: {
+      ko: "Duo를 세우고 외장 키보드를 연결하면 아래쪽 화면이 트랙패드가 됩니다. 키보드로 입력하고, 트랙패드에서 손가락을 움직이거나 탭해 Mac을 조작하세요.",
+      en: "Connect a keyboard with the Duo half open and the lower screen becomes a trackpad. Type on the keyboard, then glide or tap on the Duo to point and click on your Mac.",
+    },
+    alt: { ko: "위쪽에 Mac 화면, 아래쪽에 트랙패드와 보조 키가 있는 iPhone Duo. 앞에는 60키 외장 키보드가 놓여 있습니다.", en: "A seated iPhone Duo with the Mac desktop above a trackpad and modifier keys, and a 60-key external keyboard in front." },
+  },
+};
+const steps = [
+  ...foldPoses.map(frame => ({ ...frame, at: frame.at * 0.8 })),
+  { ...foldPoses[4], id: "seated-trackpad", at: 1 } as const,
+];
+const poses = steps.map(frame => {
+  const { id } = frame;
+  const { width, height, label, text, alt } = screens[id];
+  const capturePath = `/twort/duo/${ko ? "ko/" : ""}${id}`;
+  return {
+    frame,
+    accessory: id === "seated-trackpad",
+    label: label[lang],
+    text: text[lang],
+    capture: { width, height, alt, light: `${capturePath}.webp`, dark: `${capturePath}-dark.webp` },
+  };
+});
+---
+<section id="duo" class="duo" aria-labelledby="duo-title">
+  <div class="container">
+    <FoldShowcase lang={lang} poses={poses}
+      poseGroup={ko ? "iPhone Duo 자세 선택" : "Choose an iPhone Duo pose"}
+      poseHint={ko ? "스크롤하거나 자세를 선택하세요." : "Scroll or select a pose."}>
+      <h2 id="duo-title">
+        {ko ? "iPhone Duo를 펼치면," : "Unfold your iPhone Duo."}<br />
+        <span>{ko ? "Mac 화면도 달라집니다." : "Your Mac adapts."}</span>
+      </h2>
+      <p class="intro">
+        {ko
+          ? "연결 설정에서 ‘기기 비율 맞춤’을 선택하세요. iPhone Duo를 접고 펼치면 Mac 작업 공간과 입력 도구가 자세에 맞춰 자리를 바꿉니다."
+          : "Choose “Match device aspect ratio” in connection settings. As you fold and turn iPhone Duo, the Mac workspace and its controls adjust to the way you hold it."}
+      </p>
+      <ExternalKeyboard slot="accessory" />
+    </FoldShowcase>
+    <noscript>
+      <div class="static-poses">
+        {poses.slice(1).map(({ label, text, capture, accessory }) => (
+          <details>
+            <summary>{label}</summary>
+            <p>{text}</p>
+            <picture>
+              <source media="(prefers-color-scheme: dark)" srcset={capture.dark} />
+              <img src={capture.light} width={capture.width} height={capture.height} alt={capture.alt[lang]} loading="lazy" />
+            </picture>
+            {accessory && <div class="static-board"><ExternalKeyboard /></div>}
+          </details>
+        ))}
+      </div>
+    </noscript>
+    <p class="demo-note">
+      {ko ? "twoRT 화면 구성 예시" : "Illustrated twoRT layouts"}
+      <span aria-hidden="true"> · </span>
+      <a href="/zeropl/fold-preview-notice.txt">Fold Preview · Three.js · MIT</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .duo { border-top: 1px solid var(--line); background: var(--color-surface); }
+  h2 { margin-bottom: 16px; text-wrap: balance; }
+  h2 span { color: var(--color-accent-1); }
+  .intro, .static-poses p { max-width: 440px; margin: 0; color: var(--muted); font-size: 16px; line-height: 1.75; }
+  .demo-note { margin: 0; padding-bottom: 12px; color: var(--muted); text-align: center; font-size: 11px; }
+  .demo-note a { display: inline-flex; min-height: 44px; align-items: center; color: var(--color-accent-2); }
+  .static-poses { margin: 18px auto; max-width: 640px; }
+  .static-poses details { padding-block: 12px; border-top: 1px solid var(--line); }
+  .static-poses summary { cursor: pointer; padding-block: 8px; font-weight: 550; }
+  .static-poses img { margin: 12px auto; max-width: 100%; width: auto; height: auto; max-height: 340px; border-radius: 9px; }
+  .static-poses details:has(.static-board) { --board-width: min(86%, 490px); }
+  .static-poses picture:has(+ .static-board) img { width: calc(var(--board-width) * 117.8 / 294); margin-bottom: 0; }
+  .static-board { width: var(--board-width); margin: 16px auto 8px; }
+  @media (max-width: 760px) {
+    .intro { font-size: 14px; line-height: 1.6; }
+    h2 { margin-bottom: 10px; }
+  }
+</style>

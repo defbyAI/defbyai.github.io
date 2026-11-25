@@ -1,0 +1,54 @@
+---
+import { productEntryPath, productNames, productPath, type Product, type Language } from "../data/products";
+
+interface Props {
+  product: Product;
+  lang: Language;
+  links: ReadonlyArray<{ href: string; label: string }>;
+}
+const { product, lang, links } = Astro.props;
+---
+<a class="skip-link" href="#main">{lang === "ko" ? "본문으로 바로 가기" : "Skip to content"}</a>
+<header class="site-header" id="top">
+  <div class="header-inner">
+    <a class="site-brand" href="/"><img src="/defby_logo.svg" width="28" height="28" alt="" />defby.ai</a>
+    <span class="header-divider" aria-hidden="true"></span>
+    <a class="product-brand" href="#top">{productNames[product]}</a>
+    <nav class="product-nav" aria-label={lang === "ko" ? "제품 탐색" : "Product navigation"}>
+      {links.map(({ href, label }) => <a href={href}>{label}</a>)}
+    </nav>
+    <nav class="language-nav" aria-label="Language / 언어">
+      <a href={productPath(product, "en")} lang="en" hreflang="en" aria-current={lang === "en" ? "page" : undefined}>EN</a>
+      <span aria-hidden="true">/</span>
+      <a href={productPath(product, "ko")} lang="ko" hreflang="ko" aria-current={lang === "ko" ? "page" : undefined}>한국어</a>
+      <a href={productEntryPath(product)} data-auto-language hidden title={lang === "ko" ? "브라우저 언어 사용" : "Use browser language"}>{lang === "ko" ? "자동" : "Auto"}</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  import { browserLanguage, rememberLanguage, savedLanguage } from "../lib/language";
+
+  const nav = document.querySelector<HTMLElement>(".language-nav")!;
+  const automatic = nav.querySelector<HTMLAnchorElement>("[data-auto-language]")!;
+  const links = nav.querySelectorAll<HTMLAnchorElement>("a");
+
+  function updateLinks() {
+    for (const link of links) {
+      link.search = location.search;
+      link.hash = location.hash;
+    }
+    automatic.hidden = !savedLanguage() && document.documentElement.lang === browserLanguage();
+  }
+  for (const link of links) {
+    link.addEventListener("click", () => {
+      rememberLanguage(link.hreflang === "ko" || link.hreflang === "en" ? link.hreflang : null);
+      updateLinks();
+    });
+  }
+  updateLinks();
+  window.addEventListener("hashchange", updateLinks);
+  window.addEventListener("pageshow", updateLinks);
+  window.addEventListener("storage", updateLinks);
+  window.addEventListener("languagechange", updateLinks);
+</script>

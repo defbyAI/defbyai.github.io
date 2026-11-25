@@ -1,0 +1,8 @@
+---
+export type Inline = string | { strong: string } | { label: string; href: string };
+interface Props { runs: readonly Inline[]; }
+const { runs } = Astro.props;
+---
+{runs.map(run => typeof run === "string" ? run
+  : "strong" in run ? <strong>{run.strong}</strong>
+  : <a href={run.href}>{run.label}</a>)}

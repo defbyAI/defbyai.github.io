@@ -1,0 +1,79 @@
+---
+import type { Language } from "../../data/products";
+
+interface Props { lang: Language; }
+const ko = Astro.props.lang === "ko";
+const camera = ko ? "카메라" : "Camera";
+const microphone = ko ? "마이크" : "Microphone";
+
+// twoRT controls and the UDC use the original iPhone Duo capture as their reference.
+function screenPosition(x: number, y: number, width: number, height: number, screen = { width: 2853, height: 2007 }) {
+  return {
+    left: `${x / screen.width * 100}%`,
+    top: `${y / screen.height * 100}%`,
+    width: `${width / screen.width * 100}%`,
+    height: `${height / screen.height * 100}%`
+  };
+}
+
+const layers = [
+  { image: "session-tools", x: 2636, y: 521, width: 158, height: 1150 },
+  { image: "keyboard", x: 2636, y: 1701, width: 158, height: 158 },
+  // The Notes example in Apple's iPhone Duo design guide has a 1072 × 754 display
+  // at (22, 22). The crop starts at (1015, 61) in the source image.
+  { image: "duo-status", x: 993, y: 39, width: 50, height: 75, screen: { width: 1072, height: 754 } },
+  { image: "duo-udc", x: 1974, y: 66, width: 189, height: 122 }
+];
+---
+
+<div class="session-overlay">
+  {layers.map(({ image, x, y, width, height, screen }) => (
+    <img class="capture-layer" data-session-control={image} src={`/twort/call-overlay/${image}.webp`}
+      style={screenPosition(x, y, width, height, screen)} width={width} height={height}
+      alt="" loading="lazy" decoding="async" draggable="false" />
+  ))}
+  <div class="media-drawer" data-session-control="media-drawer" style={screenPosition(2475, 1281, 378, 192)}>
+    <img class="drawer-image" src="/twort/call-overlay/media-drawer.webp" width="489" height="250"
+      alt="" loading="lazy" decoding="async" draggable="false" />
+    <input class="drawer-switch overlay-camera" type="checkbox" name="meeting-input" value="camera"
+      role="switch" checked aria-label={camera} title={camera} />
+    <input class="drawer-switch overlay-mic" type="checkbox" name="meeting-input" value="mic"
+      role="switch" checked aria-label={microphone} title={microphone} />
+    <span class="drawer-indicator camera-indicator" aria-hidden="true"></span>
+    <span class="drawer-indicator mic-indicator" aria-hidden="true"></span>
+  </div>
+</div>
+
+<style>
+  .session-overlay { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .capture-layer, .media-drawer { position: absolute; }
+  .capture-layer, .drawer-image { display: block; }
+  [data-session-control="keyboard"] {
+    border-radius: 50%;
+    background: rgb(255 255 255 / .095);
+    box-shadow: inset 0 0 0 .1cqi rgb(255 255 255 / .12), inset 0 0 .45cqi rgb(255 255 255 / .08);
+  }
+  .drawer-image { width: 100%; height: 100%; }
+  .drawer-switch {
+    appearance: none;
+    position: absolute;
+    top: 8%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  .overlay-camera { left: 22%; width: 35.5%; height: 57%; border-radius: 19% 19% 0 19%; }
+  .overlay-mic { left: 61.9%; width: 35%; height: 84%; border-radius: 19%; }
+  .drawer-switch:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
+  .drawer-indicator { position: absolute; left: 6.3%; width: 6%; height: 11%; border-radius: 50%; }
+  .camera-indicator { top: 27.5%; }
+  .mic-indicator { top: 61.5%; }
+  .drawer-switch:not(:checked),
+  .media-drawer:has(.overlay-camera:not(:checked)) .camera-indicator,
+  .media-drawer:has(.overlay-mic:not(:checked)) .mic-indicator {
+    backdrop-filter: grayscale(1) brightness(.72);
+  }
+</style>

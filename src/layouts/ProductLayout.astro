@@ -1,11 +1,20 @@
 ---
-import type { Language } from "../data/zeropl";
-import { productPaths } from "../lib/zeropl/language";
+import { productEntryPath, productPath, type Product, type Language } from "../data/products";
 import "../styles/theme.css";
-import "../styles/zeropl.css";
-interface Props { lang: Language; title: string; description: string; }
-const { lang, title, description } = Astro.props;
-const canonical = new URL(productPaths[lang], Astro.site);
+import "../styles/product.css";
+
+interface Props {
+  product: Product;
+  lang: Language;
+  title: string;
+  description: string;
+}
+const { product, lang, title, description } = Astro.props;
+const localizedUrls = {
+  en: new URL(productPath(product, "en"), Astro.site),
+  ko: new URL(productPath(product, "ko"), Astro.site),
+};
+const canonical = localizedUrls[lang];
 ---
 <!doctype html>
 <html lang={lang}>
@@ -17,9 +26,9 @@ const canonical = new URL(productPaths[lang], Astro.site);
     <meta name="description" content={description} />
     <meta name="theme-color" content="#F6F6F1" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="en" href={new URL(productPaths.en, Astro.site)} />
-    <link rel="alternate" hreflang="ko" href={new URL(productPaths.ko, Astro.site)} />
-    <link rel="alternate" hreflang="x-default" href="https://defby.ai/zeropl/" />
+    <link rel="alternate" hreflang="en" href={localizedUrls.en} />
+    <link rel="alternate" hreflang="ko" href={localizedUrls.ko} />
+    <link rel="alternate" hreflang="x-default" href={new URL(productEntryPath(product), Astro.site)} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="defby.ai" />
     <meta property="og:title" content={title} />

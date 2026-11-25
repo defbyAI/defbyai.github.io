@@ -1,7 +1,11 @@
 ---
 import ProductLayout from "../../layouts/ProductLayout.astro";
+import AppStoreAvailability from "../AppStoreAvailability.astro";
+import ProductHeader from "../ProductHeader.astro";
+import ProductFeatures from "../ProductFeatures.astro";
+import "../../styles/zeropl.css";
 import Icon from "./Icon.astro";
-import KeylineIcon from "./KeylineIcon.astro";
+import KeylineIcon from "../KeylineIcon.astro";
 import keylineSymbols from "../../../public/zeropl/keyline-icons.svg?raw";
 import CaptureImage from "./CaptureImage.astro";
 import PlayerPreview from "./PlayerPreview.astro";
@@ -13,29 +17,21 @@ import MediaCredits from "./MediaCredits.astro";
 import { captures } from "../../data/zeropl-captures";
 import { films, mediaText } from "../../data/zeropl-media";
 import { zeropl, type Language } from "../../data/zeropl";
-import { productPaths } from "../../lib/zeropl/language";
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const t = zeropl[lang];
 const promiseIcons = ["lock", "sparkles", "laptop-smartphone"];
+const links = [
+  { href: "#platforms", label: lang === "ko" ? "기기별 화면" : "Device layouts" },
+  { href: "#translation", label: t.translation },
+  { href: "#duo", label: t.duo },
+  { href: "#features", label: t.features },
+];
 ---
-<ProductLayout lang={lang} title={t.title} description={t.description}>
+<ProductLayout product="zeropl" lang={lang} title={t.title} description={t.description}>
   <slot name="head" slot="head" />
   <Fragment set:html={keylineSymbols} />
-  <a class="skip-link" href="#main">{t.skip}</a>
-  <header class="site-header" id="top">
-    <div class="header-inner">
-      <a class="site-brand" href="/" aria-label="defby.ai"><img src="/defby_logo.svg" width="28" height="28" alt="" />defby.ai</a>
-      <span class="header-divider" aria-hidden="true"></span><a class="product-brand" href="#top">zeroPL</a>
-      <nav class="product-nav" aria-label={lang === "ko" ? "제품 탐색" : "Product navigation"}><a href="#platforms">{lang === "ko" ? "기기별 화면" : "Device layouts"}</a><a href="#translation">{t.translation}</a><a href="#duo">{t.duo}</a><a href="#features">{t.features}</a></nav>
-      <nav class="language-nav" aria-label="Language / 언어">
-        <a href={productPaths.en} lang="en" hreflang="en" aria-current={lang === "en" ? "page" : undefined}>EN</a>
-        <span aria-hidden="true">/</span>
-        <a href={productPaths.ko} lang="ko" hreflang="ko" aria-current={lang === "ko" ? "page" : undefined}>한국어</a>
-        <a href="/zeropl/" data-auto-language hidden title={lang === "ko" ? "브라우저 언어 사용" : "Use browser language"}>{lang === "ko" ? "자동" : "Auto"}</a>
-      </nav>
-    </div>
-  </header>
+  <ProductHeader product="zeropl" lang={lang} links={links} />
   <main id="main">
     <section class="product-hero" aria-labelledby="hero-title">
       <div class="hero-dots" aria-hidden="true"></div>
@@ -44,11 +40,7 @@ const promiseIcons = ["lock", "sparkles", "laptop-smartphone"];
         <h1 id="hero-title">{t.hero}</h1>
         <p class="hero-subtitle">{t.heroSubtitle}</p>
         <p class="hero-intro">{t.intro}</p>
-        <p class="store-availability">
-          <img src="/zeropl/app-store-badge.svg" width="144" height="48" lang="en" alt="App Store" />
-          <span class="store-availability-status">{t.storeStatus}</span>
-        </p>
-        <p class="platform-label">{t.platforms}</p>
+        <AppStoreAvailability status={t.storeStatus} platforms={t.platforms} />
       </div>
       <figure class="container hero-preview">
         <PlayerPreview lang={lang} />
@@ -99,18 +91,7 @@ const promiseIcons = ["lock", "sparkles", "laptop-smartphone"];
       <div class="section-copy"><p class="eyebrow">{t.webEyebrow}</p><h2 id="web-title">{t.webTitle[0]}<br /><span>{t.webTitle[1]}</span></h2><p class="section-body">{t.webBody}</p></div>
     </section>
 
-    <section class="container features-section" id="features" aria-labelledby="features-title">
-      <h2 id="features-title">{t.everyTitle}</h2>
-      <div class="feature-grid">
-        {t.featureList.map(feature => (
-          <article>
-            <KeylineIcon name={feature.icon} size={29} />
-            <h3>{feature.title}</h3>
-            <p>{feature.text}</p>
-          </article>
-        ))}
-      </div>
-    </section>
+    <ProductFeatures title={t.everyTitle} features={t.featureList} />
 
     <section class="container closing">
       <img src="/zeropl/app-icon.png" alt="" width="76" height="76" loading="lazy" />
@@ -121,30 +102,4 @@ const promiseIcons = ["lock", "sparkles", "laptop-smartphone"];
     <MediaCredits lang={lang} />
   </main>
   <footer class="container site-footer"><div><a class="site-brand" href="/"><img src="/defby_logo.svg" alt="" width="24" height="24" />defby.ai</a><p>{t.footerNote}</p></div><div class="footer-links"><a href="#media-credits">{mediaText[lang].credits}</a><a href={`/zeropl/privacy#${lang}`}>{t.privacy}</a><a href="#top">{t.backTop} ↑</a></div></footer>
-  <script>
-    import { browserLanguage, rememberLanguage, savedLanguage } from "../../lib/zeropl/language";
-
-    const nav = document.querySelector<HTMLElement>(".language-nav")!;
-    const automatic = nav.querySelector<HTMLAnchorElement>("[data-auto-language]")!;
-    const links = nav.querySelectorAll<HTMLAnchorElement>("a");
-
-    function updateLinks() {
-      for (const link of links) {
-        link.search = location.search;
-        link.hash = location.hash;
-      }
-      automatic.hidden = !savedLanguage() && document.documentElement.lang === browserLanguage();
-    }
-    for (const link of links) {
-      link.addEventListener("click", () => {
-        rememberLanguage(link.hreflang === "ko" || link.hreflang === "en" ? link.hreflang : null);
-        updateLinks();
-      });
-    }
-    updateLinks();
-    window.addEventListener("hashchange", updateLinks);
-    window.addEventListener("pageshow", updateLinks);
-    window.addEventListener("storage", updateLinks);
-    window.addEventListener("languagechange", updateLinks);
-  </script>
 </ProductLayout>

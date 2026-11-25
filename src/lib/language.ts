@@ -1,6 +1,6 @@
-import type { Language } from "../../data/zeropl";
+import { productPath, type Language, type Product } from "../data/products";
 
-export const productPaths = { en: "/en/zeropl/", ko: "/ko/zeropl/" } as const;
+// Keep preferences saved before the product pages shared language selection.
 const storageKey = "zeropl-language";
 
 export function browserLanguage(): Language {
@@ -33,4 +33,10 @@ export function rememberLanguage(language: Language | null) {
   } catch {
     // The language links also work without storing a preference.
   }
+}
+
+export function redirectToPreferredProduct(product: Product) {
+  const destination = new URL(location.href);
+  destination.pathname = productPath(product, preferredLanguage());
+  location.replace(destination.href);
 }

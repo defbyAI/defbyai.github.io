@@ -33,15 +33,17 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 | 홈 `/` | 화면 중앙의 로고·브랜드명·영문 태그라인 | `src/pages/index.astro` |
 | 홈 배경 | 회색 점을 그리는 8개 Canvas 레이어, 포인터·기기 기울기에 반응하는 패럴랙스 | `src/pages/index.astro` |
 | 브랜드 자산 | 녹색 원형 심벌, 흰색 다각형 조각, 파비콘·앱 아이콘 세트 | `public/defby_logo.svg`, `public/favicon.svg`, `public/site.webmanifest` |
-| 타이포그래피 | 홈, 제품 소개, 정책에 Asta Sans 및 시스템 대체 서체 선언, Google Fonts 사용 | `src/pages/index.astro`, `src/layouts/ProductLayout.astro`, `src/pages/zeropl/privacy.astro` |
-| 테마 | 기본 배경과 강조색을 홈, zeroPL 한·영 소개, 정책에 공통 적용 | `src/styles/theme.css` |
+| 타이포그래피 | 홈, 제품 소개, 정책에 Asta Sans 및 시스템 대체 서체 선언, Google Fonts 사용 | `src/pages/index.astro`, `src/layouts/ProductLayout.astro`, `src/layouts/PrivacyLayout.astro` |
+| 테마 | 기본 배경과 강조색을 홈, 두 제품의 한·영 소개, 정책에 공통 적용 | `src/styles/theme.css` |
 | zeroPL 개인정보 처리방침 | `/zeropl/privacy`, 한국어·영어 본문, 언어 전환, 목차, 요약, 문의 링크 | `src/pages/zeropl/privacy.astro`, `src/components/PrivacyDocument.astro` |
+| twoRT 개인정보 처리방침 | twoRT와 twoRT Connect의 한·영 게시 원고, 언어별 목차와 문의 링크 | `src/pages/twort/privacy.astro`, `src/data/twort-privacy.json` |
 | 정책 원문 | 앱의 검토된 정책 JSON을 웹 저장소에 복사하여 사용 | `src/data/zeropl-privacy.json`, `README.md` |
+| twoRT 소개 | 접속 기기별 작업 화면, 카메라·마이크 전달, Duo의 다섯 가지 자세와 외장 키보드 연결 시의 트랙패드, 네 가지 외장 디스플레이 모드, Connect 설치 안내 | `src/components/twort/ProductPage.astro` |
 | twoRT 도메인 연동 | Connect·iOS 클라이언트·Mac 클라이언트용 `webcredentials` 선언 | `public/.well-known/apple-app-site-association` |
 
-홈은 기존 브랜드 화면을 유지하며 zeroPL의 한·영문 소개 링크를 제공한다. 다운로드 버튼은 아직 없다. twoRT의 도메인 연동 파일은 인증을 위한 정적 자산이며, 제품 소개 페이지가 구현되었다는 뜻은 아니다. 위 배포 설명은 저장소 설정 기준이며 실제 서비스의 최신 배포 상태를 나타내지는 않는다.
+홈에서 zeroPL과 twoRT의 한·영문 소개로 이동할 수 있다. twoRT 소개에는 접속을 받을 Mac용 twoRT Connect의 공식 GitHub 릴리스 링크가 있다.
 
-`src/layouts/`에는 zeroPL 초안의 `ProductLayout.astro`가 있다. `AGENTS.md`에 언급된 `about.astro`, `design_draft/`는 현재 작업 트리에 없다. 기존 홈과 개인정보 처리방침 페이지를 시각적 출발점으로 삼는다.
+두 제품은 `src/layouts/ProductLayout.astro`와 `src/components/ProductHeader.astro`에서 문서 구조, 메타데이터, 헤더와 언어 전환을 공유한다.
 
 ## 2. 사이트의 목적과 표현 방향
 
@@ -131,15 +133,16 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 | --- | --- | --- | --- |
 | 홈 | `/` | `/ko/` | `/`만 구현됨; 현재는 영문 브랜드 소개 |
 | zeroPL 소개 | `/en/zeropl/` | `/ko/zeropl/` | 공통 주소 `/zeropl/`에서 언어 자동 선택 |
-| twoRT 소개 | `/twort/` | `/ko/twort/` | 둘 다 미구현 |
+| twoRT 소개 | `/en/twort/` | `/ko/twort/` | 공통 주소 `/twort/`에서 언어 자동 선택 |
 | zeroPL 개인정보 처리방침 | `/zeropl/privacy#en` | `/zeropl/privacy#ko` | 기존 단일 문서의 언어별 앵커 유지 |
+| twoRT 개인정보 처리방침 | `/twort/privacy#en` | `/twort/privacy#ko` | 제품 푸터에서 언어별 원고로 연결 |
 
 첫 구현은 홈의 제품 섹션부터 진행할 수 있다. 상세 페이지가 준비되기 전에는 같은 페이지의 제품 섹션으로 연결하고, 생성되지 않은 경로를 메뉴에 노출하지 않는다.
 
 언어 전환 기준:
 
 - 국기 대신 `English`와 `한국어`라는 언어명을 사용하고 현재 언어를 표시한다.
-- zeroPL 공통 주소에서는 브라우저의 선호 언어 순서에서 영어 또는 한국어를 선택한다. 지원 언어가 없으면 영어를 사용한다. 방문자가 직접 고른 언어는 브라우저에 저장하고 ‘자동’을 누르면 브라우저 설정을 다시 따른다.
+- 두 제품의 공통 주소와 개인정보 처리방침은 브라우저의 선호 언어 순서에서 영어 또는 한국어를 선택한다. 지원 언어가 없으면 영어를 사용한다. 방문자가 직접 고른 언어는 두 제품에 공통으로 적용하고 ‘자동’을 누르면 브라우저 설정을 다시 따른다.
 - 언어를 지정한 주소는 해당 언어로 열린다. 언어를 전환할 때는 현재 섹션과 쿼리 문자열을 유지한다.
 - 새 소개 페이지는 언어별 정적 HTML을 제공해 JavaScript 없이도 읽고 이동할 수 있게 한다.
 - 제목, 설명, 버튼, 이미지 대체 텍스트, 메타데이터까지 같은 범위로 번역한다. 번역되지 않은 기능 설명을 한 언어에만 추가하지 않는다.
@@ -160,7 +163,7 @@ defby.ai의 기존 디자인을 유지하면서 zeroPL과 twoRT를 소개하기 
 
 ### 색상
 
-홈, zeroPL 한·영문 소개, 개인정보 처리방침의 밝은 테마는 `src/styles/theme.css`의 공통 팔레트를 사용한다.
+홈, 두 제품의 한·영문 소개와 개인정보 처리방침은 `src/styles/theme.css`의 밝은 공통 팔레트를 사용한다. twoRT 데모 안의 앱 화면과 외장 키보드는 시스템 외관 변경에 맞춰 갱신한다.
 
 | 구분 | 토큰 | 값 | 용도 |
 | --- | --- | --- | --- |
@@ -271,7 +274,7 @@ https://fonts.googleapis.com/css2?family=Asta+Sans:wght@400;500;700&display=swap
 - 브랜드 태그라인의 한국어 번역과 각 제품의 최종 소개 문구.
 - 홈에 사용할 제품 아이콘·스크린샷과 별도 상세 페이지의 첫 공개 범위.
 - 제품별 출시 상태, 스토어·TestFlight·Connect 다운로드 URL, 시스템 요구 사항과 가격.
-- 공개 문의 경로와 twoRT 개인정보 처리방침의 위치. 기존 zeroPL 정책의 문의 주소를 사이트 공통 주소로 자동 확대하지 않는다.
+- twoRT 개인정보 처리 주체의 공개 명칭, 시행일, 문의 담당자·메일 주소, 지원 메일 보관·파기 기준 및 서비스 제공자 관련 고지.
 
 ### 구현 완료 시 확인
 

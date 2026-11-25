@@ -4,11 +4,9 @@ import ProductPage from "../../components/zeropl/ProductPage.astro";
 <ProductPage lang="en">
   <Fragment slot="head">
     <script>
-      import { preferredLanguage, productPaths } from "../../lib/zeropl/language";
+      import { redirectToPreferredProduct } from "../../lib/language";
 
-      const destination = new URL(location.href);
-      destination.pathname = productPaths[preferredLanguage()];
-      location.replace(destination.href);
+      redirectToPreferredProduct("zeropl");
     </script>
   </Fragment>
 </ProductPage>

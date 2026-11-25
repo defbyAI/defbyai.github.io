@@ -1,0 +1,22 @@
+---
+import type { Language } from "../../data/products";
+import { twort } from "../../data/twort";
+import HeroVideo from "../HeroVideo.astro";
+
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const t = twort[lang];
+const mediaVersion = 4;
+const take = (appearance: "light" | "dark") => {
+  const path = `/twort/media/duo-workspace-${lang}-${appearance}`;
+  return { video: `${path}.mp4?v=${mediaVersion}`, poster: `${path}.webp?v=${mediaVersion}` };
+};
+const recording = { width: 1440, height: 810, light: take("light"), dark: take("dark") };
+---
+<figure class="workspace container" id="workspace">
+  <HeroVideo lang={lang} videoId="twort-duo-title" label={t.sceneLabel} recording={recording} />
+</figure>
+
+<style>
+  .workspace { max-width: 980px; margin-block: 0; }
+</style>

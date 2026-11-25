@@ -1,0 +1,14 @@
+---
+interface Props {
+  status: string;
+  platforms?: string;
+}
+
+const { status, platforms } = Astro.props;
+---
+
+<p class="store-availability">
+  <img src="/zeropl/app-store-badge.svg" width="144" height="48" lang="en" alt="App Store" />
+  <span class="store-availability-status">{status}</span>
+</p>
+{platforms && <p class="platform-label">{platforms}</p>}

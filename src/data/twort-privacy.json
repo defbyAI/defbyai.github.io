@@ -1,0 +1,332 @@
+{
+  "websiteURL": "https://defby.ai/twort/privacy",
+  "contactEmail": "defby64@gmail.com",
+  "translations": {
+    "ko": {
+      "title": "twoRT 개인정보 처리방침",
+      "date": "{{effective_date_ko}}",
+      "summary": "twoRT를 사용하면 Mac의 화면과 소리가 등록된 iPhone이나 iPad로 암호화되어 전달됩니다. 개발자는 원격 세션의 화면을 보거나 소리를 듣지 않으며, 세션 내용을 개발자 서버에 저장하지 않습니다.",
+      "introduction": "이 방침은 {{publisher_ko}}에서 제공하는 iPhone·iPad용 twoRT와 Mac용 twoRT Connect에 적용됩니다. 두 앱은 별도의 twoRT 계정 없이 사용할 수 있습니다. 앱에는 광고나 이용자를 추적하는 분석 도구가 없습니다.",
+      "sections": [
+        {
+          "heading": "기기를 찾고 등록할 때",
+          "body": [
+            {
+              "paragraph": [
+                "같은 네트워크에서 Mac을 찾을 수 있도록 Connect는 Bonjour로 Mac의 twoRT 식별자와 연결 정보를 알립니다. 같은 네트워크의 다른 기기도 이 서비스 정보를 볼 수 있습니다. QR 코드로 등록하면 iPhone이나 iPad가 카메라로 코드를 기기 안에서 읽고 Bluetooth로 Mac이 가까이 있는지 확인합니다. 스캔 영상은 Mac으로 보내거나 사진 보관함에 저장하지 않습니다."
+              ]
+            },
+            {
+              "paragraph": [
+                "등록된 Mac에는 접근을 허용한 기기의 제품명과 모델, 등록 식별자, 공개 키, 접근 권한이 저장됩니다. 연결할 때 신원을 증명하는 twoRT 개인 키는 각 기기의 키체인에 보관됩니다. 패스키를 사용할 때는 운영체제가 본인 확인을 처리합니다. twoRT는 Face ID 얼굴 정보나 Touch ID 지문 정보를 받지 않습니다."
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "iCloud와 인터넷 연결",
+          "body": [
+            {
+              "paragraph": [
+                "같은 Apple 계정에서 iCloud 암호 및 키체인을 사용하면 Mac 이름과 모델, twoRT 식별자, 공개 키, 패스키를 찾는 데 쓰는 식별 정보, 연결 가능한 주소와 포트가 기기 사이에 동기화될 수 있습니다. 인터넷 직접 연결을 준비할 때는 유효 기간이 짧은 서명된 주소 정보와 연결 요청도 교환할 수 있습니다. Apple은 iCloud 키체인을 종단 간 암호화하며, 개발자는 이 키체인을 열람할 수 없습니다. ",
+                {
+                  "label": "Apple의 iCloud 데이터 보안 안내",
+                  "href": "https://support.apple.com/ko-kr/102651"
+                }
+              ]
+            },
+            {
+              "paragraph": [
+                "Connect는 인터넷에서 보이는 Mac의 주소를 확인하기 위해 Cloudflare의 STUN 서버에 요청할 수 있습니다. Mac이 연결을 기다리는 동안에는 세션이 없어도 주기적으로 요청할 수 있습니다. 패스키로 등록한 iPhone·iPad도 인터넷 직접 연결을 준비할 때 이 서버를 이용할 수 있습니다. Cloudflare에는 요청한 기기의 공인 IP 주소, UDP 포트, 요청 시각, 임의로 생성한 요청 식별자가 보입니다. 원격 화면, 음성, 카메라 영상, 키보드 입력은 이 서버를 거치지 않습니다. ",
+                {
+                  "label": "Cloudflare 개인정보 처리방침",
+                  "href": "https://www.cloudflare.com/privacypolicy/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "원격 화면, 소리와 입력",
+          "body": [
+            {
+              "paragraph": [
+                "Mac에서 화면 및 시스템 오디오 기록 권한을 허용하면 Connect가 화면과 시스템 소리를 캡처해 인증된 iPhone·iPad로 보냅니다. 반대 방향으로는 키보드 입력, 입력한 텍스트, 포인터 동작과 명령이 Mac으로 전달됩니다. Mac의 손쉬운 사용 권한은 이 입력으로 Mac을 조작하는 데 쓰입니다. 일반적인 원격 세션에서 twoRT는 화면이나 소리를 녹화 파일로 보관하지 않습니다."
+              ]
+            },
+            {
+              "paragraph": [
+                "iPhone·iPad에서 마이크 또는 카메라 전달을 켜면, 허용한 권한과 선택한 모드에 따라 소리나 영상이 연결된 Mac의 가상 마이크 또는 가상 카메라로 전달됩니다. 예를 들어 화상회의 앱에서 이 입력을 선택하면 그 앱이 회의 상대에게 전달하거나 녹음·녹화할 수 있습니다. 이때는 해당 앱의 설정과 처리방침이 적용됩니다. Connect가 Mac에서 요청하는 카메라 권한은 가상 카메라 관리에 쓰이며, Mac의 실제 카메라로 촬영하는 데 쓰이지 않습니다."
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "기기에 남는 정보와 사용자가 지우는 방법",
+          "body": [
+            {
+              "paragraph": [
+                "각 기기는 등록 정보, Mac 별칭, 최근 연결 시각, 연결 설정을 저장할 수 있습니다. 사용자는 다음과 같이 접근과 데이터를 관리할 수 있습니다."
+              ]
+            },
+            {
+              "items": [
+                [
+                  {
+                    "strong": "등록 해제."
+                  },
+                  " Mac의 Connect에서 등록된 기기를 선택해 등록을 해제하면 그 기기의 기존 접근 권한이 해제됩니다. iPhone·iPad에서 Mac을 가리면 모바일 목록의 표시만 바뀌고 접근 권한은 유지됩니다."
+                ],
+                [
+                  {
+                    "strong": "패스키와 권한."
+                  },
+                  " 패스키는 Apple의 암호 앱이나 사용한 자격 증명 제공자에서 삭제할 수 있습니다. 언제든 세션 또는 마이크·카메라 전달을 중지할 수 있습니다. 각 기기의 개인정보 보호 설정에서 카메라, 마이크, Bluetooth, 로컬 네트워크, 화면 기록, 손쉬운 사용 권한을 관리하고 Apple 계정 설정에서 iCloud 키체인 동기화를 관리할 수 있습니다."
+                ],
+                [
+                  {
+                    "strong": "파일과 백업."
+                  },
+                  " 내보낸 진단 보고서는 저장한 위치에서 삭제할 수 있습니다. 앱을 삭제한 뒤에도 키체인 항목, 상대 기기의 등록 기록, 내보낸 파일이나 기존 백업은 남을 수 있습니다. Connect가 등록 복구·초기화 중 Mac에 만든 백업과 운영체제 백업은 각각 저장한 곳에서 관리합니다."
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "진단 보고서와 Apple 분석 공유",
+          "body": [
+            {
+              "paragraph": [
+                "두 앱은 연결 문제를 확인하기 위해 시각, 앱·운영체제 버전, 연결 경로 유형, 상태와 오류 코드 등을 기기에 기록합니다. 사용자용 진단 보고서에는 최근 72시간의 연결 이벤트가 표시됩니다. 보고서에서는 기기 식별자, 호스트 이름, 네트워크 주소, 자격 증명, 입력 내용을 제외하거나 가립니다. 보고서를 미리 보고 파일로 저장해도 개발자에게 자동으로 전송되지 않습니다. 저장한 파일을 공유하면 직접 선택한 상대가 받습니다. 지원을 요청하면서 보고서를 첨부해 보내면 개발자도 그 내용을 받습니다."
+              ]
+            },
+            {
+              "paragraph": [
+                "iPhone·iPad에서 앱 개발자와 분석 공유를 허용한 경우에는 Apple이 충돌 정보나 앱 이용 통계를 개발자에게 제공할 수 있습니다. 이 선택은 기기의 ",
+                {
+                  "strong": "설정 → 개인정보 보호 및 보안 → 분석 및 향상"
+                },
+                "에서 변경할 수 있습니다. ",
+                {
+                  "label": "Apple의 앱 분석 및 개인정보 보호 안내",
+                  "href": "https://www.apple.com/legal/privacy/data/en/app-analytics/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "앱 업데이트와 홈페이지 방문",
+          "body": [
+            {
+              "paragraph": [
+                "Mac용 Connect는 Sparkle로 GitHub Releases에 업데이트를 확인합니다. GitHub와 다운로드 인프라에는 IP 주소, 요청한 파일, 요청 시각, Connect와 Sparkle 버전이 보일 수 있습니다. 자동 확인은 기본으로 켜져 있으며 Connect 설정에서 끌 수 있습니다. Sparkle의 선택적 시스템 정보 전송은 꺼져 있습니다. iPhone·iPad용 twoRT의 업데이트는 App Store에서 제공합니다. ",
+                {
+                  "label": "GitHub 개인정보 처리방침",
+                  "href": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+                }
+              ]
+            },
+            {
+              "paragraph": [
+                "이 방침을 웹에서 열면 브라우저가 defby.ai 홈페이지에 접속합니다. 홈페이지를 호스팅하는 GitHub Pages는 보안을 위해 방문자의 IP 주소를 기록하고 보관합니다. ",
+                {
+                  "label": "GitHub Pages의 방문 정보 처리 안내",
+                  "href": "https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "문의, 개인정보 요청과 방침 변경",
+          "body": [
+            {
+              "paragraph": [
+                "개인정보 문의는 아래 이메일로 보내실 수 있습니다. 이메일을 보내면 개발자가 Gmail을 통해 회신 주소, 문의 내용과 직접 첨부한 자료를 받습니다. 이 정보는 문의에 답하거나 문제를 해결하는 데 사용합니다. 문의 기록과 첨부 자료는 답변과 후속 지원에 필요한 동안 보관한 뒤 삭제합니다. 법령에 따라 보관해야 하는 기록은 해당 기간이 끝난 뒤 삭제합니다. ",
+                {
+                  "label": "개인정보 문의 이메일",
+                  "href": "mailto:defby64@gmail.com"
+                },
+                " · ",
+                {
+                  "label": "defby64@gmail.com",
+                  "href": "mailto:defby64@gmail.com"
+                }
+              ]
+            },
+            {
+              "paragraph": [
+                "같은 주소로 개발자가 보유한 개인정보의 열람, 정정, 삭제 또는 처리 중지를 요청할 수 있습니다. 사용자 기기에만 있는 정보는 개발자가 원격으로 조회하거나 지울 수 없습니다. 방침이 변경되면 이 페이지에 변경 내용과 시행일을 게시합니다."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "en": {
+      "title": "twoRT Privacy Policy",
+      "date": "{{effective_date_en}}",
+      "summary": "When you use twoRT, your Mac sends its screen and sound over an encrypted connection to your registered iPhone or iPad. The developer cannot see or hear your remote session and does not store its contents on a developer-operated server.",
+      "introduction": "This policy covers twoRT for iPhone and iPad and twoRT Connect for Mac, provided by {{publisher_en}}. You can use both apps without a twoRT account. Neither app contains ads or analytics tools that track you.",
+      "sections": [
+        {
+          "heading": "Finding and registering a device",
+          "body": [
+            {
+              "paragraph": [
+                "Connect advertises the Mac’s twoRT identifier and connection information through Bonjour so you can find it on your local network. Other devices on that network can see this service information. When you pair by QR code, your iPhone or iPad reads the code locally with its camera and uses Bluetooth to check that the Mac is nearby. The scanner does not send its camera images to the Mac or save them to Photos."
+              ]
+            },
+            {
+              "paragraph": [
+                "The Mac stores the product name and model, registration identifier, public key and access grant of each device you authorize. Each device keeps its own twoRT identity private key in its Keychain. When you use a passkey, the operating system verifies your identity. twoRT does not receive your Face ID or Touch ID biometric data."
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "iCloud and internet connections",
+          "body": [
+            {
+              "paragraph": [
+                "If your devices use iCloud Passwords & Keychain with the same Apple Account, they can sync the Mac’s name, model, twoRT identifier, public key, a reference used to find the passkey, and the addresses and ports where the Mac can be reached. When preparing a direct internet connection, the devices can also exchange signed, short-lived address information and connection requests. Apple protects iCloud Keychain with end-to-end encryption. The developer cannot read your keychain. ",
+                {
+                  "label": "Apple’s iCloud data security overview",
+                  "href": "https://support.apple.com/en-us/102651"
+                }
+              ]
+            },
+            {
+              "paragraph": [
+                "Connect can contact Cloudflare’s STUN server to find the Mac’s public network address. It can do this periodically while waiting for connections, even when no session is active. A passkey-registered iPhone or iPad can also contact the server when preparing a direct internet connection. Cloudflare can see the requesting device’s public IP address, UDP port, request time and a randomly generated request identifier. Your screen, audio, camera video and keyboard input do not pass through this server. ",
+                {
+                  "label": "Cloudflare Privacy Policy",
+                  "href": "https://www.cloudflare.com/privacypolicy/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "Remote screen, sound and input",
+          "body": [
+            {
+              "paragraph": [
+                "With screen and system audio recording permission on your Mac, Connect captures the screen and system sound and sends them to your authenticated iPhone or iPad. Keyboard input, typed text, pointer actions and commands travel back to the Mac. Accessibility permission allows Connect to apply those inputs. During an ordinary remote session, twoRT does not save a recording of the screen or sound."
+              ]
+            },
+            {
+              "paragraph": [
+                "If you enable microphone or camera forwarding on your iPhone or iPad, it sends sound or video to the connected Mac’s virtual microphone or camera according to your permissions and selected mode. For example, a conferencing app that uses this input can send it to participants or record it under that app’s settings and privacy policy. Connect uses Mac camera permission to manage its virtual camera. It does not use that permission to capture images from the Mac’s physical camera."
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "Information on your devices and how to remove it",
+          "body": [
+            {
+              "paragraph": [
+                "Each device may store registration records, Mac nicknames, the last connection time and connection preferences. You can manage access and stored data in the following ways."
+              ]
+            },
+            {
+              "items": [
+                [
+                  {
+                    "strong": "Revoke access."
+                  },
+                  " On the Mac, select a registered device in Connect and remove it to revoke its existing access. Hiding a Mac on iPhone or iPad changes its visibility in the mobile list. Its access grant remains in effect."
+                ],
+                [
+                  {
+                    "strong": "Manage passkeys and permissions."
+                  },
+                  " Delete a passkey in Apple Passwords or the credential provider you used. You can disconnect a session or stop microphone or camera forwarding at any time. Manage camera, microphone, Bluetooth, local network, screen recording and Accessibility permissions in each device’s privacy settings. Manage iCloud Keychain sync in Apple Account settings."
+                ],
+                [
+                  {
+                    "strong": "Remove files and backups."
+                  },
+                  " You can delete an exported diagnostic report where you saved it. Keychain items, registrations on the other device, exported files and existing backups can remain after you delete the app. You can manage backups that Connect creates on the Mac during registration recovery or reset, and any operating-system backups, where each is stored."
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "Diagnostic reports and Apple analytics sharing",
+          "body": [
+            {
+              "paragraph": [
+                "To help diagnose connection problems, the apps record information on your device such as event times, app and OS versions, connection route types, status and error codes. The diagnostic report shows connection events from the previous 72 hours. It omits or masks device identifiers, host names, network addresses, credentials and input contents. Previewing or saving the report does not send it to the developer. If you share the file, it goes to the recipient you choose. The developer receives it if you attach it to a support request."
+              ]
+            },
+            {
+              "paragraph": [
+                "If you allow sharing with app developers on your iPhone or iPad, Apple may provide the developer with crash information or app usage statistics. You can change this choice in ",
+                {
+                  "strong": "Settings → Privacy & Security → Analytics & Improvements"
+                },
+                ". ",
+                {
+                  "label": "Apple’s App Analytics and Privacy notice",
+                  "href": "https://www.apple.com/legal/privacy/data/en/app-analytics/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "App updates and website visits",
+          "body": [
+            {
+              "paragraph": [
+                "On Mac, Connect uses Sparkle to check GitHub Releases for updates. GitHub and its download infrastructure can see your IP address, the requested file, the request time, and the Connect and Sparkle versions. Automatic checks are on by default. You can turn them off in Connect settings. Sparkle’s optional system profiling is disabled. The App Store provides updates for twoRT on iPhone and iPad. ",
+                {
+                  "label": "GitHub General Privacy Statement",
+                  "href": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+                }
+              ]
+            },
+            {
+              "paragraph": [
+                "When you open this policy on the web, your browser connects to defby.ai. GitHub Pages, which hosts the website, logs and stores visitors’ IP addresses for security. ",
+                {
+                  "label": "How GitHub Pages handles visitor data",
+                  "href": "https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "Contact, privacy requests and policy changes",
+          "body": [
+            {
+              "paragraph": [
+                "You can send privacy questions to the address below. When you email the developer, the developer receives your reply address, message and any attachments you choose to send through Gmail. The developer uses them to answer your request or resolve the issue. Correspondence and attachments are kept for as long as needed to answer your request and provide follow-up support, and are then deleted. Records subject to a legal retention requirement are deleted after that period ends. ",
+                {
+                  "label": "Email about privacy",
+                  "href": "mailto:defby64@gmail.com"
+                },
+                " · ",
+                {
+                  "label": "defby64@gmail.com",
+                  "href": "mailto:defby64@gmail.com"
+                }
+              ]
+            },
+            {
+              "paragraph": [
+                "You can use the same address to request access, correction, deletion or restriction of personal data held by the developer. The developer cannot remotely inspect or erase information held only on your devices. Changes to this policy and their effective date will be posted on this page."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

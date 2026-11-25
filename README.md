@@ -50,10 +50,11 @@ The English `/en/twort/` and Korean `/ko/twort/` routes share a product page.
 The general entry at `/twort/` uses the same browser or saved language preference
 as zeroPL. Both products keep the section and query string when switching languages.
 The opening animation unfolds iPhone Duo, then places it next to a 21.5-inch
-16:9 monitor at the same scale. The Duo shows field notes and the monitor shows
-a separate photo editor. Run `node scripts/twort-duo-title/render.mjs` with
-Chrome, FFmpeg, and ImageMagick to rebuild the four language and appearance
-variants. The five illustrated postures follow `DuoSessionLayout` in twoRT’s
+monitor at the same scale. The Duo shows field notes beside a capture of the
+monitor from the extended-display demo. Run `node scripts/twort-duo-title/render.mjs`
+with Chrome, FFmpeg, and ImageMagick to capture the monitor from a temporary site
+build and rebuild the four language and appearance variants. The five illustrated
+postures follow `DuoSessionLayout` in twoRT’s
 `DuoRemoteSession.swift` when “Match device aspect
 ratio” is selected. A sixth tab shows the seated Duo with its lower trackpad
 and a 60-key keyboard. The WebGL model uses the same millimetre scale as the Duo,

@@ -37,6 +37,7 @@ const links = [
           <span>twoRT</span>
         </div>
         <h1 id="hero-title">{t.hero}</h1>
+        <p class="hero-subtitle">{t.heroSubtitle}</p>
         <p class="hero-intro">{t.intro}</p>
         <AppStoreAvailability status={t.storeStatus} platforms={t.platforms} />
         <a class="action" href="#connect">{t.setup}</a>
@@ -86,11 +87,7 @@ const links = [
 
 <style>
   .product-hero { padding-bottom: clamp(42px, 5vw, 80px); border-bottom: 1px solid var(--line); }
-  .hero-heading { padding-block: clamp(38px, 4.2vw, 64px) clamp(32px, 3.2vw, 48px); }
-  .hero-wordmark { gap: 12px; margin-bottom: 21px; }
   .hero-wordmark img { margin: 0; width: 44px; height: 44px; border-radius: 22%; }
-  .hero-heading h1 { margin-bottom: 18px; }
-  .hero-intro { margin: 0 auto 20px; max-width: 750px; font-size: clamp(16px, 1.5vw, 19px); text-wrap: balance; }
   .hero-heading .action { margin-top: 20px; }
   .action {
     display: inline-flex; align-items: center; justify-content: center;

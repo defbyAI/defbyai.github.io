@@ -6,7 +6,7 @@ import HeroVideo from "../HeroVideo.astro";
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const t = twort[lang];
-const mediaVersion = 2;
+const mediaVersion = 4;
 const take = (appearance: "light" | "dark") => {
   const path = `/twort/media/duo-workspace-${lang}-${appearance}`;
   return { video: `${path}.mp4?v=${mediaVersion}`, poster: `${path}.webp?v=${mediaVersion}` };

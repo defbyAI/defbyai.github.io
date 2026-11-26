@@ -48,8 +48,7 @@ video { display: block; max-width: 100%; }
 .credits-intro { font-size: 13px; line-height: 1.9; color: var(--muted); max-width: 690px; }
 .credits-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 35px; }
 .credits-grid article { scroll-margin-top: 30px; }
-.credits-grid picture { display: block; margin-bottom: 20px; }
-.credits-grid picture img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; }
+.credits-grid img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; margin-bottom: 20px; }
 .credit-placement { font-size: 10px; color: var(--color-accent-2); margin-bottom: 10px; }
 .credits-grid h3 { font-size: 17px; letter-spacing: -.025em; font-weight: 500; margin-bottom: 12px; }
 .credits-grid h3 > span { font-size: 11px; font-weight: 400; color: var(--muted); }
@@ -65,7 +64,7 @@ video { display: block; max-width: 100%; }
   .credits-grid { grid-template-columns: 1fr; gap: 35px; }
   .credits-grid article { max-width: 500px; }
   .credit-attribution { min-height: 0; }
-  .credits-grid picture img { aspect-ratio: 2.1; }
+  .credits-grid img { aspect-ratio: 2.1; }
   .media-credits { padding-block: 50px 40px; }
   .media-credits h2 { font-size: 26px; }
   .media-credit { font-size: 9px; }

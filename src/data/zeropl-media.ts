@@ -23,13 +23,13 @@ export const films = {
     terms: "https://gooseberry.blender.org/license/",
     credit: "(CC) Blender Foundation | gooseberry.blender.org",
     video: cosmosTitleRecording.light.video,
-    poster: cosmosTitleRecording.light.poster,
+    poster: "/zeropl/media/cosmos-franck.webp",
     recording: cosmosTitleRecording,
     range: "02:29–02:36",
     placement: { ko: "첫 화면 · iPhone Duo 펼치기", en: "Opening scene · Unfolding iPhone Duo" },
     edits: {
-      ko: "iPhone Duo에서 zeroPL이 영어 대사를 한국어 자막으로 번역하는 모습을 녹화했습니다. 라이트·다크 모드의 화면을 펼침 애니메이션에 합성해 7초 무음 영상으로 편집했습니다.",
-      en: "Recorded on iPhone Duo as zeroPL translated the English dialogue into Korean subtitles. The light and dark recordings were composited into a seven-second silent unfolding animation.",
+      ko: "iPhone Duo에서 zeroPL이 영어 대사를 한국어 자막으로 번역하는 모습을 녹화했습니다. 라이트·다크 모드의 화면을 펼침 애니메이션에 합성해 7초 무음 영상으로 편집했습니다. 크레딧 이미지는 원작의 02:35 장면입니다.",
+      en: "Recorded on iPhone Duo as zeroPL translated the English dialogue into Korean subtitles. The light and dark recordings were composited into a seven-second silent unfolding animation. The credit still shows the original film at 02:35.",
     },
   },
   sintel: {

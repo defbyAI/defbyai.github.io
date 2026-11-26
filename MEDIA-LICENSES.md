@@ -36,7 +36,8 @@ in `src/data/zeropl-media.ts`. Preserve these credits when reusing the assets.
   visible for 1 second, then fade over 5 frames. The clean view plays from 4.50 seconds
   to the end. Run `node scripts/zeropl-duo-title/render.mjs` to render both appearances.
   The matching WebP posters use each edit's first frame at **02:29.000**.
-  The film credit card displays the poster matching the viewer’s system appearance.
+  The film credit card uses `cosmos-franck.webp`, extracted from the original
+  film at **02:35.750** during the same excerpt.
 
 ## Sintel (2010)
 

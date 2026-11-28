@@ -88,6 +88,17 @@ export const twortFeatures = [
     },
   },
   {
+    icon: "clock",
+    ko: {
+      title: "연결이 끝나도 Mac 깨워 두기",
+      text: "원하는 시각까지 Mac을 깨워 두고, 잠금 상태에서는 디스플레이 잠자기를 허용하세요.",
+    },
+    en: {
+      title: "Keep your Mac awake after you disconnect",
+      text: "Keep your Mac awake until a time you choose, and let the display sleep while your Mac is locked.",
+    },
+  },
+  {
     icon: "lock",
     ko: {
       title: "연결 종료 시 잠금",
